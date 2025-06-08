@@ -1,4 +1,4 @@
-package com.dobrihlopez.financeassistant.core.useraccount
+package com.dobrihlopez.financeassistant.feature.accounts.domain
 
 data class IncomeStatistics(
     val amount: String,

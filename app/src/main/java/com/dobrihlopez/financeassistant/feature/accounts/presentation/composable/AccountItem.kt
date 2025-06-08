@@ -39,7 +39,7 @@ fun AccountItem(accountActionItem: AccountActionItem, onClick: () -> Unit) {
                 ) {
                     Text(
                         text = accountActionItem.emoji,
-                        style = MaterialTheme.typography.titleMedium
+                        style = MaterialTheme.typography.titleSmall
                     )
                 }
             }

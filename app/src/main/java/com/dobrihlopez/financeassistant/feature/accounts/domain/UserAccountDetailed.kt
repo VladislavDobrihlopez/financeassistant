@@ -1,8 +1,5 @@
 package com.dobrihlopez.financeassistant.feature.accounts.domain
 
-import com.dobrihlopez.financeassistant.core.useraccount.ExpenseStatistics
-import com.dobrihlopez.financeassistant.core.useraccount.IncomeStatistics
-
 data class UserAccountDetailed(
     val balance: String,
     val createdAt: String,
