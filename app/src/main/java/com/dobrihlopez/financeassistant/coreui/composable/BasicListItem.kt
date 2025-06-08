@@ -20,6 +20,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -36,6 +37,7 @@ fun BasicListItem(
     value: String? = null,
     valueSubtitle: String? = null,
     trailingContent: (@Composable () -> Unit)? = null,
+    backgroundColor: Color = MaterialTheme.colorScheme.background,
     onClick: (() -> Unit)? = null,
 ) {
     val spacing = MaterialTheme.spacing
@@ -43,7 +45,7 @@ fun BasicListItem(
     Row(
         modifier = modifier
             .fillMaxWidth()
-            .background(color = MaterialTheme.colorScheme.background)
+            .background(backgroundColor)
             .clickable(enabled = onClick != null) { onClick?.invoke() }
             .animateContentSize()
             .padding(horizontal = spacing.medium),
@@ -102,20 +104,22 @@ fun BasicListItem(
 
 @Composable
 fun BasicListItemWithTrailingIcon(
-    title: String,
+    content: String,
     trailingIcon: ImageVector,
     modifier: Modifier = Modifier,
     leadingContent: (@Composable () -> Unit)? = null,
-    subtitle: String? = null,
+    subContent: String? = null,
     value: String? = null,
     valueSubtitle: String? = null,
     onClick: (() -> Unit)? = null,
+    backgroundColor: Color = MaterialTheme.colorScheme.background,
 ) {
     BasicListItem(
         modifier = modifier,
+        backgroundColor = backgroundColor,
         leadingContent = leadingContent,
-        content = title,
-        subContent = subtitle,
+        content = content,
+        subContent = subContent,
         value = value,
         valueSubtitle = valueSubtitle,
         trailingContent = {

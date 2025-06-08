@@ -13,4 +13,7 @@
     <string name="settings_about">About</string>
     <string name="categories_topbar_title">My categories</string>
     <string name="categories_searchbar_hint">Input a category to find</string>
+    <string name="account_topbar_title">My account</string>
+    <string name="account_balance">Balance</string>
+    <string name="account_currency">Currency</string>
 </resources>

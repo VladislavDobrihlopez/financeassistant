@@ -26,7 +26,7 @@ fun SettingItem(section: AppSettingItem, sectionName: String, onClick: (AppSetti
         else -> BasicListItemWithTrailingIcon(
             modifier = Modifier.height(56.dp),
             onClick = { onClick(section) },
-            title = sectionName,
+            content = sectionName,
             trailingIcon = ImageVector.vectorResource(R.drawable.arrow_right),
         )
     }

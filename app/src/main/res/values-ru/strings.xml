@@ -14,4 +14,7 @@
     <string name="settings_about">О программе</string>
     <string name="categories_topbar_title">Мои статьи</string>
     <string name="categories_searchbar_hint">Найти статью</string>
+    <string name="account_topbar_title">Мой счёт</string>
+    <string name="account_balance">Баланс</string>
+    <string name="account_currency">Валюта</string>
 </resources>
