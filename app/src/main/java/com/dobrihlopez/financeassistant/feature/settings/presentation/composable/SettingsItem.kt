@@ -1,10 +1,7 @@
-package com.dobrihlopez.financeassistant.feature.settings.presentation
+package com.dobrihlopez.financeassistant.feature.settings.presentation.composable
 
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.height
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowForward
-import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
 import androidx.compose.material3.Switch
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -21,7 +18,7 @@ fun SettingItem(section: AppSettingItem, sectionName: String, onClick: (AppSetti
     when (section) {
         is AppSettingItem.Theme -> BasicListItem(
             modifier = Modifier.height(56.dp),
-            title = sectionName,
+            content = sectionName,
             trailingContent = {
                 Switch(checked = isSystemInDarkTheme(), onCheckedChange = { onClick(section) })
             })

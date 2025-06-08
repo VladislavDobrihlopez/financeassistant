@@ -12,4 +12,6 @@
     <string name="settings_server_sync">Синхронизация</string>
     <string name="settings_language">Язык</string>
     <string name="settings_about">О программе</string>
+    <string name="categories_topbar_title">Мои статьи</string>
+    <string name="categories_searchbar_hint">Найти статью</string>
 </resources>

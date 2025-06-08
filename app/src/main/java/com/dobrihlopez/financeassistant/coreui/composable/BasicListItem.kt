@@ -5,9 +5,11 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
 import androidx.compose.material.icons.filled.Notifications
@@ -28,13 +30,13 @@ import com.dobrihlopez.financeassistant.coreui.ui.theme.spacing
 @Composable
 fun BasicListItem(
     modifier: Modifier = Modifier,
-    leadingIcon: ImageVector? = null,
-    title: String,
-    subtitle: String? = null,
+    leadingContent: (@Composable () -> Unit)? = null,
+    content: String,
+    subContent: String? = null,
     value: String? = null,
     valueSubtitle: String? = null,
-    trailingContent: @Composable (() -> Unit)? = null,
-    onClick: (() -> Unit)? = null
+    trailingContent: (@Composable () -> Unit)? = null,
+    onClick: (() -> Unit)? = null,
 ) {
     val spacing = MaterialTheme.spacing
 
@@ -47,26 +49,22 @@ fun BasicListItem(
             .padding(horizontal = spacing.medium),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        if (leadingIcon != null) {
-            Icon(
-                imageVector = leadingIcon,
-                contentDescription = null,
-                tint = MaterialTheme.colorScheme.onBackground,
-                modifier = Modifier.padding(end = 16.dp)
-            )
+        leadingContent?.let {
+            it.invoke()
+            Spacer(Modifier.width(spacing.medium))
         }
 
         Column(
             modifier = Modifier.weight(1f)
         ) {
             Text(
-                text = title,
+                text = content,
                 style = MaterialTheme.typography.bodyLarge,
                 color = MaterialTheme.colorScheme.onBackground
             )
-            if (subtitle != null) {
+            if (subContent != null) {
                 Text(
-                    text = subtitle,
+                    text = subContent,
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
@@ -107,17 +105,17 @@ fun BasicListItemWithTrailingIcon(
     title: String,
     trailingIcon: ImageVector,
     modifier: Modifier = Modifier,
-    leadingIcon: ImageVector? = null,
+    leadingContent: (@Composable () -> Unit)? = null,
     subtitle: String? = null,
     value: String? = null,
     valueSubtitle: String? = null,
-    onClick: (() -> Unit)? = null
+    onClick: (() -> Unit)? = null,
 ) {
     BasicListItem(
         modifier = modifier,
-        leadingIcon = leadingIcon,
-        title = title,
-        subtitle = subtitle,
+        leadingContent = leadingContent,
+        content = title,
+        subContent = subtitle,
         value = value,
         valueSubtitle = valueSubtitle,
         trailingContent = {
@@ -137,7 +135,7 @@ fun BasicListItemWithTrailingIcon(
 @Composable
 fun BasicListItemPreview_Simple() {
     FinanceAssistantTheme {
-        BasicListItem(title = "Простой айтем")
+        BasicListItem(content = "Простой айтем")
     }
 }
 
@@ -146,8 +144,15 @@ fun BasicListItemPreview_Simple() {
 private fun BasicListItemPreview_WithIcons() {
     FinanceAssistantTheme {
         BasicListItem(
-            title = "С иконкой и стрелкой",
-            leadingIcon = Icons.Default.Notifications,
+            content = "С иконкой и стрелкой",
+            leadingContent = {
+                Icon(
+                    imageVector = Icons.Default.Notifications,
+                    contentDescription = null,
+                    tint = MaterialTheme.colorScheme.onBackground,
+                    modifier = Modifier.padding(end = 16.dp)
+                )
+            },
             trailingContent = {
                 Icon(
                     Icons.AutoMirrored.Default.KeyboardArrowRight,
@@ -163,8 +168,8 @@ private fun BasicListItemPreview_WithIcons() {
 private fun BasicListItemPreview_WithSubtitle() {
     FinanceAssistantTheme {
         BasicListItem(
-            title = "С сабтайтлом",
-            subtitle = "Подзаголовок для пояснения"
+            content = "С сабтайтлом",
+            subContent = "Подзаголовок для пояснения"
         )
     }
 }
@@ -174,7 +179,7 @@ private fun BasicListItemPreview_WithSubtitle() {
 private fun BasicListItemPreview_WithValue() {
     FinanceAssistantTheme {
         BasicListItem(
-            title = "С значением справа",
+            content = "С значением справа",
             value = "Русский"
         )
     }
@@ -185,8 +190,8 @@ private fun BasicListItemPreview_WithValue() {
 private fun BasicListItemPreview_WithValueAndSubtitleAndTrailingIcon() {
     FinanceAssistantTheme {
         BasicListItem(
-            title = "С value + сабтайтлами",
-            subtitle = "Подпись",
+            content = "С value + сабтайтлами",
+            subContent = "Подпись",
             value = "Активна",
             valueSubtitle = "Автообновление",
             trailingContent = {
