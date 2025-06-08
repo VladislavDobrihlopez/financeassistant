@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Финансовый помощник</string>
+    <string name="settings_topbar_title">Настройки</string>
+
+    <!-- Settings feature -->
+    <string name="settings_theme">Светлая темная авто</string>
+    <string name="settings_primary_color">Основной цвет</string>
+    <string name="settings_sound">Звуки</string>
+    <string name="settings_touch_gestures">Хаптики</string>
+    <string name="settings_access_password">Код пароль</string>
+    <string name="settings_server_sync">Синхронизация</string>
+    <string name="settings_language">Язык</string>
+    <string name="settings_about">О программе</string>
+</resources>

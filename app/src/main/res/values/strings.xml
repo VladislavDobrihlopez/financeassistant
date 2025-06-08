@@ -1,3 +1,14 @@
 <resources>
     <string name="app_name">finance assistant</string>
+    <string name="settings_topbar_title">Settings</string>
+
+    <!-- Settings feature -->
+    <string name="settings_theme">Light Dark Auto</string>
+    <string name="settings_primary_color">Primary color</string>
+    <string name="settings_sound">Sound</string>
+    <string name="settings_touch_gestures">Haptics</string>
+    <string name="settings_access_password">Passcode</string>
+    <string name="settings_server_sync">Synchronization</string>
+    <string name="settings_language">Language</string>
+    <string name="settings_about">About</string>
 </resources>
