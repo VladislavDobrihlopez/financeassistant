@@ -1,10 +1,10 @@
 package com.dobrihlopez.financeassistant.core
 
-import android.accounts.Account
+import com.dobrihlopez.financeassistant.feature.accounts.domain.UserAccountDetailed
 import com.dobrihlopez.financeassistant.feature.categories.domain.Category
 
 data class Transaction(
-    val account: Account,
+    val account: UserAccountDetailed,
     val amount: String,
     val category: Category,
     val comment: String,

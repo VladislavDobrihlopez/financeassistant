@@ -11,37 +11,21 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import com.dobrihlopez.financeassistant.coreui.ui.theme.FinanceAssistantTheme
+import com.arkivanov.decompose.defaultComponentContext
+import com.dobrihlopez.financeassistant.core_ui.ui.theme.FinanceAssistantTheme
+import com.dobrihlopez.financeassistant.feature.RootComponent
+import com.dobrihlopez.financeassistant.feature.RootScreen
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
+        val rootComponent = defaultComponentContext()
+
         setContent {
             FinanceAssistantTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Greeting(
-                        name = "Android",
-                        modifier = Modifier.padding(innerPadding)
-                    )
-                }
+                RootScreen(RootComponent.DefaultRootComponent(rootComponent))
             }
         }
-    }
-}
-
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
-
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    FinanceAssistantTheme {
-        Greeting("Android")
     }
 }

@@ -1,11 +1,11 @@
-package com.dobrihlopez.financeassistant.feature.transactioncore
+package com.dobrihlopez.financeassistant.feature.transaction_core.core
 
 import androidx.compose.foundation.layout.height
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.dobrihlopez.financeassistant.coreui.composable.BasicListItem
+import com.dobrihlopez.financeassistant.core_ui.composable.BasicListItem
 
 @Composable
 fun OverViewListItem(content: String, value: String) {

@@ -31,10 +31,11 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.dobrihlopez.financeassistant.R
-import com.dobrihlopez.financeassistant.coreui.composable.LoadingProgressBar
-import com.dobrihlopez.financeassistant.coreui.ui.theme.FinanceAssistantTheme
-import com.dobrihlopez.financeassistant.coreui.ui.theme.spacing
+import com.dobrihlopez.financeassistant.core_ui.composable.LoadingProgressBar
+import com.dobrihlopez.financeassistant.core_ui.ui.theme.FinanceAssistantTheme
+import com.dobrihlopez.financeassistant.core_ui.ui.theme.spacing
 import com.dobrihlopez.financeassistant.feature.categories.domain.Category
+import com.dobrihlopez.financeassistant.feature.categories.presentation.CategoriesStore.CategoriesScreenState
 import com.dobrihlopez.financeassistant.feature.categories.presentation.composable.CategoriesItem
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -42,7 +43,7 @@ import com.dobrihlopez.financeassistant.feature.categories.presentation.composab
 fun CategoriesContent(
     state: CategoriesScreenState,
     onSearchBarTextChange: (String) -> Unit,
-    onSearchBarClick: () -> Unit,
+    onSearchClick: () -> Unit,
 ) {
     Scaffold(topBar = {
         TopAppBar(
@@ -72,7 +73,7 @@ fun CategoriesContent(
                         SearchBar(
                             searchText = state.searchText,
                             onTextChange = onSearchBarTextChange,
-                            onSearchClick = onSearchBarClick,
+                            onSearchClick = onSearchClick,
                         )
                         HorizontalDivider()
                     }
@@ -155,7 +156,7 @@ private fun PreviewLightRussian() {
             state = CategoriesScreenState.Succeeded(
                 searchText = "Найти статью", categories = provideCategories()
             ),
-            onSearchBarClick = {},
+            onSearchClick = {},
             onSearchBarTextChange = {}
         )
     }
@@ -174,7 +175,7 @@ private fun PreviewDarkRussian() {
             state = CategoriesScreenState.Succeeded(
                 searchText = "Найти статью", categories = provideCategories()
             ),
-            onSearchBarClick = {},
+            onSearchClick = {},
             onSearchBarTextChange = {}
         )
     }
@@ -194,7 +195,7 @@ private fun PreviewLightEnglish() {
             state = CategoriesScreenState.Succeeded(
                 searchText = "Найти статью", categories = provideCategories()
             ),
-            onSearchBarClick = {},
+            onSearchClick = {},
             onSearchBarTextChange = {}
         )
     }
@@ -213,24 +214,9 @@ private fun PreviewDarkEnglish() {
             state = CategoriesScreenState.Succeeded(
                 searchText = "Найти статью", categories = provideCategories()
             ),
-            onSearchBarClick = {},
+            onSearchClick = {},
             onSearchBarTextChange = {}
         )
     }
 }
 
-private fun provideCategories(): List<Category> = listOf(
-    Category(id = 1, emoji = "🏠", isIncome = false, name = "Аренда квартиры"),
-    Category(id = 2, emoji = "👗", isIncome = false, name = "Одежда"),
-    Category(id = 3, emoji = "🐶", isIncome = false, name = "На собачку"),
-    Category(id = 4, emoji = "🐶", isIncome = false, name = "На собачку"),
-    Category(
-        id = 5,
-        emoji = "🟢",
-        isIncome = false,
-        name = "Ремонт квартиры"
-    ),
-    Category(id = 6, emoji = "🍭", isIncome = false, name = "Продукты"),
-    Category(id = 7, emoji = "🤸‍♂️", isIncome = false, name = "Спортзал"),
-    Category(id = 8, emoji = "💊", isIncome = false, name = "Медицина")
-)

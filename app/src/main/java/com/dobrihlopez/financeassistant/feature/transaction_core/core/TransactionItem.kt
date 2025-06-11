@@ -1,4 +1,4 @@
-package com.dobrihlopez.financeassistant.feature.transactioncore
+package com.dobrihlopez.financeassistant.feature.transaction_core.core
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -16,7 +16,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
 import com.dobrihlopez.financeassistant.core.Transaction
-import com.dobrihlopez.financeassistant.coreui.composable.BasicListItemWithTrailingIcon
+import com.dobrihlopez.financeassistant.core_ui.composable.BasicListItemWithTrailingIcon
 
 @Composable
 fun TransactionItem(

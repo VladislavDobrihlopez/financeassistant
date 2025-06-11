@@ -1,9 +1,10 @@
 package com.dobrihlopez.financeassistant.feature.categories.presentation
 
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 
 @Composable
-fun CategoriesScreen(modifier: Modifier = Modifier) {
-
+fun CategoriesScreen(componentContext: CategoriesComponent) {
+    val screenState = componentContext.state.collectAsStateWithLifecycle().value
+    CategoriesContent(state = screenState, onSearchBarTextChange = {}, onSearchClick = {})
 }

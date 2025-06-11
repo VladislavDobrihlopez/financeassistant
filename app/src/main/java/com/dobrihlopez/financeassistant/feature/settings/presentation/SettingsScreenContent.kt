@@ -20,13 +20,13 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.dobrihlopez.financeassistant.R
-import com.dobrihlopez.financeassistant.coreui.ui.theme.FinanceAssistantTheme
+import com.dobrihlopez.financeassistant.core_ui.ui.theme.FinanceAssistantTheme
 import com.dobrihlopez.financeassistant.feature.settings.domain.AppSettingItem
 import com.dobrihlopez.financeassistant.feature.settings.presentation.composable.SettingItem
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SettingScreenContent(modifier: Modifier = Modifier) {
+fun SettingScreenContent(state: SettingsScreenState, onOptionClicked: (AppSettingItem) -> Unit) {
     Scaffold(topBar = {
         TopAppBar(
             title = {
@@ -51,18 +51,15 @@ fun SettingScreenContent(modifier: Modifier = Modifier) {
         }
 
         val items = remember(provider) {
-            AppSettingItem.all.map { it to provider.provide(it) }
+            state.items.map { it to provider.provide(it) }
         }
 
         LazyColumn(modifier = Modifier.padding(values)) {
-
             itemsIndexed(
                 items = items,
                 key = { _, (section, _) -> section.id }
             ) { idx, (section, name) ->
-                SettingItem(section = section, sectionName = name) {
-                    // TODO delegate to component/viewmodel
-                }
+                SettingItem(section = section, sectionName = name, onClick = onOptionClicked)
 
                 if (idx >= 0) {
                     HorizontalDivider()

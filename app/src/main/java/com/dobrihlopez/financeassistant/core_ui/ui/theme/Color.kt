@@ -1,4 +1,4 @@
-package com.dobrihlopez.financeassistant.coreui.ui.theme
+package com.dobrihlopez.financeassistant.core_ui.ui.theme
 
 import androidx.compose.ui.graphics.Color
 

@@ -1,4 +1,4 @@
-package com.dobrihlopez.financeassistant.feature.transactioncore
+package com.dobrihlopez.financeassistant.feature.transaction_core.core
 
 import android.accounts.Account
 import com.dobrihlopez.financeassistant.core.Transaction

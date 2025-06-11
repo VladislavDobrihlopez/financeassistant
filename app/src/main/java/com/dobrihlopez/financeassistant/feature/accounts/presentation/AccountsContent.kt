@@ -1,4 +1,4 @@
-package com.dobrihlopez.financeassistant.feature.account.presentation
+package com.dobrihlopez.financeassistant.feature.accounts.presentation
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -28,11 +28,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.dobrihlopez.financeassistant.R
-import com.dobrihlopez.financeassistant.coreui.composable.LoadingProgressBar
-import com.dobrihlopez.financeassistant.coreui.ui.theme.FinanceAssistantTheme
+import com.dobrihlopez.financeassistant.core_ui.composable.LoadingProgressBar
+import com.dobrihlopez.financeassistant.core_ui.ui.theme.FinanceAssistantTheme
 import com.dobrihlopez.financeassistant.feature.accounts.domain.UserAccountDetailed
-import com.dobrihlopez.financeassistant.feature.accounts.presentation.AccountActionItem
-import com.dobrihlopez.financeassistant.feature.accounts.presentation.AccountScreenState
 import com.dobrihlopez.financeassistant.feature.accounts.presentation.composable.AccountItem
 
 @OptIn(ExperimentalMaterial3Api::class)

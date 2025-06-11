@@ -16,7 +16,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
-import com.dobrihlopez.financeassistant.coreui.composable.BasicListItemWithTrailingIcon
+import com.dobrihlopez.financeassistant.core_ui.composable.BasicListItemWithTrailingIcon
 import com.dobrihlopez.financeassistant.feature.accounts.presentation.AccountActionItem
 
 @Composable

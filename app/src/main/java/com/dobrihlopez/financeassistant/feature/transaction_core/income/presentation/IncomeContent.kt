@@ -1,4 +1,4 @@
-package com.dobrihlopez.financeassistant.feature.income.presentation
+package com.dobrihlopez.financeassistant.feature.transaction_core.income.presentation
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -26,16 +26,16 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.dobrihlopez.financeassistant.R
-import com.dobrihlopez.financeassistant.coreui.composable.LoadingProgressBar
-import com.dobrihlopez.financeassistant.coreui.ui.theme.FinanceAssistantTheme
-import com.dobrihlopez.financeassistant.feature.transactioncore.TransactionItem
-import com.dobrihlopez.financeassistant.feature.transactioncore.OverViewListItem
-import com.dobrihlopez.financeassistant.feature.transactioncore.TransactionScreenState
-import com.dobrihlopez.financeassistant.feature.transactioncore.previewTransactions
+import com.dobrihlopez.financeassistant.core_ui.composable.LoadingProgressBar
+import com.dobrihlopez.financeassistant.core_ui.ui.theme.FinanceAssistantTheme
+import com.dobrihlopez.financeassistant.feature.transaction_core.core.TransactionItem
+import com.dobrihlopez.financeassistant.feature.transaction_core.core.OverViewListItem
+import com.dobrihlopez.financeassistant.feature.transaction_core.core.TransactionScreenState
+import com.dobrihlopez.financeassistant.feature.transaction_core.core.previewIncomeTransactions
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ExpenseContent(
+fun IncomeContent(
     state: TransactionScreenState,
     onHistoryClick: () -> Unit,
     onFabClick: () -> Unit,
@@ -45,7 +45,7 @@ fun ExpenseContent(
             TopAppBar(
                 title = {
                     Box(Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
-                        Text(text = "Расходы сегодня", style = MaterialTheme.typography.titleLarge)
+                        Text(text = "Доходы сегодня", style = MaterialTheme.typography.titleLarge)
                     }
                 },
                 actions = {
@@ -56,7 +56,7 @@ fun ExpenseContent(
                 colors = TopAppBarDefaults.topAppBarColors(
                     containerColor = MaterialTheme.colorScheme.primary,
                     titleContentColor = MaterialTheme.colorScheme.onSurface
-                )
+                ),
             )
         },
         floatingActionButton = {
@@ -91,18 +91,20 @@ fun ExpenseContent(
     }
 }
 
-@Preview(showBackground = true, name = "Expense Light")
+@Preview(showBackground = true, name = "Income Light")
 @Composable
 private fun PreviewIncomeLight() {
     FinanceAssistantTheme(darkTheme = false) {
-        ExpenseContent(
+        IncomeContent(
             state = TransactionScreenState.Succeeded(
-                transactions = previewTransactions(),
+                transactions = previewIncomeTransactions(),
                 summaryText = "Всего",
-                summaryValue = "436 558 ₽"
+                summaryValue = "600 000 ₽"
             ),
             onHistoryClick = {},
             onFabClick = {},
         )
     }
 }
+
+
