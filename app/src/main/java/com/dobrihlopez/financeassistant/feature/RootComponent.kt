@@ -3,6 +3,7 @@ package com.dobrihlopez.financeassistant.feature
 import com.arkivanov.decompose.ComponentContext
 import com.arkivanov.decompose.router.stack.ChildStack
 import com.arkivanov.decompose.router.stack.StackNavigation
+import com.arkivanov.decompose.router.stack.bringToFront
 import com.arkivanov.decompose.router.stack.childStack
 import com.arkivanov.decompose.value.Value
 import com.arkivanov.mvikotlin.core.store.StoreFactory
@@ -12,9 +13,16 @@ import com.dobrihlopez.financeassistant.feature.settings.presentation.SettingsCo
 import com.dobrihlopez.financeassistant.feature.transaction_core.expenses.presentation.ExpenseComponent
 import com.dobrihlopez.financeassistant.feature.transaction_core.income.presentation.IncomeComponent
 import kotlinx.serialization.Serializable
+import java.util.UUID
 
 interface RootComponent {
     val state: Value<ChildStack<*, Child>>
+
+    fun onExpensesClick()
+    fun onIncomeClick()
+    fun onAccountsClick()
+    fun onCategoriesClick()
+    fun onSettingsClick()
 
     sealed class Child {
         data class Accounts(val accountComponent: AccountsComponent) : Child()
@@ -30,15 +38,15 @@ interface RootComponent {
     ) : RootComponent, ComponentContext by defaultComponentContext {
 
         private val stack = StackNavigation<Config>()
-        override val state: Value<ChildStack<*, Child>>
-            get() = childStack(
-                key = "RootChildStack",
-                source = stack,
-                initialConfiguration = Config.Expenses,
-                handleBackButton = true,
-                childFactory = ::child,
-                serializer = Config.serializer()
-            )
+        
+        override val state: Value<ChildStack<*, Child>> = childStack(
+            key = "RootChildStack",
+            source = stack,
+            initialConfiguration = Config.Expenses,
+            handleBackButton = true,
+            childFactory = ::child,
+            serializer = Config.serializer()
+        )
 
         private fun child(config: Config, componentContext: ComponentContext): Child {
             return when (config) {
@@ -48,6 +56,26 @@ interface RootComponent {
                 Config.Income -> Child.Income(IncomeComponent.DefaultIncomeComponent(componentContext, storeFactory))
                 Config.Settings -> Child.Settings(SettingsComponent.DefaultAccountComponent(componentContext, storeFactory))
             }
+        }
+
+        override fun onExpensesClick() {
+            stack.bringToFront(Config.Expenses)
+        }
+
+        override fun onIncomeClick() {
+            stack.bringToFront(Config.Income)
+        }
+
+        override fun onAccountsClick() {
+            stack.bringToFront(Config.Accounts)
+        }
+
+        override fun onCategoriesClick() {
+            stack.bringToFront(Config.Categories)
+        }
+
+        override fun onSettingsClick() {
+            stack.bringToFront(Config.Settings)
         }
 
         @Serializable
