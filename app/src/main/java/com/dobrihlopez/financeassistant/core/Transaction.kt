@@ -2,7 +2,9 @@ package com.dobrihlopez.financeassistant.core
 
 import com.dobrihlopez.financeassistant.feature.accounts.domain.UserAccountDetailed
 import com.dobrihlopez.financeassistant.feature.categories.domain.Category
+import kotlinx.serialization.Serializable
 
+@Serializable
 data class Transaction(
     val account: UserAccountDetailed,
     val amount: String,

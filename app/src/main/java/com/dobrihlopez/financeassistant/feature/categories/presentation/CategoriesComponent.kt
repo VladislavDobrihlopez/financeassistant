@@ -57,7 +57,7 @@ interface CategoriesComponent {
     }
 }
 
-private fun provideCategories(): List<Category> = listOf(
+fun provideCategories(): List<Category> = listOf(
     Category(id = 1, emoji = "🏠", isIncome = false, name = "Аренда квартиры"),
     Category(id = 2, emoji = "👗", isIncome = false, name = "Одежда"),
     Category(id = 3, emoji = "🐶", isIncome = false, name = "На собачку"),

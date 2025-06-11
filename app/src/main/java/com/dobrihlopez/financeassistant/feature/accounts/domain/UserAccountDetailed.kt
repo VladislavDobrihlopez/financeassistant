@@ -1,5 +1,8 @@
 package com.dobrihlopez.financeassistant.feature.accounts.domain
 
+import kotlinx.serialization.Serializable
+
+@Serializable
 data class UserAccountDetailed(
     val balance: String,
     val createdAt: String,

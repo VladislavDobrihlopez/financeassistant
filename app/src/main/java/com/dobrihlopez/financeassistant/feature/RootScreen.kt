@@ -4,9 +4,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import com.arkivanov.decompose.Child
-import com.arkivanov.decompose.extensions.compose.jetpack.stack.Children
-import com.arkivanov.decompose.extensions.compose.jetpack.subscribeAsState
+import com.arkivanov.decompose.extensions.compose.stack.Children
 import com.dobrihlopez.financeassistant.feature.accounts.presentation.AccountsScreen
 import com.dobrihlopez.financeassistant.feature.categories.presentation.CategoriesScreen
 import com.dobrihlopez.financeassistant.feature.settings.presentation.SettingScreen

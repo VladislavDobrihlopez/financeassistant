@@ -5,6 +5,7 @@ import com.arkivanov.decompose.router.stack.ChildStack
 import com.arkivanov.decompose.router.stack.StackNavigation
 import com.arkivanov.decompose.router.stack.childStack
 import com.arkivanov.decompose.value.Value
+import com.arkivanov.mvikotlin.core.store.StoreFactory
 import com.dobrihlopez.financeassistant.feature.accounts.presentation.AccountsComponent
 import com.dobrihlopez.financeassistant.feature.categories.presentation.CategoriesComponent
 import com.dobrihlopez.financeassistant.feature.settings.presentation.SettingsComponent
@@ -25,6 +26,7 @@ interface RootComponent {
 
     class DefaultRootComponent(
         val defaultComponentContext: ComponentContext,
+        private val storeFactory: StoreFactory,
     ) : RootComponent, ComponentContext by defaultComponentContext {
 
         private val stack = StackNavigation<Config>()
@@ -38,17 +40,15 @@ interface RootComponent {
                 serializer = Config.serializer()
             )
 
-
         private fun child(config: Config, componentContext: ComponentContext): Child {
             return when (config) {
-                Config.Accounts -> Child.Accounts(AccountsComponent.DefaultAccountComponent(componentContext))
-                Config.Categories -> Child.Category(CategoriesComponent.DefaultCategoriesComponent(componentContext))
-                Config.Expenses -> Child.Expenses(ExpenseComponent.DefaultExpenseComponent(componentContext))
-                Config.Income -> Child.Income(IncomeComponent.DefaultIncomeComponent(componentContext))
-                Config.Settings -> Child.Settings(SettingsComponent.DefaultAccountComponent(componentContext))
+                Config.Accounts -> Child.Accounts(AccountsComponent.DefaultAccountComponent(componentContext, storeFactory))
+                Config.Categories -> Child.Category(CategoriesComponent.DefaultCategoriesComponent(componentContext, storeFactory))
+                Config.Expenses -> Child.Expenses(ExpenseComponent.DefaultExpenseComponent(componentContext, storeFactory))
+                Config.Income -> Child.Income(IncomeComponent.DefaultIncomeComponent(componentContext, storeFactory))
+                Config.Settings -> Child.Settings(SettingsComponent.DefaultAccountComponent(componentContext, storeFactory))
             }
         }
-
 
         @Serializable
         sealed class Config {

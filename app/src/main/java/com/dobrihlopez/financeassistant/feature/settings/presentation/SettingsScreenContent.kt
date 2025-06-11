@@ -1,6 +1,7 @@
 package com.dobrihlopez.financeassistant.feature.settings.presentation
 
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -20,83 +21,118 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.dobrihlopez.financeassistant.R
+import com.dobrihlopez.financeassistant.core_ui.composable.LoadingProgressBar
 import com.dobrihlopez.financeassistant.core_ui.ui.theme.FinanceAssistantTheme
 import com.dobrihlopez.financeassistant.feature.settings.domain.AppSettingItem
+import com.dobrihlopez.financeassistant.feature.settings.presentation.SettingsStore.SettingsScreenState
 import com.dobrihlopez.financeassistant.feature.settings.presentation.composable.SettingItem
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SettingScreenContent(state: SettingsScreenState, onOptionClicked: (AppSettingItem) -> Unit) {
-    Scaffold(topBar = {
-        TopAppBar(
-            title = {
-                Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
+fun SettingScreenContent(
+    state: SettingsScreenState,
+    onOptionClicked: (AppSettingItem) -> Unit
+) {
+    Scaffold(
+        topBar = {
+            TopAppBar(
+                title = {
+                    Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
+                        Text(
+                            text = stringResource(R.string.settings_topbar_title),
+                            style = MaterialTheme.typography.titleLarge,
+                        )
+                    }
+                },
+                colors = TopAppBarDefaults.topAppBarColors(
+                    containerColor = MaterialTheme.colorScheme.primary,
+                    titleContentColor = MaterialTheme.colorScheme.onSurface,
+                )
+            )
+        }
+    ) { paddingValues ->
+        when (state) {
+            is SettingsScreenState.Loading -> {
+                Box(modifier = Modifier.fillMaxSize()) {
+                    LoadingProgressBar()
+                }
+            }
+            is SettingsScreenState.Failed -> {
+                Box(modifier = Modifier.fillMaxSize()) {
                     Text(
-                        text = stringResource(R.string.settings_topbar_title),
-                        style = MaterialTheme.typography.titleLarge,
+                        text = state.errorResId?.let { stringResource(it) } ?: "Error",
+                        style = MaterialTheme.typography.bodyLarge,
+                        color = MaterialTheme.colorScheme.error
                     )
                 }
-            },
-            colors = TopAppBarDefaults.topAppBarColors(
-                containerColor = MaterialTheme.colorScheme.primary,
-                titleContentColor = MaterialTheme.colorScheme.onSurface,
-            )
-        )
-    }) { values ->
-        val context = LocalContext.current
+            }
+            is SettingsScreenState.Succeeded -> {
+                val context = LocalContext.current
+                val provider = remember { AndroidSettingsProvider(context) }
+                val items = remember(provider) {
+                    state.items.map { it to provider.provide(it) }
+                }
 
-        // TODO move this logic out into component/viewmodel
-        val provider = remember {
-            AndroidSettingsProvider(context)
-        }
-
-        val items = remember(provider) {
-            state.items.map { it to provider.provide(it) }
-        }
-
-        LazyColumn(modifier = Modifier.padding(values)) {
-            itemsIndexed(
-                items = items,
-                key = { _, (section, _) -> section.id }
-            ) { idx, (section, name) ->
-                SettingItem(section = section, sectionName = name, onClick = onOptionClicked)
-
-                if (idx >= 0) {
-                    HorizontalDivider()
+                LazyColumn(modifier = Modifier.padding(paddingValues)) {
+                    itemsIndexed(
+                        items = items,
+                        key = { _, (section, _) -> section.id }
+                    ) { idx, (section, name) ->
+                        SettingItem(section = section, sectionName = name, onClick = onOptionClicked)
+                        if (idx < items.lastIndex) {
+                            HorizontalDivider()
+                        }
+                    }
                 }
             }
         }
     }
 }
 
-@Preview(showSystemUi = true, locale = "ru", group = "Russian")
+@Preview(showBackground = true, name = "Settings Light")
 @Composable
-private fun PreviewSettingScreenContent_Light_Ru() {
-    FinanceAssistantTheme {
-        SettingScreenContent()
+private fun PreviewSettingScreenContent_Light() {
+    FinanceAssistantTheme(darkTheme = false) {
+        SettingScreenContent(
+            state = SettingsStore.SettingsScreenState.Succeeded(
+                items = AppSettingItem.all
+            ),
+            onOptionClicked = {}
+        )
     }
 }
 
-@Preview(showSystemUi = true, locale = "ru", group = "Russian")
+@Preview(showBackground = true, name = "Settings Dark")
 @Composable
-private fun PreviewSettingScreenContent_Dark_Ru() {
+private fun PreviewSettingScreenContent_Dark() {
     FinanceAssistantTheme(darkTheme = true) {
-        SettingScreenContent()
+        SettingScreenContent(
+            state = SettingsStore.SettingsScreenState.Succeeded(
+                items = AppSettingItem.all
+            ),
+            onOptionClicked = {}
+        )
     }
 }
 
-@Preview(showSystemUi = true, locale = "eng", group = "English")
+@Preview(showBackground = true, name = "Settings Loading")
 @Composable
-private fun PreviewSettingScreenContent_Light_Eng() {
+private fun PreviewSettingScreenContent_Loading() {
     FinanceAssistantTheme {
-        SettingScreenContent()
+        SettingScreenContent(
+            state = SettingsStore.SettingsScreenState.Loading,
+            onOptionClicked = {}
+        )
     }
 }
 
-@Preview(showSystemUi = true, locale = "eng", group = "English")
+@Preview(showBackground = true, name = "Settings Error")
 @Composable
-private fun PreviewSettingScreenContent_Dark_Eng() {
-    FinanceAssistantTheme(darkTheme = true) {
-        SettingScreenContent()
+private fun PreviewSettingScreenContent_Error() {
+    FinanceAssistantTheme {
+        SettingScreenContent(
+            state = SettingsStore.SettingsScreenState.Failed(null),
+            onOptionClicked = {}
+        )
     }
 }

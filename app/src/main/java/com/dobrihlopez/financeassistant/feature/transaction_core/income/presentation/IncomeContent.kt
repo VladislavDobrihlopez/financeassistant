@@ -28,15 +28,14 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.dobrihlopez.financeassistant.R
 import com.dobrihlopez.financeassistant.core_ui.composable.LoadingProgressBar
 import com.dobrihlopez.financeassistant.core_ui.ui.theme.FinanceAssistantTheme
-import com.dobrihlopez.financeassistant.feature.transaction_core.core.TransactionItem
 import com.dobrihlopez.financeassistant.feature.transaction_core.core.OverViewListItem
-import com.dobrihlopez.financeassistant.feature.transaction_core.core.TransactionScreenState
+import com.dobrihlopez.financeassistant.feature.transaction_core.core.TransactionItem
 import com.dobrihlopez.financeassistant.feature.transaction_core.core.previewIncomeTransactions
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun IncomeContent(
-    state: TransactionScreenState,
+    state: IncomeStore.IncomeScreenState,
     onHistoryClick: () -> Unit,
     onFabClick: () -> Unit,
 ) {
@@ -70,9 +69,9 @@ fun IncomeContent(
         }
     ) { paddingValues ->
         when (state) {
-            is TransactionScreenState.Loading -> LoadingProgressBar()
-            is TransactionScreenState.Failed -> TODO()
-            is TransactionScreenState.Succeeded -> {
+            is IncomeStore.IncomeScreenState.Loading -> LoadingProgressBar()
+            is IncomeStore.IncomeScreenState.Failed -> TODO()
+            is IncomeStore.IncomeScreenState.Succeeded -> {
                 LazyColumn(modifier = Modifier
                     .padding(paddingValues)
                     .fillMaxSize()
@@ -96,7 +95,23 @@ fun IncomeContent(
 private fun PreviewIncomeLight() {
     FinanceAssistantTheme(darkTheme = false) {
         IncomeContent(
-            state = TransactionScreenState.Succeeded(
+            state = IncomeStore.IncomeScreenState.Succeeded(
+                transactions = previewIncomeTransactions(),
+                summaryText = "Всего",
+                summaryValue = "600 000 ₽"
+            ),
+            onHistoryClick = {},
+            onFabClick = {},
+        )
+    }
+}
+
+@Preview(showBackground = true, name = "Income Dark")
+@Composable
+private fun PreviewIncomeDark() {
+    FinanceAssistantTheme(darkTheme = true) {
+        IncomeContent(
+            state = IncomeStore.IncomeScreenState.Succeeded(
                 transactions = previewIncomeTransactions(),
                 summaryText = "Всего",
                 summaryValue = "600 000 ₽"

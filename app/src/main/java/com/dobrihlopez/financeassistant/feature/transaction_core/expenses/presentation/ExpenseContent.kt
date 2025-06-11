@@ -30,13 +30,13 @@ import com.dobrihlopez.financeassistant.core_ui.composable.LoadingProgressBar
 import com.dobrihlopez.financeassistant.core_ui.ui.theme.FinanceAssistantTheme
 import com.dobrihlopez.financeassistant.feature.transaction_core.core.TransactionItem
 import com.dobrihlopez.financeassistant.feature.transaction_core.core.OverViewListItem
-import com.dobrihlopez.financeassistant.feature.transaction_core.core.TransactionScreenState
 import com.dobrihlopez.financeassistant.feature.transaction_core.core.previewTransactions
+import com.dobrihlopez.financeassistant.feature.transaction_core.expenses.presentation.ExpenseStore
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ExpenseContent(
-    state: TransactionScreenState,
+    state: ExpenseStore.ExpenseScreenState,
     onHistoryClick: () -> Unit,
     onFabClick: () -> Unit,
 ) {
@@ -70,9 +70,9 @@ fun ExpenseContent(
         }
     ) { paddingValues ->
         when (state) {
-            is TransactionScreenState.Loading -> LoadingProgressBar()
-            is TransactionScreenState.Failed -> TODO()
-            is TransactionScreenState.Succeeded -> {
+            is ExpenseStore.ExpenseScreenState.Loading -> LoadingProgressBar()
+            is ExpenseStore.ExpenseScreenState.Failed -> TODO()
+            is ExpenseStore.ExpenseScreenState.Succeeded -> {
                 LazyColumn(modifier = Modifier
                     .padding(paddingValues)
                     .fillMaxSize()
@@ -93,10 +93,26 @@ fun ExpenseContent(
 
 @Preview(showBackground = true, name = "Expense Light")
 @Composable
-private fun PreviewIncomeLight() {
+private fun PreviewExpenseLight() {
     FinanceAssistantTheme(darkTheme = false) {
         ExpenseContent(
-            state = TransactionScreenState.Succeeded(
+            state = ExpenseStore.ExpenseScreenState.Succeeded(
+                transactions = previewTransactions(),
+                summaryText = "Всего",
+                summaryValue = "436 558 ₽"
+            ),
+            onHistoryClick = {},
+            onFabClick = {},
+        )
+    }
+}
+
+@Preview(showBackground = true, name = "Expense Dark")
+@Composable
+private fun PreviewExpenseDark() {
+    FinanceAssistantTheme(darkTheme = true) {
+        ExpenseContent(
+            state = ExpenseStore.ExpenseScreenState.Succeeded(
                 transactions = previewTransactions(),
                 summaryText = "Всего",
                 summaryValue = "436 558 ₽"

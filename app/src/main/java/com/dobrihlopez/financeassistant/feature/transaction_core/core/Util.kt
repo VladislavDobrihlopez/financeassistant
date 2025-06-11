@@ -1,7 +1,7 @@
 package com.dobrihlopez.financeassistant.feature.transaction_core.core
 
-import android.accounts.Account
 import com.dobrihlopez.financeassistant.core.Transaction
+import com.dobrihlopez.financeassistant.feature.accounts.domain.UserAccountDetailed
 import com.dobrihlopez.financeassistant.feature.categories.domain.Category
 
 fun previewTransactions(): List<Transaction> = listOf(
@@ -10,7 +10,16 @@ fun previewTransactions(): List<Transaction> = listOf(
         amount = "100 000 ₽",
         category = Category("🏠", 1, false, "Аренда квартиры"),
         comment = "",
-        account = Account("com.bank", "1"),
+        account = UserAccountDetailed(
+            id = 1,
+            name = "Мой счёт",
+            balance = "-670 000",
+            currency = "₽",
+            createdAt = "",
+            updatedAt = "",
+            expenseStats = emptyList(),
+            incomeStatistics = emptyList()
+        ),
         createdAt = "",
         updatedAt = "",
         transactionDate = "2025-06-08"
@@ -20,7 +29,16 @@ fun previewTransactions(): List<Transaction> = listOf(
         amount = "100 000 ₽",
         category = Category("👗", 2, false, "Одежда"),
         comment = "",
-        account = Account("com.bank", "1"),
+        account = UserAccountDetailed(
+            id = 1,
+            name = "Мой счёт",
+            balance = "-670 000",
+            currency = "₽",
+            createdAt = "",
+            updatedAt = "",
+            expenseStats = emptyList(),
+            incomeStatistics = emptyList()
+        ),
         createdAt = "",
         updatedAt = "",
         transactionDate = "2025-06-08"
@@ -30,7 +48,16 @@ fun previewTransactions(): List<Transaction> = listOf(
         amount = "100 000 ₽",
         category = Category("🐶", 3, false, "На собачку"),
         comment = "Джек",
-        account = Account("com.bank", "1"),
+        account = UserAccountDetailed(
+            id = 1,
+            name = "Мой счёт",
+            balance = "-670 000",
+            currency = "₽",
+            createdAt = "",
+            updatedAt = "",
+            expenseStats = emptyList(),
+            incomeStatistics = emptyList()
+        ),
         createdAt = "",
         updatedAt = "",
         transactionDate = "2025-06-08"
@@ -40,7 +67,16 @@ fun previewTransactions(): List<Transaction> = listOf(
         amount = "100 000 ₽",
         category = Category("🐶", 4, false, "На собачку"),
         comment = "Энни",
-        account = Account("com.bank", "1"),
+        account = UserAccountDetailed(
+            id = 1,
+            name = "Мой счёт",
+            balance = "-670 000",
+            currency = "₽",
+            createdAt = "",
+            updatedAt = "",
+            expenseStats = emptyList(),
+            incomeStatistics = emptyList()
+        ),
         createdAt = "",
         updatedAt = "",
         transactionDate = "2025-06-08"
@@ -48,9 +84,18 @@ fun previewTransactions(): List<Transaction> = listOf(
     Transaction(
         id = 5,
         amount = "100 000 ₽",
-        category = Category("РК", 5, false, "Ремонт квартиры"),
+        category = Category("🟢", 5, false, "Ремонт квартиры"),
         comment = "",
-        account = Account("com.bank", "1"),
+        account = UserAccountDetailed(
+            id = 1,
+            name = "Мой счёт",
+            balance = "-670 000",
+            currency = "₽",
+            createdAt = "",
+            updatedAt = "",
+            expenseStats = emptyList(),
+            incomeStatistics = emptyList()
+        ),
         createdAt = "",
         updatedAt = "",
         transactionDate = "2025-06-08"
@@ -60,7 +105,16 @@ fun previewTransactions(): List<Transaction> = listOf(
         amount = "100 000 ₽",
         category = Category("🍭", 6, false, "Продукты"),
         comment = "",
-        account = Account("com.bank", "1"),
+        account = UserAccountDetailed(
+            id = 1,
+            name = "Мой счёт",
+            balance = "-670 000",
+            currency = "₽",
+            createdAt = "",
+            updatedAt = "",
+            expenseStats = emptyList(),
+            incomeStatistics = emptyList()
+        ),
         createdAt = "",
         updatedAt = "",
         transactionDate = "2025-06-08"
@@ -70,7 +124,16 @@ fun previewTransactions(): List<Transaction> = listOf(
         amount = "100 000 ₽",
         category = Category("🏋️", 7, false, "Спортзал"),
         comment = "",
-        account = Account("com.bank", "1"),
+        account = UserAccountDetailed(
+            id = 1,
+            name = "Мой счёт",
+            balance = "-670 000",
+            currency = "₽",
+            createdAt = "",
+            updatedAt = "",
+            expenseStats = emptyList(),
+            incomeStatistics = emptyList()
+        ),
         createdAt = "",
         updatedAt = "",
         transactionDate = "2025-06-08"
@@ -80,7 +143,16 @@ fun previewTransactions(): List<Transaction> = listOf(
         amount = "100 000 ₽",
         category = Category("💊", 8, false, "Медицина"),
         comment = "",
-        account = Account("com.bank", "1"),
+        account = UserAccountDetailed(
+            id = 1,
+            name = "Мой счёт",
+            balance = "-670 000",
+            currency = "₽",
+            createdAt = "",
+            updatedAt = "",
+            expenseStats = emptyList(),
+            incomeStatistics = emptyList()
+        ),
         createdAt = "",
         updatedAt = "",
         transactionDate = "2025-06-08"
@@ -90,20 +162,57 @@ fun previewTransactions(): List<Transaction> = listOf(
 fun previewIncomeTransactions(): List<Transaction> = listOf(
     Transaction(
         id = 1,
-        amount = "+500 000 ₽",
-        category = Category(id = 1, isIncome = true, name = "Зарплата"),
+        amount = "200 000 ₽",
+        category = Category("💼", 1, true, "Зарплата"),
         comment = "",
-        account = Account("com.bank", "1"),
+        account = UserAccountDetailed(
+            id = 1,
+            name = "Мой счёт",
+            balance = "-670 000",
+            currency = "₽",
+            createdAt = "",
+            updatedAt = "",
+            expenseStats = emptyList(),
+            incomeStatistics = emptyList()
+        ),
         createdAt = "",
         updatedAt = "",
         transactionDate = "2025-06-08"
     ),
     Transaction(
         id = 2,
-        amount = "+100 000 ₽",
-        category = Category( id = 2, isIncome = true, name = "Подработка"),
+        amount = "200 000 ₽",
+        category = Category("💼", 2, true, "Зарплата"),
         comment = "",
-        account = Account("com.bank", "1"),
+        account = UserAccountDetailed(
+            id = 1,
+            name = "Мой счёт",
+            balance = "-670 000",
+            currency = "₽",
+            createdAt = "",
+            updatedAt = "",
+            expenseStats = emptyList(),
+            incomeStatistics = emptyList()
+        ),
+        createdAt = "",
+        updatedAt = "",
+        transactionDate = "2025-06-08"
+    ),
+    Transaction(
+        id = 3,
+        amount = "200 000 ₽",
+        category = Category("💼", 3, true, "Зарплата"),
+        comment = "",
+        account = UserAccountDetailed(
+            id = 1,
+            name = "Мой счёт",
+            balance = "-670 000",
+            currency = "₽",
+            createdAt = "",
+            updatedAt = "",
+            expenseStats = emptyList(),
+            incomeStatistics = emptyList()
+        ),
         createdAt = "",
         updatedAt = "",
         transactionDate = "2025-06-08"

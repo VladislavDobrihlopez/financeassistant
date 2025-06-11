@@ -31,6 +31,7 @@ import com.dobrihlopez.financeassistant.R
 import com.dobrihlopez.financeassistant.core_ui.composable.LoadingProgressBar
 import com.dobrihlopez.financeassistant.core_ui.ui.theme.FinanceAssistantTheme
 import com.dobrihlopez.financeassistant.feature.accounts.domain.UserAccountDetailed
+import com.dobrihlopez.financeassistant.feature.accounts.presentation.AccountsStore.AccountScreenState
 import com.dobrihlopez.financeassistant.feature.accounts.presentation.composable.AccountItem
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -138,7 +139,9 @@ private fun provideAccount(): UserAccountDetailed = UserAccountDetailed(
 private fun PreviewLightRussian() {
     FinanceAssistantTheme(darkTheme = false) {
         AccountContent(
-            state = AccountScreenState.Succeeded(provideAccount()),
+            state = AccountsStore.AccountScreenState.Succeeded(
+                account = provideAccount()
+            ),
             onEditClick = {},
             onFabClick = {},
             onBalanceClick = {},
@@ -157,7 +160,9 @@ private fun PreviewLightRussian() {
 private fun PreviewDarkRussian() {
     FinanceAssistantTheme(darkTheme = true) {
         AccountContent(
-            state = AccountScreenState.Succeeded(provideAccount()),
+            state = AccountsStore.AccountScreenState.Succeeded(
+                account = provideAccount()
+            ),
             onEditClick = {},
             onFabClick = {},
             onBalanceClick = {},
@@ -176,7 +181,9 @@ private fun PreviewDarkRussian() {
 private fun PreviewLightEnglish() {
     FinanceAssistantTheme(darkTheme = false) {
         AccountContent(
-            state = AccountScreenState.Succeeded(provideAccount()),
+            state = AccountsStore.AccountScreenState.Succeeded(
+                account = provideAccount()
+            ),
             onEditClick = {},
             onFabClick = {},
             onBalanceClick = {},
@@ -195,7 +202,9 @@ private fun PreviewLightEnglish() {
 private fun PreviewDarkEnglish() {
     FinanceAssistantTheme(darkTheme = true) {
         AccountContent(
-            state = AccountScreenState.Succeeded(provideAccount()),
+            state = AccountsStore.AccountScreenState.Succeeded(
+                account = provideAccount()
+            ),
             onEditClick = {},
             onFabClick = {},
             onBalanceClick = {},
