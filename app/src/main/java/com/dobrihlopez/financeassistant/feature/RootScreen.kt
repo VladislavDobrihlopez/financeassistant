@@ -1,13 +1,22 @@
 package com.dobrihlopez.financeassistant.feature
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.statusBars
+import androidx.compose.foundation.layout.systemBars
+import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import com.arkivanov.decompose.extensions.compose.stack.Children
+import com.arkivanov.decompose.extensions.compose.subscribeAsState
 import com.dobrihlopez.financeassistant.core_ui.composable.BottomNavigationBar
 import com.dobrihlopez.financeassistant.core_ui.composable.NavigationItem
 import com.dobrihlopez.financeassistant.feature.accounts.presentation.AccountsScreen
@@ -19,10 +28,17 @@ import com.dobrihlopez.financeassistant.feature.transaction_core.income.presenta
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun RootScreen(rootComponent: RootComponent) {
+    val childStack by rootComponent.state.subscribeAsState()
+
     Scaffold(
+        modifier = Modifier.fillMaxSize()
+            .background(MaterialTheme.colorScheme.primary)
+            .windowInsetsPadding(WindowInsets.statusBars)
+            .background(MaterialTheme.colorScheme.background)
+            .windowInsetsPadding(WindowInsets.navigationBars),
         bottomBar = {
             BottomNavigationBar(
-                currentRoute = rootComponent.state.value.active.instance,
+                currentRoute = childStack.active.instance,
                 onNavigate = { item ->
                     when (item) {
                         is NavigationItem.Expenses -> rootComponent.onExpensesClick()
@@ -35,7 +51,11 @@ fun RootScreen(rootComponent: RootComponent) {
             )
         }
     ) { paddingValues ->
-        Box(Modifier.padding(paddingValues)) {
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(paddingValues)
+        ) {
             Children(stack = rootComponent.state) { screen ->
                 when (val config = screen.instance) {
                     is RootComponent.Child.Accounts -> AccountsScreen(config.accountComponent)

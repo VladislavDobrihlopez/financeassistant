@@ -38,9 +38,10 @@ interface RootComponent {
     ) : RootComponent, ComponentContext by defaultComponentContext {
 
         private val stack = StackNavigation<Config>()
+        private val stackKey = UUID.randomUUID().toString()
         
         override val state: Value<ChildStack<*, Child>> = childStack(
-            key = "RootChildStack",
+            key = stackKey,
             source = stack,
             initialConfiguration = Config.Expenses,
             handleBackButton = true,

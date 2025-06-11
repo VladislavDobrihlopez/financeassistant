@@ -51,18 +51,18 @@ fun BottomNavigationBar(
     NavigationBar(
         modifier = Modifier
             .fillMaxWidth()
-            .height(80.dp)
             .windowInsetsPadding(WindowInsets.navigationBars),
         containerColor = MaterialTheme.colorScheme.surface,
-        contentColor = MaterialTheme.colorScheme.onSurface
+        contentColor = MaterialTheme.colorScheme.onSurface,
+        tonalElevation = 0.dp
     ) {
         NavigationItem.items.forEach { item ->
-            val selected = when (currentRoute) {
-                is RootComponent.Child.Expenses -> item is NavigationItem.Expenses
-                is RootComponent.Child.Income -> item is NavigationItem.Incomes
-                is RootComponent.Child.Accounts -> item is NavigationItem.Accounts
-                is RootComponent.Child.Category -> item is NavigationItem.Categories
-                is RootComponent.Child.Settings -> item is NavigationItem.Settings
+            val selected = when (item) {
+                NavigationItem.Expenses -> currentRoute is RootComponent.Child.Expenses
+                NavigationItem.Incomes -> currentRoute is RootComponent.Child.Income
+                NavigationItem.Accounts -> currentRoute is RootComponent.Child.Accounts
+                NavigationItem.Categories -> currentRoute is RootComponent.Child.Category
+                NavigationItem.Settings -> currentRoute is RootComponent.Child.Settings
             }
             NavigationBarItem(
                 selected = selected,
@@ -85,35 +85,3 @@ fun BottomNavigationBar(
         }
     }
 }
-//
-//@Preview(showBackground = true, name = "Bottom Navigation Light")
-//@Composable
-//private fun PreviewBottomNavigationLight() {
-//    FinanceAssistantTheme(darkTheme = false) {
-//        BottomNavigationBar(
-//            currentRoute = RootComponent.Child.Expenses(
-//                ExpenseComponent.DefaultExpenseComponent(
-//                    componentContext = defaultComponentContext(),
-//                    storeFactory = DefaultStoreFactory()
-//                )
-//            ),
-//            onNavigate = {}
-//        )
-//    }
-//}
-//
-//@Preview(showBackground = true, name = "Bottom Navigation Dark")
-//@Composable
-//private fun PreviewBottomNavigationDark() {
-//    FinanceAssistantTheme(darkTheme = true) {
-//        BottomNavigationBar(
-//            currentRoute = RootComponent.Child.Expenses(
-//                ExpenseComponent.DefaultExpenseComponent(
-//                    componentContext = defaultComponentContext(),
-//                    storeFactory = DefaultStoreFactory()
-//                )
-//            ),
-//            onNavigate = {}
-//        )
-//    }
-//}
