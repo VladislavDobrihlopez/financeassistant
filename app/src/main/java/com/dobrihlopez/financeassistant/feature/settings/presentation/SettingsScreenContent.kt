@@ -79,7 +79,7 @@ fun SettingScreenContent(
                         key = { _, (section, _) -> section.id }
                     ) { idx, (section, name) ->
                         SettingItem(section = section, sectionName = name, onClick = onOptionClicked)
-                        if (idx < items.lastIndex) {
+                        if (idx <= items.lastIndex) {
                             HorizontalDivider()
                         }
                     }

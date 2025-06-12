@@ -84,7 +84,7 @@ fun ExpenseContent(
                         OverViewListItem(content = state.summaryText, value = state.summaryValue)
                         HorizontalDivider()
                     }
-                    items(state.transactions) { transaction ->
+                    items(state.transactions, key = { it.id }) { transaction ->
                         TransactionItem(transaction, onClick = {
                             onExpenseClick(transaction)
                         })
