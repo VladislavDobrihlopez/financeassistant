@@ -30,6 +30,7 @@ fun AccountItem(accountActionItem: AccountActionItem, onClick: () -> Unit) {
         backgroundColor = MaterialTheme.colorScheme.primaryContainer,
         content = context.getString(accountActionItem.title),
         value = (accountActionItem.value ?: "") + " " + accountActionItem.currency,
+        onClick = onClick,
         leadingContent = {
             if (accountActionItem.emoji != null) {
                 Box(
@@ -37,7 +38,7 @@ fun AccountItem(accountActionItem: AccountActionItem, onClick: () -> Unit) {
                         .size(28.dp)
                         .clip(CircleShape)
                         .background(MaterialTheme.colorScheme.surface)
-                        .clickable(onClick = onClick),
+                    ,
                     contentAlignment = Alignment.Center
                 ) {
                     Text(
