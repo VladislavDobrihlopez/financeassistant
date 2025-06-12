@@ -6,27 +6,30 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
-import com.dobrihlopez.financeassistant.core_ui.composable.BasicListItemWithTrailingIcon
+import com.dobrihlopez.financeassistant.R
+import com.dobrihlopez.financeassistant.core_ui.composable.BasicListItem
 import com.dobrihlopez.financeassistant.feature.accounts.presentation.AccountActionItem
 
 @Composable
 fun AccountItem(accountActionItem: AccountActionItem, onClick: () -> Unit) {
     val context = LocalContext.current
-    BasicListItemWithTrailingIcon(
+    BasicListItem(
         modifier = Modifier.height(70.dp),
         backgroundColor = MaterialTheme.colorScheme.primaryContainer,
         content = context.getString(accountActionItem.title),
-        valueSubtitle = accountActionItem.value + " " + accountActionItem.currency,
+        value = (accountActionItem.value ?: "") + " " + accountActionItem.currency,
         leadingContent = {
             if (accountActionItem.emoji != null) {
                 Box(
@@ -44,6 +47,11 @@ fun AccountItem(accountActionItem: AccountActionItem, onClick: () -> Unit) {
                 }
             }
         },
-        trailingIcon = Icons.AutoMirrored.Default.KeyboardArrowRight,
+        trailingContent = {
+            Icon(
+                imageVector = ImageVector.vectorResource(R.drawable.ic_arrow_head),
+                contentDescription = null
+            )
+        }
     )
 }

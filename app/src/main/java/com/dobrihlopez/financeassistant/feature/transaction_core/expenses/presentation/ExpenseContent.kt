@@ -23,9 +23,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.dobrihlopez.financeassistant.R
+import com.dobrihlopez.financeassistant.core.Transaction
 import com.dobrihlopez.financeassistant.core_ui.composable.LoadingProgressBar
 import com.dobrihlopez.financeassistant.core_ui.ui.theme.FinanceAssistantTheme
 import com.dobrihlopez.financeassistant.feature.transaction_core.core.TransactionItem
@@ -39,18 +41,19 @@ fun ExpenseContent(
     state: ExpenseStore.ExpenseScreenState,
     onHistoryClick: () -> Unit,
     onFabClick: () -> Unit,
+    onExpenseClick: (Transaction) -> Unit,
 ) {
     Scaffold(
         topBar = {
             TopAppBar(
                 title = {
                     Box(Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
-                        Text(text = "Расходы сегодня", style = MaterialTheme.typography.titleLarge)
+                        Text(text = stringResource(R.string.expenses_topbar_title), style = MaterialTheme.typography.titleLarge)
                     }
                 },
                 actions = {
                     IconButton(onClick = onHistoryClick) {
-                        Icon(ImageVector.vectorResource(R.drawable.ic_history), contentDescription = "History")
+                        Icon(ImageVector.vectorResource(R.drawable.ic_history), contentDescription = null)
                     }
                 },
                 colors = TopAppBarDefaults.topAppBarColors(
@@ -65,7 +68,7 @@ fun ExpenseContent(
                 onClick = onFabClick,
                 containerColor = MaterialTheme.colorScheme.primary
             ) {
-                Icon(Icons.Default.Add, contentDescription = "Add an item")
+                Icon(Icons.Default.Add, contentDescription = null)
             }
         }
     ) { paddingValues ->
@@ -82,7 +85,9 @@ fun ExpenseContent(
                         HorizontalDivider()
                     }
                     items(state.transactions) { transaction ->
-                        TransactionItem(transaction, onClick = { TODO() })
+                        TransactionItem(transaction, onClick = {
+                            onExpenseClick(transaction)
+                        })
                         HorizontalDivider()
                     }
                 }
@@ -103,6 +108,7 @@ private fun PreviewExpenseLight() {
             ),
             onHistoryClick = {},
             onFabClick = {},
+            onExpenseClick = {}
         )
     }
 }
@@ -119,6 +125,7 @@ private fun PreviewExpenseDark() {
             ),
             onHistoryClick = {},
             onFabClick = {},
+            onExpenseClick = {}
         )
     }
 }

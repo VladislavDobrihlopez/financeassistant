@@ -42,8 +42,8 @@ interface SettingsStore: Store<SettingsStore.Intent, SettingsStore.SettingsScree
         private class ExecutorImpl: CoroutineExecutor<Intent, Nothing, SettingsScreenState, Message, Nothing>() {
             override fun executeIntent(intent: Intent) {
                 when (intent) {
-                    Intent.LoadSettings -> TODO()
-                    is Intent.SettingClick -> TODO()
+                    Intent.LoadSettings -> {}
+                    is Intent.SettingClick -> {}
                 }
             }
         }

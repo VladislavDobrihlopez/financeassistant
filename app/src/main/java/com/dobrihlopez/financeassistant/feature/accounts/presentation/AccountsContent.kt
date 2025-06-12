@@ -56,7 +56,7 @@ fun AccountContent(
                 },
                 actions = {
                     IconButton(onClick = onEditClick) {
-                        Icon(imageVector = Icons.Default.Edit, contentDescription = "Edit")
+                        Icon(imageVector = Icons.Default.Edit, contentDescription = null)
                     }
                 },
                 colors = TopAppBarDefaults.topAppBarColors(
@@ -71,7 +71,7 @@ fun AccountContent(
                 onClick = onFabClick,
                 containerColor = MaterialTheme.colorScheme.primary
             ) {
-                Icon(Icons.Default.Add, contentDescription = "Add an item")
+                Icon(Icons.Default.Add, contentDescription = null)
             }
         }
     ) { innerPadding ->
@@ -93,7 +93,6 @@ fun AccountContent(
                         ),
                         AccountActionItem(
                             title = R.string.account_currency,
-                            value = account.currency,
                             currency = "₽",
                             onClick = onCurrencyClick,
                         )

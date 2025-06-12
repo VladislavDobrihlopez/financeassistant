@@ -16,4 +16,6 @@
     <string name="account_topbar_title">My account</string>
     <string name="account_balance">Balance</string>
     <string name="account_currency">Currency</string>
+    <string name="incomes_topbar_title">Incomes today</string>
+    <string name="expenses_topbar_title">Expenses today</string>
 </resources>

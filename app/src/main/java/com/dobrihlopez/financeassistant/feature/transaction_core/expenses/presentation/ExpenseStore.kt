@@ -27,6 +27,7 @@ interface ExpenseStore: Store<ExpenseStore.Intent, ExpenseStore.ExpenseScreenSta
         data object LoadExpenses: Intent()
         data object AddExpense: Intent()
         data object HistoryClick: Intent()
+        data class OnExpenseClick(val transaction: Transaction): Intent()
     }
 
     class ExpenseStoreFactory(
@@ -45,9 +46,10 @@ interface ExpenseStore: Store<ExpenseStore.Intent, ExpenseStore.ExpenseScreenSta
         private class ExecutorImpl: CoroutineExecutor<Intent, Nothing, ExpenseScreenState, Message, Nothing>() {
             override fun executeIntent(intent: Intent) {
                 when (intent) {
-                    Intent.LoadExpenses -> TODO()
-                    Intent.AddExpense -> TODO()
-                    Intent.HistoryClick -> TODO()
+                    Intent.LoadExpenses -> {}
+                    Intent.AddExpense -> {}
+                    Intent.HistoryClick -> {}
+                    is Intent.OnExpenseClick -> {}
                 }
             }
         }

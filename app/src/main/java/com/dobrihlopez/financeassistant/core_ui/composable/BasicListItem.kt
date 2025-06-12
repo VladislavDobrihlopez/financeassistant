@@ -64,7 +64,7 @@ fun BasicListItem(
                 style = MaterialTheme.typography.bodyLarge,
                 color = MaterialTheme.colorScheme.onBackground
             )
-            if (subContent != null) {
+            if (subContent != null && subContent.isNotEmpty()) {
                 Text(
                     text = subContent,
                     style = MaterialTheme.typography.bodySmall,

@@ -45,9 +45,9 @@ interface IncomeStore: Store<IncomeStore.Intent, IncomeStore.IncomeScreenState, 
         private class ExecutorImpl: CoroutineExecutor<Intent, Nothing, IncomeScreenState, Message, Nothing>() {
             override fun executeIntent(intent: Intent) {
                 when (intent) {
-                    Intent.LoadIncome -> TODO()
-                    Intent.AddIncome -> TODO()
-                    Intent.HistoryClick -> TODO()
+                    Intent.LoadIncome -> {}
+                    Intent.AddIncome -> {}
+                    Intent.HistoryClick -> {}
                 }
             }
         }

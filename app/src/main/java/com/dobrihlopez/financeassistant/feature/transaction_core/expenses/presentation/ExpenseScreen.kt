@@ -7,5 +7,11 @@ import com.dobrihlopez.financeassistant.feature.income.presentation.ExpenseConte
 @Composable
 fun ExpenseScreen(componentContext: ExpenseComponent) {
     val screenState = componentContext.state.collectAsStateWithLifecycle().value
-    ExpenseContent(state = screenState, onHistoryClick = {}, onFabClick = {})
+    ExpenseContent(state = screenState, onHistoryClick = {
+        componentContext.onHistoryClick()
+    }, onFabClick = {
+        componentContext.onFabClick()
+    }, onExpenseClick = {
+        componentContext.onExpenseClick(it)
+    })
 }

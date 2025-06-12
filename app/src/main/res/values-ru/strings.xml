@@ -17,4 +17,6 @@
     <string name="account_topbar_title">Мой счёт</string>
     <string name="account_balance">Баланс</string>
     <string name="account_currency">Валюта</string>
+    <string name="incomes_topbar_title">Доходы сегодня</string>
+    <string name="expenses_topbar_title">Расходы сегодня</string>
 </resources>

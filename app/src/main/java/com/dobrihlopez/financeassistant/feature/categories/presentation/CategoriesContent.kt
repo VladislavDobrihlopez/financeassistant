@@ -138,7 +138,7 @@ private fun SearchBar(
                     .size(24.dp),
                 tint = MaterialTheme.colorScheme.onSurfaceVariant,
                 imageVector = Icons.Default.Search,
-                contentDescription = "Search"
+                contentDescription = null
             )
         }
     }

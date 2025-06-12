@@ -23,6 +23,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.dobrihlopez.financeassistant.R
@@ -44,12 +45,12 @@ fun IncomeContent(
             TopAppBar(
                 title = {
                     Box(Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
-                        Text(text = "Доходы сегодня", style = MaterialTheme.typography.titleLarge)
+                        Text(text = stringResource(R.string.incomes_topbar_title), style = MaterialTheme.typography.titleLarge)
                     }
                 },
                 actions = {
                     IconButton(onClick = onHistoryClick) {
-                        Icon(ImageVector.vectorResource(R.drawable.ic_history), contentDescription = "History")
+                        Icon(ImageVector.vectorResource(R.drawable.ic_history), contentDescription = null)
                     }
                 },
                 colors = TopAppBarDefaults.topAppBarColors(
@@ -64,13 +65,13 @@ fun IncomeContent(
                 onClick = onFabClick,
                 containerColor = MaterialTheme.colorScheme.primary
             ) {
-                Icon(Icons.Default.Add, contentDescription = "Add an item")
+                Icon(Icons.Default.Add, contentDescription = null)
             }
         }
     ) { paddingValues ->
         when (state) {
             is IncomeStore.IncomeScreenState.Loading -> LoadingProgressBar()
-            is IncomeStore.IncomeScreenState.Failed -> TODO()
+            is IncomeStore.IncomeScreenState.Failed -> {}
             is IncomeStore.IncomeScreenState.Succeeded -> {
                 LazyColumn(modifier = Modifier
                     .padding(paddingValues)
@@ -81,7 +82,7 @@ fun IncomeContent(
                         HorizontalDivider()
                     }
                     items(state.transactions) { transaction ->
-                        TransactionItem(transaction, onClick = { TODO() })
+                        TransactionItem(transaction, onClick = { })
                         HorizontalDivider()
                     }
                 }

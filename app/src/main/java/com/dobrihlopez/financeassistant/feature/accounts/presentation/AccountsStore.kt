@@ -45,11 +45,11 @@ interface AccountsStore: Store<AccountsStore.Intent, AccountsStore.AccountScreen
         private class ExecutorImpl: CoroutineExecutor<Intent, Nothing, AccountScreenState, Message, Nothing>() {
             override fun executeIntent(intent: Intent) {
                 when (intent) {
-                    Intent.LoadAccount -> TODO()
-                    Intent.EditAccount -> TODO()
-                    Intent.AddAccount -> TODO()
-                    Intent.BalanceClick -> TODO()
-                    Intent.CurrencyClick -> TODO()
+                    Intent.LoadAccount -> {}
+                    Intent.EditAccount -> {}
+                    Intent.AddAccount -> {}
+                    Intent.BalanceClick -> {}
+                    Intent.CurrencyClick -> {}
                 }
             }
         }

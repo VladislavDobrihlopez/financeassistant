@@ -24,7 +24,7 @@ interface IncomeComponent {
         private val initState = restoreState() ?: IncomeStore.IncomeScreenState.Succeeded(
             transactions = previewIncomeTransactions(),
             summaryText = "Всего",
-            summaryValue = "600 000 ₽"
+            summaryValue = "900 000 ₽"
         )
 
         private val store = instanceKeeper.getStore {

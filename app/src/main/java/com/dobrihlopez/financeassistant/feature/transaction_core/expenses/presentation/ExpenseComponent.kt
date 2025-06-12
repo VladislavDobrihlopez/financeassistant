@@ -4,6 +4,7 @@ import com.arkivanov.decompose.ComponentContext
 import com.arkivanov.mvikotlin.core.instancekeeper.getStore
 import com.arkivanov.mvikotlin.core.store.StoreFactory
 import com.arkivanov.mvikotlin.extensions.coroutines.stateFlow
+import com.dobrihlopez.financeassistant.core.Transaction
 import com.dobrihlopez.financeassistant.feature.transaction_core.core.previewTransactions
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.StateFlow
@@ -13,6 +14,7 @@ interface ExpenseComponent {
 
     fun onHistoryClick()
     fun onFabClick()
+    fun onExpenseClick(transaction: Transaction)
 
     class DefaultExpenseComponent(
         val componentContext: ComponentContext,
@@ -49,6 +51,10 @@ interface ExpenseComponent {
 
         override fun onFabClick() {
             store.accept(ExpenseStore.Intent.AddExpense)
+        }
+
+        override fun onExpenseClick(transaction: Transaction) {
+            store.accept(ExpenseStore.Intent.OnExpenseClick(transaction))
         }
 
         private companion object {
