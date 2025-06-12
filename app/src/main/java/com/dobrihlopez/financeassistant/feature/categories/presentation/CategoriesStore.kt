@@ -47,7 +47,7 @@ interface CategoriesStore: Store<CategoriesStore.Intent, CategoriesStore.Categor
 
                 when (intent) {
                     is Intent.SearchBarTextChange -> dispatch(Message.UpdateSearchBar(intent.text))
-                    Intent.SearchCategories -> TODO()
+                    Intent.SearchCategories -> {}
                 }
             }
         }
@@ -60,12 +60,14 @@ interface CategoriesStore: Store<CategoriesStore.Intent, CategoriesStore.Categor
 
                 return when (msg) {
                     is Message.UpdateSearchBar -> copy(searchText = msg.text.trimStart())
+                    is Message.UpdateCategories -> copy(categories = provideCategories())
                 }
             }
         }
 
         sealed class Message {
             data class UpdateSearchBar(val text: String): Message()
+            data class UpdateCategories(val categories: List<Category>): Message()
         }
     }
 }

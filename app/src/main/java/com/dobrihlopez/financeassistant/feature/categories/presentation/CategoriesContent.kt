@@ -2,9 +2,11 @@ package com.dobrihlopez.financeassistant.feature.categories.presentation
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
@@ -66,20 +68,18 @@ fun CategoriesContent(
             is CategoriesScreenState.Failed -> TODO()
             CategoriesScreenState.Loading -> LoadingProgressBar()
             is CategoriesScreenState.Succeeded -> {
-                LazyColumn(modifier = Modifier
-                    .padding(values)
-                    .fillMaxWidth()) {
-                    item {
-                        SearchBar(
-                            searchText = state.searchText,
-                            onTextChange = onSearchBarTextChange,
-                            onSearchClick = onSearchClick,
-                        )
-                        HorizontalDivider()
-                    }
-                    items(items = state.categories, key = { it.id }) { category ->
-                        CategoriesItem(category = category)
-                        HorizontalDivider()
+                Column(modifier = Modifier.padding(values)) {
+                    SearchBar(
+                        searchText = state.searchText,
+                        onTextChange = onSearchBarTextChange,
+                        onSearchClick = onSearchClick,
+                    )
+                    HorizontalDivider()
+                    LazyColumn {
+                        items(items = state.categories, key = { it.id }) { category ->
+                            CategoriesItem(category = category)
+                            HorizontalDivider()
+                        }
                     }
                 }
             }
@@ -97,6 +97,7 @@ private fun SearchBar(
     Row(
         modifier = modifier
             .fillMaxWidth()
+            .height(56.dp)
             .background(MaterialTheme.colorScheme.surfaceContainerHigh)
             .padding(MaterialTheme.spacing.tiny),
         verticalAlignment = Alignment.CenterVertically,

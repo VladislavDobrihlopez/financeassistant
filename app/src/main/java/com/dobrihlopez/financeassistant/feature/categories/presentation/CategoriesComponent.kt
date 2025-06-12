@@ -64,7 +64,7 @@ fun provideCategories(): List<Category> = listOf(
     Category(id = 4, emoji = "🐶", isIncome = false, name = "На собачку"),
     Category(
         id = 5,
-        emoji = "🟢",
+        emoji = "рк",
         isIncome = false,
         name = "Ремонт квартиры"
     ),

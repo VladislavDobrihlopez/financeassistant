@@ -84,7 +84,7 @@ fun previewTransactions(): List<Transaction> = listOf(
     Transaction(
         id = 5,
         amount = "100 000 ₽",
-        category = Category("🟢", 5, false, "Ремонт квартиры"),
+        category = Category("рк", 5, false, "Ремонт квартиры"),
         comment = "",
         account = UserAccountDetailed(
             id = 1,
@@ -156,7 +156,45 @@ fun previewTransactions(): List<Transaction> = listOf(
         createdAt = "",
         updatedAt = "",
         transactionDate = "2025-06-08"
-    )
+    ),
+    Transaction(
+        id = 500,
+        amount = "100 000 ₽",
+        category = Category("рк", 5, false, "Ремонт квартиры"),
+        comment = "",
+        account = UserAccountDetailed(
+            id = 1,
+            name = "Мой счёт",
+            balance = "-670 000",
+            currency = "₽",
+            createdAt = "",
+            updatedAt = "",
+            expenseStats = emptyList(),
+            incomeStatistics = emptyList()
+        ),
+        createdAt = "",
+        updatedAt = "",
+        transactionDate = "2025-06-08"
+    ),
+    Transaction(
+        id = 100,
+        amount = "100 000 ₽",
+        category = Category("🍭", 6, false, "Продукты"),
+        comment = "",
+        account = UserAccountDetailed(
+            id = 1,
+            name = "Мой счёт",
+            balance = "-670 000",
+            currency = "₽",
+            createdAt = "",
+            updatedAt = "",
+            expenseStats = emptyList(),
+            incomeStatistics = emptyList()
+        ),
+        createdAt = "",
+        updatedAt = "",
+        transactionDate = "2025-06-08"
+    ),
 )
 
 fun previewIncomeTransactions(): List<Transaction> = listOf(

@@ -6,5 +6,5 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 @Composable
 fun CategoriesScreen(componentContext: CategoriesComponent) {
     val screenState = componentContext.state.collectAsStateWithLifecycle().value
-    CategoriesContent(state = screenState, onSearchBarTextChange = {}, onSearchClick = {})
+    CategoriesContent(state = screenState, onSearchBarTextChange = componentContext::onSearchBarTextChange, onSearchClick = {})
 }
