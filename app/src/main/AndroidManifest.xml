@@ -10,13 +10,13 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.FinanceAssistant"
-        tools:targetApi="31">
+        android:theme="@style/Theme.FinanceAssistant">
         <activity
             android:name=".MainActivity"
             android:exported="true"
             android:label="@string/app_name"
-            android:theme="@style/Theme.FinanceAssistant">
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.FinanceAssistant.Splash">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

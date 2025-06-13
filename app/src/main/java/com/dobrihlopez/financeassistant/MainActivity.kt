@@ -1,47 +1,58 @@
 package com.dobrihlopez.financeassistant
 
 import android.os.Bundle
+import android.os.PersistableBundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
-import com.dobrihlopez.financeassistant.coreui.ui.theme.FinanceAssistantTheme
+import androidx.compose.runtime.LaunchedEffect
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import com.arkivanov.decompose.defaultComponentContext
+import com.arkivanov.mvikotlin.main.store.DefaultStoreFactory
+import com.dobrihlopez.financeassistant.core_ui.ui.theme.FinanceAssistantTheme
+import com.dobrihlopez.financeassistant.feature.RootComponent
+import com.dobrihlopez.financeassistant.feature.RootScreen
+import kotlinx.coroutines.delay
 
 class MainActivity : ComponentActivity() {
+    private var isSplashVisible = true
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
+
+        isSplashVisible = savedInstanceState?.getBoolean(EXTRA_SPLASH_VISIBILITY, false) ?: false
+        installSplashScreen().setKeepOnScreenCondition {
+            isSplashVisible
+        }
+
+        val rootComponent = RootComponent.DefaultRootComponent(
+            defaultComponentContext = defaultComponentContext(),
+            storeFactory = DefaultStoreFactory()
+        )
+
         setContent {
             FinanceAssistantTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Greeting(
-                        name = "Android",
-                        modifier = Modifier.padding(innerPadding)
-                    )
+                LaunchedEffect(Unit) {
+                    delay(SPLASH_DURATION_IN_MS)
+                    isSplashVisible = false
                 }
+
+                RootScreen(rootComponent)
             }
         }
     }
-}
 
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
+    override fun onSaveInstanceState(
+        outState: Bundle,
+        outPersistentState: PersistableBundle,
+    ) {
+        super.onSaveInstanceState(outState, outPersistentState)
+        outState.putBoolean(EXTRA_SPLASH_VISIBILITY, isSplashVisible)
+    }
 
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    FinanceAssistantTheme {
-        Greeting("Android")
+    private companion object {
+        const val EXTRA_SPLASH_VISIBILITY = "extra_splash"
+        const val SPLASH_DURATION_IN_MS = 1500L
     }
 }
