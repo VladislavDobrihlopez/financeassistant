@@ -7,6 +7,7 @@ import com.arkivanov.mvikotlin.core.store.StoreFactory
 import com.arkivanov.mvikotlin.extensions.coroutines.CoroutineExecutor
 import com.dobrihlopez.financeassistant.feature.accounts.domain.UserAccountDetailed
 import kotlinx.serialization.Serializable
+import javax.inject.Inject
 
 interface AccountsStore: Store<AccountsStore.Intent, AccountsStore.AccountScreenState, Nothing> {
     @Serializable
@@ -29,18 +30,21 @@ interface AccountsStore: Store<AccountsStore.Intent, AccountsStore.AccountScreen
         data object CurrencyClick: Intent()
     }
 
-    class AccountsStoreFactory(
+    class AccountsStoreFactory @Inject constructor(
         private val storeFactory: StoreFactory
     ) {
-        fun create(initialState: AccountScreenState): AccountsStore =
-            object :
-                AccountsStore,
-                Store<Intent, AccountScreenState, Nothing> by storeFactory.create(
-                    name = "AccountsStore",
-                    initialState = initialState,
-                    executorFactory = { ExecutorImpl() },
-                    reducer = ReducerImpl
-                ) {}
+        fun create(initialState: AccountsStore.AccountScreenState): AccountsStore =
+            AccountsStoreImpl(storeFactory, initialState)
+
+        private class AccountsStoreImpl(
+            storeFactory: StoreFactory,
+            initialState: AccountScreenState
+        ) : AccountsStore, Store<Intent, AccountScreenState, Nothing> by storeFactory.create(
+            name = "AccountsStore",
+            initialState = initialState,
+            executorFactory = { ExecutorImpl() },
+            reducer = ReducerImpl
+        )
 
         private class ExecutorImpl: CoroutineExecutor<Intent, Nothing, AccountScreenState, Message, Nothing>() {
             override fun executeIntent(intent: Intent) {

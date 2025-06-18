@@ -57,11 +57,11 @@ fun RootScreen(rootComponent: RootComponent) {
         ) {
             Children(stack = rootComponent.state) { screen ->
                 when (val config = screen.instance) {
-                    is RootComponent.Child.Accounts -> AccountsScreen(config.accountComponent)
-                    is RootComponent.Child.Category -> CategoriesScreen(config.categoryComponent)
-                    is RootComponent.Child.Expenses -> ExpenseScreen(config.expensesComponent)
-                    is RootComponent.Child.Income -> IncomeScreen(config.incomeComponent)
-                    is RootComponent.Child.Settings -> SettingScreen(config.settingsComponent)
+                    is RootComponent.Child.Accounts -> AccountsScreen(config.component)
+                    is RootComponent.Child.Category -> CategoriesScreen(config.component)
+                    is RootComponent.Child.Expenses -> ExpenseScreen(config.component)
+                    is RootComponent.Child.Income -> IncomeScreen(config.component)
+                    is RootComponent.Child.Settings -> SettingScreen(config.component)
                 }
             }
         }

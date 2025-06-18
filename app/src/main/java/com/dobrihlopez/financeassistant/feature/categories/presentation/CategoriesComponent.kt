@@ -8,6 +8,11 @@ import com.dobrihlopez.financeassistant.feature.categories.domain.Category
 import com.dobrihlopez.financeassistant.feature.categories.presentation.CategoriesStore.CategoriesScreenState
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.StateFlow
+import com.dobrihlopez.financeassistant.core.domain.article.ArticleRepository
+import com.dobrihlopez.financeassistant.feature.categories.presentation.CategoriesStore.CategoriesStoreFactory
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 
 interface CategoriesComponent {
     val state: StateFlow<CategoriesScreenState>
@@ -15,22 +20,19 @@ interface CategoriesComponent {
     fun onSearchBarTextChange(text: String)
     fun onSearchClick()
 
-    class DefaultCategoriesComponent(
-        val componentContext: ComponentContext,
-        private val storeFactory: StoreFactory,
-    ): CategoriesComponent, ComponentContext by componentContext {
+    class DefaultCategoriesComponent @AssistedInject constructor(
+        @Assisted("componentContext") private val componentContext: ComponentContext,
+        private val categoriesStoreFactory: CategoriesStoreFactory
+    ) : CategoriesComponent, ComponentContext by componentContext {
 
-        private fun restoreState() = stateKeeper.consume(STATE_KEY, strategy = CategoriesScreenState.serializer())
-
-        private val initState = restoreState() ?: CategoriesScreenState.Succeeded(
-            searchText = "",
-            categories = provideCategories()
-        )
+        private val initState = stateKeeper.consume(STATE_KEY, strategy = CategoriesScreenState.serializer())
+            ?: CategoriesScreenState.Succeeded(
+                searchText = "",
+                categories = provideCategories()
+            )
 
         private val store = instanceKeeper.getStore {
-            CategoriesStore.CategoriesStoreFactory(storeFactory).create(
-                initialState = initState
-            )
+            categoriesStoreFactory.create(initState)
         }
 
         @OptIn(ExperimentalCoroutinesApi::class)
@@ -54,6 +56,11 @@ interface CategoriesComponent {
         private companion object {
             const val STATE_KEY = "categories"
         }
+    }
+
+    @AssistedFactory
+    interface Factory {
+        fun create(@Assisted("componentContext") componentContext: ComponentContext): DefaultCategoriesComponent
     }
 }
 

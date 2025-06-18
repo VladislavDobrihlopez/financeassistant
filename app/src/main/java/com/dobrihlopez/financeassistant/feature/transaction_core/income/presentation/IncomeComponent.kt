@@ -7,6 +7,11 @@ import com.arkivanov.mvikotlin.extensions.coroutines.stateFlow
 import com.dobrihlopez.financeassistant.feature.transaction_core.core.previewIncomeTransactions
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.StateFlow
+import com.dobrihlopez.financeassistant.core.domain.income.IncomeRepository
+import com.dobrihlopez.financeassistant.feature.transaction_core.income.presentation.IncomeStore.IncomeStoreFactory
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 
 interface IncomeComponent {
     val state: StateFlow<IncomeStore.IncomeScreenState>
@@ -14,23 +19,20 @@ interface IncomeComponent {
     fun onHistoryClick()
     fun onFabClick()
 
-    class DefaultIncomeComponent(
-        val componentContext: ComponentContext,
-        private val storeFactory: StoreFactory,
-    ): IncomeComponent, ComponentContext by componentContext {
+    class DefaultIncomeComponent @AssistedInject constructor(
+        @Assisted("componentContext") private val componentContext: ComponentContext,
+        private val incomeStoreFactory: IncomeStoreFactory
+    ) : IncomeComponent, ComponentContext by componentContext {
 
-        private fun restoreState() = stateKeeper.consume(STATE_KEY, strategy = IncomeStore.IncomeScreenState.serializer())
-
-        private val initState = restoreState() ?: IncomeStore.IncomeScreenState.Succeeded(
-            transactions = previewIncomeTransactions(),
-            summaryText = "Всего",
-            summaryValue = "900 000 ₽"
-        )
+        private val initState = stateKeeper.consume(STATE_KEY, strategy = IncomeStore.IncomeScreenState.serializer())
+            ?: IncomeStore.IncomeScreenState.Succeeded(
+                transactions = previewIncomeTransactions(),
+                summaryText = "Всего",
+                summaryValue = "900 000 ₽"
+            )
 
         private val store = instanceKeeper.getStore {
-            IncomeStore.IncomeStoreFactory(storeFactory).create(
-                initialState = initState
-            )
+            incomeStoreFactory.create(initState)
         }
 
         @OptIn(ExperimentalCoroutinesApi::class)
@@ -54,5 +56,10 @@ interface IncomeComponent {
         private companion object {
             const val STATE_KEY = "income"
         }
+    }
+
+    @AssistedFactory
+    interface Factory {
+        fun create(@Assisted("componentContext") componentContext: ComponentContext): DefaultIncomeComponent
     }
 }

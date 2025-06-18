@@ -5,8 +5,12 @@ import com.arkivanov.mvikotlin.core.instancekeeper.getStore
 import com.arkivanov.mvikotlin.core.store.StoreFactory
 import com.arkivanov.mvikotlin.extensions.coroutines.stateFlow
 import com.dobrihlopez.financeassistant.feature.accounts.domain.UserAccountDetailed
+import com.dobrihlopez.financeassistant.feature.accounts.presentation.AccountsStore.AccountsStoreFactory
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.StateFlow
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 
 interface AccountsComponent {
     val state: StateFlow<AccountsStore.AccountScreenState>
@@ -16,21 +20,18 @@ interface AccountsComponent {
     fun onBalanceClick()
     fun onCurrencyClick()
 
-    class DefaultAccountComponent(
-        val componentContext: ComponentContext,
-        private val storeFactory: StoreFactory,
-    ): AccountsComponent, ComponentContext by componentContext {
+    class DefaultAccountComponent @AssistedInject constructor(
+        @Assisted("componentContext") private val componentContext: ComponentContext,
+        private val accountsStoreFactory: AccountsStoreFactory
+    ) : AccountsComponent, ComponentContext by componentContext {
 
-        private fun restoreState() = stateKeeper.consume(STATE_KEY, strategy = AccountsStore.AccountScreenState.serializer())
-
-        private val initState = restoreState() ?: AccountsStore.AccountScreenState.Succeeded(
-            account = provideAccount()
-        )
+        private val initState = stateKeeper.consume(STATE_KEY, strategy = AccountsStore.AccountScreenState.serializer())
+            ?: AccountsStore.AccountScreenState.Succeeded(
+                account = provideAccount()
+            )
 
         private val store = instanceKeeper.getStore {
-            AccountsStore.AccountsStoreFactory(storeFactory).create(
-                initialState = initState
-            )
+            accountsStoreFactory.create(initState)
         }
 
         @OptIn(ExperimentalCoroutinesApi::class)
@@ -57,6 +58,11 @@ interface AccountsComponent {
 
         override fun onCurrencyClick() {
             store.accept(AccountsStore.Intent.CurrencyClick)
+        }
+
+        @AssistedFactory
+        interface Factory {
+            fun create(@Assisted("componentContext") componentContext: ComponentContext): DefaultAccountComponent
         }
 
         private companion object {

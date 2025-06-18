@@ -1,0 +1,84 @@
+package com.dobrihlopez.financeassistant.core.network
+
+import com.dobrihlopez.financeassistant.BuildConfig
+import com.google.gson.Gson
+import com.google.gson.GsonBuilder
+import dagger.Module
+import dagger.Provides
+import dagger.hilt.InstallIn
+import dagger.hilt.components.SingletonComponent
+import okhttp3.Interceptor
+import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
+import javax.inject.Singleton
+
+@Module
+@InstallIn(SingletonComponent::class)
+object NetworkModule {
+
+    @Provides
+    @Singleton
+    fun provideBaseUrl(): String = "https://shmr-finance.ru/api/"
+
+    @Provides
+    @Singleton
+    fun provideGson(): Gson = GsonBuilder().create()
+
+    @Provides
+    @Singleton
+    fun provideOkHttpClient(): OkHttpClient {
+        val logging = HttpLoggingInterceptor().apply {
+            level = HttpLoggingInterceptor.Level.BODY
+        }
+        val authInterceptor = Interceptor { chain ->
+            val request = chain.request().newBuilder()
+                .addHeader("Authorization", "Bearer ${BuildConfig.API_TOKEN}")
+                .build()
+            chain.proceed(request)
+        }
+        return OkHttpClient.Builder()
+            .addInterceptor(authInterceptor)
+            .addInterceptor(logging)
+            .build()
+    }
+
+    @Provides
+    @Singleton
+    fun provideRetrofit(baseUrl: String, client: OkHttpClient, gson: Gson): Retrofit =
+        Retrofit.Builder()
+            .baseUrl(baseUrl)
+            .client(client)
+            .addConverterFactory(GsonConverterFactory.create(gson))
+            .build()
+
+    @Provides
+    @Singleton
+    fun provideIncomeApi(retrofit: Retrofit): IncomeApi = retrofit.create(IncomeApi::class.java)
+
+    @Provides
+    @Singleton
+    fun provideExpenseApi(retrofit: Retrofit): ExpenseApi = retrofit.create(ExpenseApi::class.java)
+
+    @Provides
+    @Singleton
+    fun provideArticleApi(retrofit: Retrofit): ArticleApi = retrofit.create(ArticleApi::class.java)
+
+    @Provides
+    @Singleton
+    fun provideIncomeRepository(impl: com.dobrihlopez.financeassistant.core.data.income.IncomeRepositoryImpl): com.dobrihlopez.financeassistant.core.domain.income.IncomeRepository = impl
+
+    @Provides
+    @Singleton
+    fun provideExpenseRepository(impl: com.dobrihlopez.financeassistant.core.data.expenses.ExpenseRepositoryImpl): com.dobrihlopez.financeassistant.core.domain.expenses.ExpenseRepository = impl
+
+    @Provides
+    @Singleton
+    fun provideArticleRepository(impl: com.dobrihlopez.financeassistant.core.data.article.ArticleRepositoryImpl): com.dobrihlopez.financeassistant.core.domain.article.ArticleRepository = impl
+
+    // Примеры провайдеров API-интерфейсов (реализую далее)
+    // @Provides
+    // @Singleton
+    // fun provideIncomeApi(retrofit: Retrofit): IncomeApi = retrofit.create(IncomeApi::class.java)
+} 

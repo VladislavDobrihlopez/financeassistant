@@ -5,29 +5,30 @@ import com.arkivanov.mvikotlin.core.instancekeeper.getStore
 import com.arkivanov.mvikotlin.core.store.StoreFactory
 import com.arkivanov.mvikotlin.extensions.coroutines.stateFlow
 import com.dobrihlopez.financeassistant.feature.settings.domain.AppSettingItem
+import com.dobrihlopez.financeassistant.feature.settings.presentation.SettingsStore.SettingsStoreFactory
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.StateFlow
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 
 interface SettingsComponent {
     val state: StateFlow<SettingsStore.SettingsScreenState>
 
     fun onSettingClick(setting: AppSettingItem)
 
-    class DefaultAccountComponent(
-        val componentContext: ComponentContext,
-        private val storeFactory: StoreFactory,
-    ): SettingsComponent, ComponentContext by componentContext {
+    class DefaultSettingsComponent @AssistedInject constructor(
+        @Assisted("componentContext") private val componentContext: ComponentContext,
+        private val settingsStoreFactory: SettingsStoreFactory
+    ) : SettingsComponent, ComponentContext by componentContext {
 
-        private fun restoreState() = stateKeeper.consume(STATE_KEY, strategy = SettingsStore.SettingsScreenState.serializer())
-
-        private val initState = restoreState() ?: SettingsStore.SettingsScreenState.Succeeded(
-            items = AppSettingItem.all
-        )
+        private val initState = stateKeeper.consume(STATE_KEY, strategy = SettingsStore.SettingsScreenState.serializer())
+            ?: SettingsStore.SettingsScreenState.Succeeded(
+                items = AppSettingItem.all
+            )
 
         private val store = instanceKeeper.getStore {
-            SettingsStore.SettingsStoreFactory(storeFactory).create(
-                initialState = initState
-            )
+            settingsStoreFactory.create(initState)
         }
 
         @OptIn(ExperimentalCoroutinesApi::class)
@@ -42,6 +43,11 @@ interface SettingsComponent {
 
         override fun onSettingClick(setting: AppSettingItem) {
             store.accept(SettingsStore.Intent.SettingClick(setting))
+        }
+
+        @AssistedFactory
+        interface Factory {
+            fun create(@Assisted("componentContext") componentContext: ComponentContext): DefaultSettingsComponent
         }
 
         private companion object {

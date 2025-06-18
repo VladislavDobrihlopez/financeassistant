@@ -8,6 +8,11 @@ import com.dobrihlopez.financeassistant.core.Transaction
 import com.dobrihlopez.financeassistant.feature.transaction_core.core.previewTransactions
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.StateFlow
+import com.dobrihlopez.financeassistant.core.domain.expenses.ExpenseRepository
+import com.dobrihlopez.financeassistant.feature.transaction_core.expenses.presentation.ExpenseStore.ExpenseStoreFactory
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 
 interface ExpenseComponent {
     val state: StateFlow<ExpenseStore.ExpenseScreenState>
@@ -16,23 +21,20 @@ interface ExpenseComponent {
     fun onFabClick()
     fun onExpenseClick(transaction: Transaction)
 
-    class DefaultExpenseComponent(
-        val componentContext: ComponentContext,
-        private val storeFactory: StoreFactory,
-    ): ExpenseComponent, ComponentContext by componentContext {
+    class DefaultExpenseComponent @AssistedInject constructor(
+        @Assisted("componentContext") private val componentContext: ComponentContext,
+        private val expenseStoreFactory: ExpenseStoreFactory
+    ) : ExpenseComponent, ComponentContext by componentContext {
 
-        private fun restoreState() = stateKeeper.consume(STATE_KEY, strategy = ExpenseStore.ExpenseScreenState.serializer())
-
-        private val initState = restoreState() ?: ExpenseStore.ExpenseScreenState.Succeeded(
-            transactions = previewTransactions(),
-            summaryText = "Всего",
-            summaryValue = "436 558 ₽"
-        )
+        private val initState = stateKeeper.consume(STATE_KEY, strategy = ExpenseStore.ExpenseScreenState.serializer())
+            ?: ExpenseStore.ExpenseScreenState.Succeeded(
+                transactions = previewTransactions(),
+                summaryText = "Всего",
+                summaryValue = "436 558 ₽"
+            )
 
         private val store = instanceKeeper.getStore {
-            ExpenseStore.ExpenseStoreFactory(storeFactory).create(
-                initialState = initState
-            )
+            expenseStoreFactory.create(initState)
         }
 
         @OptIn(ExperimentalCoroutinesApi::class)
@@ -60,5 +62,10 @@ interface ExpenseComponent {
         private companion object {
             const val STATE_KEY = "expense"
         }
+    }
+
+    @AssistedFactory
+    interface Factory {
+        fun create(@Assisted("componentContext") componentContext: ComponentContext): DefaultExpenseComponent
     }
 }

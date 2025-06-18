@@ -6,6 +6,8 @@ import com.arkivanov.mvikotlin.core.store.Store
 import com.arkivanov.mvikotlin.core.store.StoreFactory
 import com.arkivanov.mvikotlin.extensions.coroutines.CoroutineExecutor
 import com.dobrihlopez.financeassistant.core.Transaction
+import com.dobrihlopez.financeassistant.core.domain.income.IncomeRepository
+import javax.inject.Inject
 import kotlinx.serialization.Serializable
 
 interface IncomeStore: Store<IncomeStore.Intent, IncomeStore.IncomeScreenState, Nothing> {
@@ -29,18 +31,23 @@ interface IncomeStore: Store<IncomeStore.Intent, IncomeStore.IncomeScreenState, 
         data object HistoryClick: Intent()
     }
 
-    class IncomeStoreFactory(
-        private val storeFactory: StoreFactory
+    class IncomeStoreFactory @Inject constructor(
+        private val storeFactory: StoreFactory,
+        private val incomeRepository: IncomeRepository
     ) {
         fun create(initialState: IncomeScreenState): IncomeStore =
-            object :
-                IncomeStore,
-                Store<Intent, IncomeScreenState, Nothing> by storeFactory.create(
-                    name = "IncomeStore",
-                    initialState = initialState,
-                    executorFactory = { ExecutorImpl() },
-                    reducer = ReducerImpl
-                ) {}
+            IncomeStoreImpl(storeFactory, initialState, incomeRepository)
+
+        private class IncomeStoreImpl(
+            storeFactory: StoreFactory,
+            initialState: IncomeScreenState,
+            incomeRepository: IncomeRepository
+        ) : IncomeStore, Store<Intent, IncomeScreenState, Nothing> by storeFactory.create(
+            name = "IncomeStore",
+            initialState = initialState,
+            executorFactory = { ExecutorImpl() },
+            reducer = ReducerImpl
+        )
 
         private class ExecutorImpl: CoroutineExecutor<Intent, Nothing, IncomeScreenState, Message, Nothing>() {
             override fun executeIntent(intent: Intent) {

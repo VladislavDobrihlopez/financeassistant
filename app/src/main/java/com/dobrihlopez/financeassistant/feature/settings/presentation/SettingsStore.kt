@@ -7,6 +7,7 @@ import com.arkivanov.mvikotlin.core.store.StoreFactory
 import com.arkivanov.mvikotlin.extensions.coroutines.CoroutineExecutor
 import com.dobrihlopez.financeassistant.feature.settings.domain.AppSettingItem
 import kotlinx.serialization.Serializable
+import javax.inject.Inject
 
 interface SettingsStore: Store<SettingsStore.Intent, SettingsStore.SettingsScreenState, Nothing> {
     @Serializable
@@ -26,18 +27,21 @@ interface SettingsStore: Store<SettingsStore.Intent, SettingsStore.SettingsScree
         data class SettingClick(val setting: AppSettingItem): Intent()
     }
 
-    class SettingsStoreFactory(
+    class SettingsStoreFactory @Inject constructor(
         private val storeFactory: StoreFactory
     ) {
         fun create(initialState: SettingsScreenState): SettingsStore =
-            object :
-                SettingsStore,
-                Store<Intent, SettingsScreenState, Nothing> by storeFactory.create(
-                    name = "SettingsStore",
-                    initialState = initialState,
-                    executorFactory = { ExecutorImpl() },
-                    reducer = ReducerImpl
-                ) {}
+            SettingsStoreImpl(storeFactory, initialState)
+
+        private class SettingsStoreImpl(
+            storeFactory: StoreFactory,
+            initialState: SettingsScreenState
+        ) : SettingsStore, Store<Intent, SettingsScreenState, Nothing> by storeFactory.create(
+            name = "SettingsStore",
+            initialState = initialState,
+            executorFactory = { ExecutorImpl() },
+            reducer = ReducerImpl
+        )
 
         private class ExecutorImpl: CoroutineExecutor<Intent, Nothing, SettingsScreenState, Message, Nothing>() {
             override fun executeIntent(intent: Intent) {

@@ -6,6 +6,8 @@ import com.arkivanov.mvikotlin.core.store.Store
 import com.arkivanov.mvikotlin.core.store.StoreFactory
 import com.arkivanov.mvikotlin.extensions.coroutines.CoroutineExecutor
 import com.dobrihlopez.financeassistant.core.Transaction
+import com.dobrihlopez.financeassistant.core.domain.expenses.ExpenseRepository
+import javax.inject.Inject
 import kotlinx.serialization.Serializable
 
 interface ExpenseStore: Store<ExpenseStore.Intent, ExpenseStore.ExpenseScreenState, Nothing> {
@@ -30,18 +32,23 @@ interface ExpenseStore: Store<ExpenseStore.Intent, ExpenseStore.ExpenseScreenSta
         data class OnExpenseClick(val transaction: Transaction): Intent()
     }
 
-    class ExpenseStoreFactory(
-        private val storeFactory: StoreFactory
+    class ExpenseStoreFactory @Inject constructor(
+        private val storeFactory: StoreFactory,
+        private val expenseRepository: ExpenseRepository
     ) {
         fun create(initialState: ExpenseScreenState): ExpenseStore =
-            object :
-                ExpenseStore,
-                Store<Intent, ExpenseScreenState, Nothing> by storeFactory.create(
-                    name = "ExpenseStore",
-                    initialState = initialState,
-                    executorFactory = { ExecutorImpl() },
-                    reducer = ReducerImpl
-                ) {}
+            ExpenseStoreImpl(storeFactory, initialState, expenseRepository)
+
+        private class ExpenseStoreImpl(
+            storeFactory: StoreFactory,
+            initialState: ExpenseScreenState,
+            expenseRepository: ExpenseRepository
+        ) : ExpenseStore, Store<Intent, ExpenseScreenState, Nothing> by storeFactory.create(
+            name = "ExpenseStore",
+            initialState = initialState,
+            executorFactory = { ExecutorImpl() },
+            reducer = ReducerImpl
+        )
 
         private class ExecutorImpl: CoroutineExecutor<Intent, Nothing, ExpenseScreenState, Message, Nothing>() {
             override fun executeIntent(intent: Intent) {
