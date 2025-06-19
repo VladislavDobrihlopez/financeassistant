@@ -26,10 +26,7 @@ interface CategoriesComponent {
     ) : CategoriesComponent, ComponentContext by componentContext {
 
         private val initState = stateKeeper.consume(STATE_KEY, strategy = CategoriesScreenState.serializer())
-            ?: CategoriesScreenState.Succeeded(
-                searchText = "",
-                categories = provideCategories()
-            )
+            ?: CategoriesScreenState.Loading
 
         private val store = instanceKeeper.getStore {
             categoriesStoreFactory.create(initState)
@@ -64,6 +61,7 @@ interface CategoriesComponent {
     }
 }
 
+// mock data
 fun provideCategories(): List<Category> = listOf(
     Category(id = 1, emoji = "🏠", isIncome = false, name = "Аренда квартиры"),
     Category(id = 2, emoji = "👗", isIncome = false, name = "Одежда"),

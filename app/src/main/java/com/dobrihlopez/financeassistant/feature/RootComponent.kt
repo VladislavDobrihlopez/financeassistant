@@ -6,21 +6,15 @@ import com.arkivanov.decompose.router.stack.StackNavigation
 import com.arkivanov.decompose.router.stack.bringToFront
 import com.arkivanov.decompose.router.stack.childStack
 import com.arkivanov.decompose.value.Value
-import com.arkivanov.mvikotlin.core.store.StoreFactory
 import com.dobrihlopez.financeassistant.feature.accounts.presentation.AccountsComponent
-import com.dobrihlopez.financeassistant.feature.accounts.presentation.AccountsComponent.DefaultAccountComponent
 import com.dobrihlopez.financeassistant.feature.categories.presentation.CategoriesComponent
 import com.dobrihlopez.financeassistant.feature.settings.presentation.SettingsComponent
-import com.dobrihlopez.financeassistant.feature.settings.presentation.SettingsComponent.DefaultSettingsComponent
 import com.dobrihlopez.financeassistant.feature.transaction_core.expenses.presentation.ExpenseComponent
 import com.dobrihlopez.financeassistant.feature.transaction_core.income.presentation.IncomeComponent
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import kotlinx.serialization.Serializable
-import java.util.UUID
-import javax.inject.Inject
-import kotlin.jvm.JvmName
 
 interface RootComponent {
     val state: Value<ChildStack<*, Child>>
@@ -57,8 +51,8 @@ interface RootComponent {
         private val expenseComponentFactory: ExpenseComponent.Factory,
         private val incomeComponentFactory: IncomeComponent.Factory,
         private val categoriesComponentFactory: CategoriesComponent.Factory,
-        private val accountsComponentFactory: DefaultAccountComponent.Factory,
-        private val settingsComponentFactory: DefaultSettingsComponent.Factory,
+        private val accountsComponentFactory: AccountsComponent.Factory,
+        private val settingsComponentFactory: SettingsComponent.Factory,
         @Assisted("componentContext") private val componentContext: ComponentContext,
     ) : RootComponent, ComponentContext by componentContext {
 

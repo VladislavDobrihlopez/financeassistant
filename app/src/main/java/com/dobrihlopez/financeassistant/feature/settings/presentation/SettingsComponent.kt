@@ -17,6 +17,11 @@ interface SettingsComponent {
 
     fun onSettingClick(setting: AppSettingItem)
 
+    @AssistedFactory
+    interface Factory {
+        fun create(@Assisted("componentContext") componentContext: ComponentContext): DefaultSettingsComponent
+    }
+
     class DefaultSettingsComponent @AssistedInject constructor(
         @Assisted("componentContext") private val componentContext: ComponentContext,
         private val settingsStoreFactory: SettingsStoreFactory
@@ -43,11 +48,6 @@ interface SettingsComponent {
 
         override fun onSettingClick(setting: AppSettingItem) {
             store.accept(SettingsStore.Intent.SettingClick(setting))
-        }
-
-        @AssistedFactory
-        interface Factory {
-            fun create(@Assisted("componentContext") componentContext: ComponentContext): DefaultSettingsComponent
         }
 
         private companion object {

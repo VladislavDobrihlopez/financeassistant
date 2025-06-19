@@ -2,15 +2,14 @@ package com.dobrihlopez.financeassistant.feature.accounts.presentation
 
 import com.arkivanov.decompose.ComponentContext
 import com.arkivanov.mvikotlin.core.instancekeeper.getStore
-import com.arkivanov.mvikotlin.core.store.StoreFactory
 import com.arkivanov.mvikotlin.extensions.coroutines.stateFlow
 import com.dobrihlopez.financeassistant.feature.accounts.domain.UserAccountDetailed
 import com.dobrihlopez.financeassistant.feature.accounts.presentation.AccountsStore.AccountsStoreFactory
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.StateFlow
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.StateFlow
 
 interface AccountsComponent {
     val state: StateFlow<AccountsStore.AccountScreenState>
@@ -19,6 +18,11 @@ interface AccountsComponent {
     fun onFabClick()
     fun onBalanceClick()
     fun onCurrencyClick()
+
+    @AssistedFactory
+    interface Factory {
+        fun create(@Assisted("componentContext") componentContext: ComponentContext): DefaultAccountComponent
+    }
 
     class DefaultAccountComponent @AssistedInject constructor(
         @Assisted("componentContext") private val componentContext: ComponentContext,
@@ -58,11 +62,6 @@ interface AccountsComponent {
 
         override fun onCurrencyClick() {
             store.accept(AccountsStore.Intent.CurrencyClick)
-        }
-
-        @AssistedFactory
-        interface Factory {
-            fun create(@Assisted("componentContext") componentContext: ComponentContext): DefaultAccountComponent
         }
 
         private companion object {
