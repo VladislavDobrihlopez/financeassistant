@@ -18,6 +18,8 @@ interface AccountsComponent {
     fun onFabClick()
     fun onBalanceClick()
     fun onCurrencyClick()
+    fun onCurrencySelected(account: com.dobrihlopez.financeassistant.feature.accounts.domain.UserAccountDetailed, currency: com.dobrihlopez.financeassistant.feature.accounts.presentation.composable.Currency)
+    fun onBalanceChanged(account: com.dobrihlopez.financeassistant.feature.accounts.domain.UserAccountDetailed, newBalance: String)
 
     @AssistedFactory
     interface Factory {
@@ -60,6 +62,33 @@ interface AccountsComponent {
 
         override fun onCurrencyClick() {
             store.accept(AccountsStore.Intent.CurrencyClick)
+        }
+
+        override fun onCurrencySelected(account: com.dobrihlopez.financeassistant.feature.accounts.domain.UserAccountDetailed, currency: com.dobrihlopez.financeassistant.feature.accounts.presentation.composable.Currency) {
+            val currencyCode = when (currency) {
+                com.dobrihlopez.financeassistant.feature.accounts.presentation.composable.Currency.Ruble -> "RUB"
+                com.dobrihlopez.financeassistant.feature.accounts.presentation.composable.Currency.Usd -> "USD"
+                com.dobrihlopez.financeassistant.feature.accounts.presentation.composable.Currency.Euro -> "EUR"
+            }
+            store.accept(
+                AccountsStore.Intent.UpdateAccount(
+                    id = account.id,
+                    name = account.name,
+                    balance = account.balance,
+                    currency = currencyCode
+                )
+            )
+        }
+
+        override fun onBalanceChanged(account: com.dobrihlopez.financeassistant.feature.accounts.domain.UserAccountDetailed, newBalance: String) {
+            store.accept(
+                AccountsStore.Intent.UpdateAccount(
+                    id = account.id,
+                    name = account.name,
+                    balance = newBalance,
+                    currency = account.currency
+                )
+            )
         }
 
         private companion object {

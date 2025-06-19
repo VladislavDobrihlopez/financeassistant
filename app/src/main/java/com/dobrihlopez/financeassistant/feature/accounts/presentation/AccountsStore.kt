@@ -93,6 +93,9 @@ interface AccountsStore: Store<AccountsStore.Intent, AccountsStore.AccountScreen
                         }
                     }
                     is Intent.UpdateAccount -> {
+                        val state = state()
+                        if (state is AccountsStore.AccountScreenState.Succeeded && intent.currency == state.account.currency && intent.balance == state.account.balance) return
+
                         dispatch(Message.Loading)
                         scope.launch {
                             try {
