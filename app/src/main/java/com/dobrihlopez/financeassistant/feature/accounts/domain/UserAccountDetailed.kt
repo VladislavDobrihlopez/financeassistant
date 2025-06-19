@@ -13,3 +13,15 @@ data class UserAccountDetailed(
     val name: String,
     val updatedAt: String
 )
+
+fun com.dobrihlopez.financeassistant.feature.accounts.data.model.AccountDto.toDomain(): UserAccountDetailed =
+    UserAccountDetailed(
+        id = id,
+        name = name,
+        balance = balance,
+        currency = currency,
+        createdAt = createdAt,
+        updatedAt = updatedAt,
+        expenseStats = emptyList(),
+        incomeStatistics = emptyList(),
+    )

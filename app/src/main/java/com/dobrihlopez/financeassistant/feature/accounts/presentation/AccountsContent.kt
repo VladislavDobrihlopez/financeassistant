@@ -87,13 +87,13 @@ fun AccountContent(
                         AccountActionItem(
                             title = R.string.account_balance,
                             value = account.balance,
-                            currency = "₽",
+                            currency = account.currency,
                             onClick = onBalanceClick,
                             emoji = "\uD83D\uDCB0"
                         ),
                         AccountActionItem(
                             title = R.string.account_currency,
-                            currency = "₽",
+                            currency = account.currency,
                             onClick = onCurrencyClick,
                         )
                     )

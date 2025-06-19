@@ -30,9 +30,7 @@ interface AccountsComponent {
     ) : AccountsComponent, ComponentContext by componentContext {
 
         private val initState = stateKeeper.consume(STATE_KEY, strategy = AccountsStore.AccountScreenState.serializer())
-            ?: AccountsStore.AccountScreenState.Succeeded(
-                account = provideAccount()
-            )
+            ?: AccountsStore.AccountScreenState.Loading
 
         private val store = instanceKeeper.getStore {
             accountsStoreFactory.create(initState)
