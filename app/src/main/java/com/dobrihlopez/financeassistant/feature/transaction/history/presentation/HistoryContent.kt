@@ -1,14 +1,29 @@
 package com.dobrihlopez.financeassistant.feature.transaction.history.presentation
 
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.material3.DatePicker
+import androidx.compose.material3.DatePickerDefaults
+import androidx.compose.material3.DatePickerDialog
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
+import androidx.compose.material3.rememberDatePickerState
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import com.dobrihlopez.financeassistant.R
-import com.dobrihlopez.financeassistant.core.atEndOfDay
 import com.dobrihlopez.financeassistant.core_ui.composable.LoadingProgressBar
 import com.dobrihlopez.financeassistant.feature.transaction.core_ui.OverViewListItem
 import com.dobrihlopez.financeassistant.feature.transaction.core_ui.TransactionItem
@@ -25,13 +40,13 @@ fun HistoryContent(
     onRefresh: () -> Unit,
     paddingValues: PaddingValues,
 ) {
-    var showStartDatePicker by remember { mutableStateOf(false) }
-    var showEndDatePicker by remember { mutableStateOf(false) }
+    var showStartDatePicker by rememberSaveable { mutableStateOf(false) }
+    var showEndDatePicker by rememberSaveable { mutableStateOf(false) }
     val startDatePickerState = rememberDatePickerState(
         initialSelectedDateMillis = state.startDate.atStartOfDay(ZoneId.systemDefault()).toInstant().toEpochMilli()
     )
     val endDatePickerState = rememberDatePickerState(
-        initialSelectedDateMillis = state.endDate.atEndOfDay(ZoneId.systemDefault()).toInstant().toEpochMilli()
+        initialSelectedDateMillis = state.endDate.atStartOfDay(ZoneId.systemDefault()).toInstant().toEpochMilli()
     )
 
     Box(modifier = Modifier.fillMaxSize().padding(paddingValues)) {
@@ -80,21 +95,39 @@ fun HistoryContent(
                 onDismissRequest = { showStartDatePicker = false },
                 confirmButton = {
                     TextButton(onClick = {
-                        val millis = startDatePickerState.selectedDateMillis
-                        if (millis != null) {
-                            val localDate = Instant.ofEpochMilli(millis)
-                                .atZone(ZoneId.systemDefault())
-                                .toLocalDate()
-                            onStartDateClick(localDate)
+                        startDatePickerState.selectedDateMillis?.let {
+                            val selectedDate = Instant.ofEpochMilli(it).atZone(ZoneId.systemDefault()).toLocalDate()
+                            if (selectedDate > state.endDate) {
+                                onEndDateClick(selectedDate)
+                            }
+                            onStartDateClick(selectedDate)
                         }
                         showStartDatePicker = false
-                    }) { Text(stringResource(android.R.string.ok)) }
+                    }) {
+                        Text(text = stringResource(android.R.string.ok), color = MaterialTheme.colorScheme.onPrimary)
+                    }
                 },
                 dismissButton = {
-                    TextButton(onClick = { showStartDatePicker = false }) { Text(stringResource(android.R.string.cancel)) }
-                }
+                    TextButton(onClick = { showStartDatePicker = false }) {
+                        Text(text = stringResource(android.R.string.cancel), color = MaterialTheme.colorScheme.onPrimary)
+                    }
+                },
+                colors = DatePickerDefaults.colors().copy(
+                    containerColor = MaterialTheme.colorScheme.primaryContainer,
+                )
             ) {
-                DatePicker(state = startDatePickerState, showModeToggle = false)
+                DatePicker(
+                    colors = DatePickerDefaults.colors(
+                        containerColor = MaterialTheme.colorScheme.primaryContainer,
+                        selectedDayContainerColor = MaterialTheme.colorScheme.primary,
+                        selectedDayContentColor = MaterialTheme.colorScheme.onPrimary,
+                        todayContentColor = MaterialTheme.colorScheme.onPrimary,
+                    ),
+                    state = startDatePickerState,
+                    title = null,
+                    headline = null,
+                    showModeToggle = false
+                )
             }
         }
         if (showEndDatePicker) {
@@ -102,21 +135,39 @@ fun HistoryContent(
                 onDismissRequest = { showEndDatePicker = false },
                 confirmButton = {
                     TextButton(onClick = {
-                        val millis = endDatePickerState.selectedDateMillis
-                        if (millis != null) {
-                            val localDate = Instant.ofEpochMilli(millis)
-                                .atZone(ZoneId.systemDefault())
-                                .toLocalDate()
-                            onEndDateClick(localDate)
+                        endDatePickerState.selectedDateMillis?.let {
+                            val selectedDate = Instant.ofEpochMilli(it).atZone(ZoneId.systemDefault()).toLocalDate()
+                            if (selectedDate < state.startDate) {
+                                onStartDateClick(selectedDate)
+                            }
+                            onEndDateClick(selectedDate)
                         }
                         showEndDatePicker = false
-                    }) { Text(stringResource(android.R.string.ok)) }
+                    }) {
+                        Text(text = stringResource(android.R.string.ok), color = MaterialTheme.colorScheme.onPrimary)
+                    }
                 },
                 dismissButton = {
-                    TextButton(onClick = { showEndDatePicker = false }) { Text(stringResource(android.R.string.cancel)) }
-                }
+                    TextButton(onClick = { showEndDatePicker = false }) {
+                        Text(text = stringResource(android.R.string.cancel), color = MaterialTheme.colorScheme.onPrimary)
+                    }
+                },
+                colors = DatePickerDefaults.colors().copy(
+                    containerColor = MaterialTheme.colorScheme.primaryContainer,
+                )
             ) {
-                DatePicker(state = endDatePickerState, showModeToggle = false)
+                DatePicker(
+                    colors = DatePickerDefaults.colors(
+                        containerColor = MaterialTheme.colorScheme.primaryContainer,
+                        selectedDayContainerColor = MaterialTheme.colorScheme.primary,
+                        selectedDayContentColor = MaterialTheme.colorScheme.onPrimary,
+                        todayContentColor = MaterialTheme.colorScheme.onPrimary,
+                    ),
+                    state = endDatePickerState,
+                    title = null,
+                    headline = null,
+                    showModeToggle = false
+                )
             }
         }
     }

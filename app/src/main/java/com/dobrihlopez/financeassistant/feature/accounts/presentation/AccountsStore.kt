@@ -11,7 +11,7 @@ import kotlinx.serialization.Serializable
 import javax.inject.Inject
 import kotlinx.coroutines.launch
 import com.dobrihlopez.financeassistant.feature.accounts.domain.usecase.GetFirstAccountUseCase
-import com.dobrihlopez.financeassistant.feature.accounts.domain.UpdateAccountUseCase
+import com.dobrihlopez.financeassistant.feature.accounts.domain.usecase.UpdateAccountUseCase
 
 interface AccountsStore: Store<AccountsStore.Intent, AccountsStore.AccountScreenState, Nothing> {
     @Serializable

@@ -34,7 +34,7 @@ fun TransactionItem(
         subContent = transaction.comment,
         value = transaction.amount,
         valueSubtitle = if (showTime) {
-            OffsetDateTime.parse(transaction.updatedAt).format(DateTimeFormatter.ofPattern("HH:mm"))
+            OffsetDateTime.parse(transaction.updatedAt).format(DateTimeFormatter.ofPattern("dd.MM.yyyy, HH:mm"))
         } else null,
         leadingContent = transaction.category.emoji?.run {
             {

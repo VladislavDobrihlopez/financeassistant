@@ -5,6 +5,7 @@ import com.arkivanov.mvikotlin.core.instancekeeper.getStore
 import com.arkivanov.mvikotlin.extensions.coroutines.stateFlow
 import com.dobrihlopez.financeassistant.feature.accounts.domain.UserAccountDetailed
 import com.dobrihlopez.financeassistant.feature.accounts.presentation.AccountsStore.AccountsStoreFactory
+import com.dobrihlopez.financeassistant.feature.accounts.presentation.composable.Currency
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
@@ -18,8 +19,8 @@ interface AccountsComponent {
     fun onFabClick()
     fun onBalanceClick()
     fun onCurrencyClick()
-    fun onCurrencySelected(account: com.dobrihlopez.financeassistant.feature.accounts.domain.UserAccountDetailed, currency: com.dobrihlopez.financeassistant.feature.accounts.presentation.composable.Currency)
-    fun onBalanceChanged(account: com.dobrihlopez.financeassistant.feature.accounts.domain.UserAccountDetailed, newBalance: String)
+    fun onCurrencySelected(account: UserAccountDetailed, currency: Currency)
+    fun onBalanceChanged(account: UserAccountDetailed, newBalance: String)
 
     @AssistedFactory
     interface Factory {
@@ -64,11 +65,11 @@ interface AccountsComponent {
             store.accept(AccountsStore.Intent.CurrencyClick)
         }
 
-        override fun onCurrencySelected(account: com.dobrihlopez.financeassistant.feature.accounts.domain.UserAccountDetailed, currency: com.dobrihlopez.financeassistant.feature.accounts.presentation.composable.Currency) {
+        override fun onCurrencySelected(account: UserAccountDetailed, currency: Currency) {
             val currencyCode = when (currency) {
-                com.dobrihlopez.financeassistant.feature.accounts.presentation.composable.Currency.Ruble -> "RUB"
-                com.dobrihlopez.financeassistant.feature.accounts.presentation.composable.Currency.Usd -> "USD"
-                com.dobrihlopez.financeassistant.feature.accounts.presentation.composable.Currency.Euro -> "EUR"
+                Currency.Ruble -> "RUB"
+                Currency.Usd -> "USD"
+                Currency.Euro -> "EUR"
             }
             store.accept(
                 AccountsStore.Intent.UpdateAccount(
@@ -80,7 +81,7 @@ interface AccountsComponent {
             )
         }
 
-        override fun onBalanceChanged(account: com.dobrihlopez.financeassistant.feature.accounts.domain.UserAccountDetailed, newBalance: String) {
+        override fun onBalanceChanged(account: UserAccountDetailed, newBalance: String) {
             store.accept(
                 AccountsStore.Intent.UpdateAccount(
                     id = account.id,

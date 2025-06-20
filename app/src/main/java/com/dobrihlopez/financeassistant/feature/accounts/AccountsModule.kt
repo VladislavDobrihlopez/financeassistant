@@ -7,6 +7,7 @@ import com.dobrihlopez.financeassistant.feature.accounts.domain.AccountsReposito
 import com.dobrihlopez.financeassistant.feature.accounts.domain.usecase.GetFirstAccountUseCase
 import com.dobrihlopez.financeassistant.feature.accounts.domain.usecase.UpdateAccountUseCase
 import com.dobrihlopez.financeassistant.feature.accounts.presentation.AccountsStore
+import dagger.Binds
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -16,26 +17,27 @@ import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
-object AccountsModule {
-    @Provides
+abstract class AccountsModule {
+    @Binds
     @Singleton
-    fun provideAccountsApiService(retrofit: Retrofit): AccountsApiService =
-        retrofit.create(AccountsApiService::class.java)
+    abstract fun bindAccountRepository(impl: AccountsRepositoryImpl): AccountsRepository
 
-    @Provides
-    @Singleton
-    fun provideAccountsRepository(api: AccountsApiService): AccountsRepository =
-        AccountsRepositoryImpl(api)
+    companion object {
+        @Provides
+        @Singleton
+        fun provideAccountsApiService(retrofit: Retrofit): AccountsApiService =
+            retrofit.create(AccountsApiService::class.java)
 
-    @Provides
-    fun provideGetFirstAccountUseCase(repository: AccountsRepository): GetFirstAccountUseCase =
-        GetFirstAccountUseCase(repository)
-
-    @Provides
-    fun provideAccountsStoreFactory(
-        storeFactory: StoreFactory,
-        getFirstAccountUseCase: GetFirstAccountUseCase,
-        updateAccountUseCase: UpdateAccountUseCase
-    ): AccountsStore.AccountsStoreFactory =
-        AccountsStore.AccountsStoreFactory(storeFactory, getFirstAccountUseCase, updateAccountUseCase)
+        @Provides
+        fun provideAccountsStoreFactory(
+            storeFactory: StoreFactory,
+            getFirstAccountUseCase: GetFirstAccountUseCase,
+            updateAccountUseCase: UpdateAccountUseCase
+        ): AccountsStore.AccountsStoreFactory =
+            AccountsStore.AccountsStoreFactory(
+                storeFactory,
+                getFirstAccountUseCase,
+                updateAccountUseCase
+            )
+    }
 } 

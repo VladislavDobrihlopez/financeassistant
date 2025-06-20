@@ -2,28 +2,31 @@ package com.dobrihlopez.financeassistant.feature.accounts.presentation
 
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.rememberModalBottomSheetState
-import androidx.compose.runtime.*
-import androidx.compose.ui.Modifier
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.dobrihlopez.financeassistant.feature.accounts.presentation.AccountsStore.AccountScreenState
 import com.dobrihlopez.financeassistant.feature.accounts.presentation.composable.BalanceEditDialog
 import com.dobrihlopez.financeassistant.feature.accounts.presentation.composable.CurrencyChooser
-import com.dobrihlopez.financeassistant.feature.accounts.presentation.AccountsStore.AccountScreenState
-import com.dobrihlopez.financeassistant.feature.accounts.presentation.AccountsStore
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AccountsScreen(component: AccountsComponent) {
-    val state by component.state.collectAsState()
-    var showCurrencySheet by remember { mutableStateOf(false) }
-    var showBalanceSheet by remember { mutableStateOf(false) }
+    val state by component.state.collectAsStateWithLifecycle()
+    var showCurrencySheet by rememberSaveable { mutableStateOf(false) }
+    var showBalanceSheet by rememberSaveable { mutableStateOf(false) }
     val currencySheetState = rememberModalBottomSheetState()
     val balanceSheetState = rememberModalBottomSheetState()
 
     AccountContent(
         state = state,
-        onEditClick = { component.onEditClick() },
+        onEditClick = { showCurrencySheet = false; showBalanceSheet = true },
         onFabClick = { component.onFabClick() },
-        onBalanceClick = { showBalanceSheet = true },
-        onCurrencyClick = { showCurrencySheet = true }
+        onBalanceClick = { showCurrencySheet = false; showBalanceSheet = true },
+        onCurrencyClick = { showBalanceSheet = false; showCurrencySheet = true }
     )
 
     if (showCurrencySheet) {
