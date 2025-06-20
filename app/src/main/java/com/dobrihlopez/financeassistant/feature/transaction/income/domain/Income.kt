@@ -1,4 +1,4 @@
-package com.dobrihlopez.financeassistant.core.domain.income
+package com.dobrihlopez.financeassistant.feature.transaction.income.domain
 
 data class Income(
     val id: Long,

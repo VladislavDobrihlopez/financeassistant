@@ -7,9 +7,9 @@ import com.arkivanov.mvikotlin.core.store.StoreFactory
 import com.arkivanov.mvikotlin.extensions.coroutines.CoroutineBootstrapper
 import com.arkivanov.mvikotlin.extensions.coroutines.CoroutineExecutor
 import com.dobrihlopez.financeassistant.core.Transaction
-import com.dobrihlopez.financeassistant.core.domain.expenses.ExpenseRepository
+import com.dobrihlopez.financeassistant.feature.transaction.expenses.domain.ExpenseRepository
 import com.dobrihlopez.financeassistant.feature.transaction.core.GetTransactionsForPeriodUseCase
-import com.dobrihlopez.financeassistant.feature.accounts.domain.GetFirstAccountUseCase
+import com.dobrihlopez.financeassistant.feature.accounts.domain.usecase.GetFirstAccountUseCase
 import javax.inject.Inject
 import kotlinx.serialization.Serializable
 import kotlinx.coroutines.launch
@@ -39,7 +39,6 @@ interface ExpenseStore: Store<ExpenseStore.Intent, ExpenseStore.ExpenseScreenSta
 
     class ExpenseStoreFactory @Inject constructor(
         private val storeFactory: StoreFactory,
-        private val expenseRepository: ExpenseRepository,
         private val getTransactionsForPeriodUseCase: GetTransactionsForPeriodUseCase,
         private val getFirstAccountUseCase: GetFirstAccountUseCase
     ) {

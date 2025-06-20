@@ -1,9 +1,9 @@
-package com.dobrihlopez.financeassistant.core.data.expenses
+package com.dobrihlopez.financeassistant.feature.transaction.expenses.data
 
-import com.dobrihlopez.financeassistant.core.domain.expenses.Expense
-import com.dobrihlopez.financeassistant.core.domain.expenses.ExpenseHistory
 import com.dobrihlopez.financeassistant.core.network.ExpenseDto
 import com.dobrihlopez.financeassistant.core.network.ExpenseHistoryDto
+import com.dobrihlopez.financeassistant.feature.transaction.expenses.domain.Expense
+import com.dobrihlopez.financeassistant.feature.transaction.expenses.domain.ExpenseHistory
 
 fun ExpenseDto.toDomain(): Expense = Expense(
     id = id,

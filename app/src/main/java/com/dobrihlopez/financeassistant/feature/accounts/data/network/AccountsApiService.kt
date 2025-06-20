@@ -1,7 +1,5 @@
-package com.dobrihlopez.financeassistant.feature.accounts.data
+package com.dobrihlopez.financeassistant.feature.accounts.data.network
 
-import com.dobrihlopez.financeassistant.feature.accounts.data.model.AccountDto
-import com.dobrihlopez.financeassistant.feature.accounts.data.model.UpdateAccountRequest
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.PUT
@@ -16,4 +14,4 @@ interface AccountsApiService {
         @Path("id") id: Int,
         @Body body: UpdateAccountRequest
     ): AccountDto
-} 
+}

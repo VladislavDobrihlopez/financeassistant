@@ -1,6 +1,6 @@
 package com.dobrihlopez.financeassistant.feature.accounts.domain
 
-import com.dobrihlopez.financeassistant.feature.accounts.data.model.AccountDto
+import com.dobrihlopez.financeassistant.feature.accounts.data.network.AccountDto
 
 data class UserAccount(
     val balance: String,

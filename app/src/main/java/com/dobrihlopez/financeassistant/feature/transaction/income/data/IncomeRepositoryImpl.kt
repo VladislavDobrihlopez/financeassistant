@@ -1,8 +1,8 @@
-package com.dobrihlopez.financeassistant.core.data.income
+package com.dobrihlopez.financeassistant.feature.transaction.income.data
 
-import com.dobrihlopez.financeassistant.core.domain.income.Income
-import com.dobrihlopez.financeassistant.core.domain.income.IncomeHistory
-import com.dobrihlopez.financeassistant.core.domain.income.IncomeRepository
+import com.dobrihlopez.financeassistant.feature.transaction.income.domain.Income
+import com.dobrihlopez.financeassistant.feature.transaction.income.domain.IncomeHistory
+import com.dobrihlopez.financeassistant.feature.transaction.income.domain.IncomeRepository
 import com.dobrihlopez.financeassistant.core.network.IncomeApi
 import javax.inject.Inject
 

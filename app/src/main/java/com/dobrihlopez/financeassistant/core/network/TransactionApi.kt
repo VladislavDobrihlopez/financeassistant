@@ -1,6 +1,6 @@
 package com.dobrihlopez.financeassistant.core.network
 
-import com.dobrihlopez.financeassistant.core.data.transactions.TransactionDto
+import com.dobrihlopez.financeassistant.feature.transaction.core_data.transactions.TransactionDto
 import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Query

@@ -1,4 +1,4 @@
-package com.dobrihlopez.financeassistant.feature.accounts.data.model
+package com.dobrihlopez.financeassistant.feature.accounts.data.network
 
 data class UpdateAccountRequest(
     val name: String,

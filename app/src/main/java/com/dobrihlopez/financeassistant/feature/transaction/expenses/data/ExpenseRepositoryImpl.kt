@@ -1,9 +1,9 @@
-package com.dobrihlopez.financeassistant.core.data.expenses
+package com.dobrihlopez.financeassistant.feature.transaction.expenses.data
 
-import com.dobrihlopez.financeassistant.core.domain.expenses.Expense
-import com.dobrihlopez.financeassistant.core.domain.expenses.ExpenseHistory
-import com.dobrihlopez.financeassistant.core.domain.expenses.ExpenseRepository
 import com.dobrihlopez.financeassistant.core.network.ExpenseApi
+import com.dobrihlopez.financeassistant.feature.transaction.expenses.domain.Expense
+import com.dobrihlopez.financeassistant.feature.transaction.expenses.domain.ExpenseHistory
+import com.dobrihlopez.financeassistant.feature.transaction.expenses.domain.ExpenseRepository
 import javax.inject.Inject
 
 class ExpenseRepositoryImpl @Inject constructor(

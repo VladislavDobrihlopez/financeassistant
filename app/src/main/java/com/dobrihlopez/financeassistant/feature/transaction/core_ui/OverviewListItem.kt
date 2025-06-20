@@ -1,4 +1,4 @@
-package com.dobrihlopez.financeassistant.feature.transaction.core
+package com.dobrihlopez.financeassistant.feature.transaction.core_ui
 
 import androidx.compose.foundation.layout.height
 import androidx.compose.material3.MaterialTheme
@@ -10,7 +10,7 @@ import com.dobrihlopez.financeassistant.core_ui.composable.BasicListItem
 @Composable
 fun OverViewListItem(content: String, value: String, onClick: () -> Unit = {}) {
     BasicListItem(
-        modifier = Modifier.height(50.dp),
+        modifier = Modifier.height(56.dp),
         content = content,
         value = value,
         backgroundColor = MaterialTheme.colorScheme.primaryContainer,

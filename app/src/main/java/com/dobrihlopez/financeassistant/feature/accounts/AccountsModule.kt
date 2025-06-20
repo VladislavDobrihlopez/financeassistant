@@ -1,10 +1,11 @@
 package com.dobrihlopez.financeassistant.feature.accounts
 
-import com.dobrihlopez.financeassistant.feature.accounts.data.AccountsApiService
-import com.dobrihlopez.financeassistant.feature.accounts.data.AccountsRepository
-import com.dobrihlopez.financeassistant.feature.accounts.data.AccountsRepositoryImpl
-import com.dobrihlopez.financeassistant.feature.accounts.domain.GetFirstAccountUseCase
-import com.dobrihlopez.financeassistant.feature.accounts.domain.UpdateAccountUseCase
+import com.arkivanov.mvikotlin.core.store.StoreFactory
+import com.dobrihlopez.financeassistant.feature.accounts.data.network.AccountsApiService
+import com.dobrihlopez.financeassistant.feature.accounts.data.repo.AccountsRepositoryImpl
+import com.dobrihlopez.financeassistant.feature.accounts.domain.AccountsRepository
+import com.dobrihlopez.financeassistant.feature.accounts.domain.usecase.GetFirstAccountUseCase
+import com.dobrihlopez.financeassistant.feature.accounts.domain.usecase.UpdateAccountUseCase
 import com.dobrihlopez.financeassistant.feature.accounts.presentation.AccountsStore
 import dagger.Module
 import dagger.Provides
@@ -31,12 +32,8 @@ object AccountsModule {
         GetFirstAccountUseCase(repository)
 
     @Provides
-    fun provideUpdateAccountUseCase(repository: AccountsRepository): UpdateAccountUseCase =
-        UpdateAccountUseCase(repository)
-
-    @Provides
     fun provideAccountsStoreFactory(
-        storeFactory: com.arkivanov.mvikotlin.core.store.StoreFactory,
+        storeFactory: StoreFactory,
         getFirstAccountUseCase: GetFirstAccountUseCase,
         updateAccountUseCase: UpdateAccountUseCase
     ): AccountsStore.AccountsStoreFactory =

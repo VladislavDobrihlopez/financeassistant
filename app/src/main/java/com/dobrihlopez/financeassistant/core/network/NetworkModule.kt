@@ -55,30 +55,5 @@ object NetworkModule {
 
     @Provides
     @Singleton
-    fun provideIncomeApi(retrofit: Retrofit): IncomeApi = retrofit.create(IncomeApi::class.java)
-
-    @Provides
-    @Singleton
-    fun provideExpenseApi(retrofit: Retrofit): ExpenseApi = retrofit.create(ExpenseApi::class.java)
-
-    @Provides
-    @Singleton
     fun provideArticleApi(retrofit: Retrofit): ArticleApi = retrofit.create(ArticleApi::class.java)
-
-    @Provides
-    @Singleton
-    fun provideIncomeRepository(impl: com.dobrihlopez.financeassistant.core.data.income.IncomeRepositoryImpl): com.dobrihlopez.financeassistant.core.domain.income.IncomeRepository = impl
-
-    @Provides
-    @Singleton
-    fun provideExpenseRepository(impl: com.dobrihlopez.financeassistant.core.data.expenses.ExpenseRepositoryImpl): com.dobrihlopez.financeassistant.core.domain.expenses.ExpenseRepository = impl
-
-    @Provides
-    @Singleton
-    fun provideArticleRepository(impl: com.dobrihlopez.financeassistant.core.data.article.ArticleRepositoryImpl): com.dobrihlopez.financeassistant.core.domain.article.ArticleRepository = impl
-
-    // Примеры провайдеров API-интерфейсов (реализую далее)
-    // @Provides
-    // @Singleton
-    // fun provideIncomeApi(retrofit: Retrofit): IncomeApi = retrofit.create(IncomeApi::class.java)
-} 
+}

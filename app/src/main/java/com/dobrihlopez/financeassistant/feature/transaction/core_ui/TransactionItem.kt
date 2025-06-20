@@ -1,4 +1,4 @@
-package com.dobrihlopez.financeassistant.feature.transaction.core
+package com.dobrihlopez.financeassistant.feature.transaction.core_ui
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -19,8 +19,6 @@ import androidx.compose.ui.unit.dp
 import com.dobrihlopez.financeassistant.R
 import com.dobrihlopez.financeassistant.core.Transaction
 import com.dobrihlopez.financeassistant.core_ui.composable.BasicListItem
-import java.time.LocalDateTime
-import java.time.LocalTime
 import java.time.OffsetDateTime
 import java.time.format.DateTimeFormatter
 

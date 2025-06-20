@@ -104,7 +104,10 @@ interface CategoriesStore: Store<CategoriesStore.Intent, CategoriesStore.Categor
 
             private fun List<Category>.filterByQuery(query: String): List<Category> {
                 val optimizedQuery = query.trimStart()
-                return if (optimizedQuery.isEmpty()) this else return filter { it.name.contains(other = optimizedQuery, ignoreCase = true) }
+                return if (optimizedQuery.isEmpty())
+                    this
+                else
+                    filter { it.name.contains(other = optimizedQuery, ignoreCase = true) }
             }
         }
 

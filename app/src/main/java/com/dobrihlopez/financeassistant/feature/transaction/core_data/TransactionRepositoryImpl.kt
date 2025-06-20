@@ -1,7 +1,8 @@
-package com.dobrihlopez.financeassistant.core.data.transactions
+package com.dobrihlopez.financeassistant.feature.transaction.core_data
 
 import com.dobrihlopez.financeassistant.core.Transaction
 import com.dobrihlopez.financeassistant.core.network.TransactionApi
+import com.dobrihlopez.financeassistant.feature.transaction.core_data.transactions.toDomain
 import javax.inject.Inject
 
 class TransactionRepositoryImpl @Inject constructor(
@@ -15,4 +16,4 @@ class TransactionRepositoryImpl @Inject constructor(
         return api.getTransactionsForPeriod(accountId, startDate, endDate)
             .map { it.toDomain() }
     }
-} 
+}

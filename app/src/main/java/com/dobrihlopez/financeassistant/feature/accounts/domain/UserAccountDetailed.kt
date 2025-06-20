@@ -1,5 +1,6 @@
 package com.dobrihlopez.financeassistant.feature.accounts.domain
 
+import com.dobrihlopez.financeassistant.feature.accounts.data.network.AccountDto
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -14,7 +15,7 @@ data class UserAccountDetailed(
     val updatedAt: String
 )
 
-fun com.dobrihlopez.financeassistant.feature.accounts.data.model.AccountDto.toDomain(): UserAccountDetailed =
+fun AccountDto.toDomain(): UserAccountDetailed =
     UserAccountDetailed(
         id = id,
         name = name,

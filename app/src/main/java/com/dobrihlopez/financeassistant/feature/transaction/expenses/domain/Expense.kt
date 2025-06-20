@@ -1,4 +1,4 @@
-package com.dobrihlopez.financeassistant.core.domain.expenses
+package com.dobrihlopez.financeassistant.feature.transaction.expenses.domain
 
 data class Expense(
     val id: Long,

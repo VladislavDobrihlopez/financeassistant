@@ -6,9 +6,9 @@ import com.arkivanov.mvikotlin.core.store.Store
 import com.arkivanov.mvikotlin.core.store.StoreFactory
 import com.arkivanov.mvikotlin.extensions.coroutines.CoroutineExecutor
 import com.dobrihlopez.financeassistant.core.Transaction
-import com.dobrihlopez.financeassistant.core.domain.income.IncomeRepository
+import com.dobrihlopez.financeassistant.feature.transaction.income.domain.IncomeRepository
 import com.dobrihlopez.financeassistant.feature.transaction.core.GetTransactionsForPeriodUseCase
-import com.dobrihlopez.financeassistant.feature.accounts.domain.GetFirstAccountUseCase
+import com.dobrihlopez.financeassistant.feature.accounts.domain.usecase.GetFirstAccountUseCase
 import javax.inject.Inject
 import kotlinx.serialization.Serializable
 import kotlinx.coroutines.launch
@@ -38,7 +38,6 @@ interface IncomeStore: Store<IncomeStore.Intent, IncomeStore.IncomeScreenState, 
 
     class IncomeStoreFactory @Inject constructor(
         private val storeFactory: StoreFactory,
-        private val incomeRepository: IncomeRepository,
         private val getTransactionsForPeriodUseCase: GetTransactionsForPeriodUseCase,
         private val getFirstAccountUseCase: GetFirstAccountUseCase
     ) {

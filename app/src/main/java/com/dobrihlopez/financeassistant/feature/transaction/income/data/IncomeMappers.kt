@@ -1,7 +1,7 @@
-package com.dobrihlopez.financeassistant.core.data.income
+package com.dobrihlopez.financeassistant.feature.transaction.income.data
 
-import com.dobrihlopez.financeassistant.core.domain.income.Income
-import com.dobrihlopez.financeassistant.core.domain.income.IncomeHistory
+import com.dobrihlopez.financeassistant.feature.transaction.income.domain.Income
+import com.dobrihlopez.financeassistant.feature.transaction.income.domain.IncomeHistory
 import com.dobrihlopez.financeassistant.core.network.IncomeDto
 import com.dobrihlopez.financeassistant.core.network.IncomeHistoryDto
 

@@ -1,4 +1,4 @@
-package com.dobrihlopez.financeassistant.core.domain.income
+package com.dobrihlopez.financeassistant.feature.transaction.income.domain
 
 interface IncomeRepository {
     suspend fun getIncomeList(): List<Income>

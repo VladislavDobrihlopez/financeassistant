@@ -14,8 +14,8 @@ import androidx.compose.ui.unit.dp
 import com.dobrihlopez.financeassistant.core.Transaction
 import com.dobrihlopez.financeassistant.core_ui.composable.LoadingProgressBar
 import com.dobrihlopez.financeassistant.core_ui.ui.theme.FinanceAssistantTheme
-import com.dobrihlopez.financeassistant.feature.transaction.core.OverViewListItem
-import com.dobrihlopez.financeassistant.feature.transaction.core.TransactionItem
+import com.dobrihlopez.financeassistant.feature.transaction.core_ui.OverViewListItem
+import com.dobrihlopez.financeassistant.feature.transaction.core_ui.TransactionItem
 import com.dobrihlopez.financeassistant.feature.transaction.core.previewTransactions
 
 @OptIn(ExperimentalMaterial3Api::class)

@@ -1,4 +1,4 @@
-package com.dobrihlopez.financeassistant.core.data.transactions
+package com.dobrihlopez.financeassistant.feature.transaction.core_data.transactions
 
 import kotlinx.serialization.Serializable
 

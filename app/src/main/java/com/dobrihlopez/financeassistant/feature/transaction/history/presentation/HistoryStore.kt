@@ -7,7 +7,7 @@ import com.arkivanov.mvikotlin.core.store.StoreFactory
 import com.arkivanov.mvikotlin.extensions.coroutines.CoroutineBootstrapper
 import com.arkivanov.mvikotlin.extensions.coroutines.CoroutineExecutor
 import com.dobrihlopez.financeassistant.core.Transaction
-import com.dobrihlopez.financeassistant.feature.accounts.domain.GetFirstAccountUseCase
+import com.dobrihlopez.financeassistant.feature.accounts.domain.usecase.GetFirstAccountUseCase
 import com.dobrihlopez.financeassistant.feature.transaction.core.GetTransactionsForPeriodUseCase
 import kotlinx.serialization.Contextual
 import kotlinx.serialization.Serializable

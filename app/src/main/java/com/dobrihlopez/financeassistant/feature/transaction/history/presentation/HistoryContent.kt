@@ -10,8 +10,8 @@ import androidx.compose.ui.res.stringResource
 import com.dobrihlopez.financeassistant.R
 import com.dobrihlopez.financeassistant.core.atEndOfDay
 import com.dobrihlopez.financeassistant.core_ui.composable.LoadingProgressBar
-import com.dobrihlopez.financeassistant.feature.transaction.core.OverViewListItem
-import com.dobrihlopez.financeassistant.feature.transaction.core.TransactionItem
+import com.dobrihlopez.financeassistant.feature.transaction.core_ui.OverViewListItem
+import com.dobrihlopez.financeassistant.feature.transaction.core_ui.TransactionItem
 import java.time.Instant
 import java.time.LocalDate
 import java.time.ZoneId

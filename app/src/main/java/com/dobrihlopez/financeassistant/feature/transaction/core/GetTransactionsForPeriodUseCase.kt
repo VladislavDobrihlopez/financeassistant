@@ -1,7 +1,7 @@
 package com.dobrihlopez.financeassistant.feature.transaction.core
 
 import com.dobrihlopez.financeassistant.core.Transaction
-import com.dobrihlopez.financeassistant.core.data.transactions.TransactionRepositoryImpl
+import com.dobrihlopez.financeassistant.feature.transaction.core_data.TransactionRepositoryImpl
 import javax.inject.Inject
 
 class GetTransactionsForPeriodUseCase @Inject constructor(
