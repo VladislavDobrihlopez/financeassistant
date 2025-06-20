@@ -33,7 +33,7 @@ interface ExpenseComponent {
     class DefaultExpenseComponent @AssistedInject constructor(
         @Assisted("componentContext") private val componentContext: ComponentContext,
         private val expenseStoreFactory: ExpenseStoreFactory,
-        private val historyComponentFactory: HistoryComponent.DefaultHistoryComponent.Factory
+        private val historyComponentFactory: HistoryComponent.DefaultHistoryComponent.Factory,
     ) : ExpenseComponent, ComponentContext by componentContext {
 
         private val stack = StackNavigation<Config>()
@@ -43,17 +43,24 @@ interface ExpenseComponent {
             initialConfiguration = Config.Main,
             childFactory = ::child,
             key = "expense_stack",
+            handleBackButton = true,
             serializer = Config.serializer()
         )
 
         private fun child(config: Config, componentContext: ComponentContext): Child =
             when (config) {
                 Config.Main -> Child.Main(this)
-                Config.History -> Child.History(historyComponentFactory.create(componentContext, isIncome = false))
+                Config.History -> Child.History(
+                    historyComponentFactory.create(
+                        componentContext,
+                        isIncome = false
+                    )
+                )
             }
 
-        private val initState = stateKeeper.consume(STATE_KEY, strategy = ExpenseStore.ExpenseScreenState.serializer())
-            ?: ExpenseStore.ExpenseScreenState.Loading
+        private val initState =
+            stateKeeper.consume(STATE_KEY, strategy = ExpenseStore.ExpenseScreenState.serializer())
+                ?: ExpenseStore.ExpenseScreenState.Loading
 
         private val store = instanceKeeper.getStore {
             expenseStoreFactory.create(initState)
@@ -89,6 +96,7 @@ interface ExpenseComponent {
         sealed class Config {
             @Serializable
             object Main : Config()
+
             @Serializable
             object History : Config()
         }

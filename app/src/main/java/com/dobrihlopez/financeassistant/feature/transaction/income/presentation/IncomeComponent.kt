@@ -41,6 +41,7 @@ interface IncomeComponent {
             initialConfiguration = Config.Main,
             childFactory = ::child,
             key = "income_stack",
+            handleBackButton = true,
             serializer = Config.serializer()
         )
 
