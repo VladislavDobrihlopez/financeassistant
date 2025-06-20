@@ -1,15 +1,15 @@
-package com.dobrihlopez.financeassistant.feature.transaction_core.expenses.presentation
+package com.dobrihlopez.financeassistant.feature.transaction.expenses.presentation
 
 import com.arkivanov.decompose.ComponentContext
 import com.arkivanov.mvikotlin.core.instancekeeper.getStore
 import com.arkivanov.mvikotlin.core.store.StoreFactory
 import com.arkivanov.mvikotlin.extensions.coroutines.stateFlow
 import com.dobrihlopez.financeassistant.core.Transaction
-import com.dobrihlopez.financeassistant.feature.transaction_core.core.previewTransactions
+import com.dobrihlopez.financeassistant.feature.transaction.core.previewTransactions
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.StateFlow
 import com.dobrihlopez.financeassistant.core.domain.expenses.ExpenseRepository
-import com.dobrihlopez.financeassistant.feature.transaction_core.expenses.presentation.ExpenseStore.ExpenseStoreFactory
+import com.dobrihlopez.financeassistant.feature.transaction.expenses.presentation.ExpenseStore.ExpenseStoreFactory
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
@@ -27,11 +27,7 @@ interface ExpenseComponent {
     ) : ExpenseComponent, ComponentContext by componentContext {
 
         private val initState = stateKeeper.consume(STATE_KEY, strategy = ExpenseStore.ExpenseScreenState.serializer())
-            ?: ExpenseStore.ExpenseScreenState.Succeeded(
-                transactions = previewTransactions(),
-                summaryText = "Всего",
-                summaryValue = "436 558 ₽"
-            )
+            ?: ExpenseStore.ExpenseScreenState.Loading
 
         private val store = instanceKeeper.getStore {
             expenseStoreFactory.create(initState)

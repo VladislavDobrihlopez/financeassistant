@@ -1,4 +1,4 @@
-package com.dobrihlopez.financeassistant.feature.transaction_core.core
+package com.dobrihlopez.financeassistant.feature.transaction.core
 
 import androidx.compose.foundation.layout.height
 import androidx.compose.material3.MaterialTheme

@@ -1,14 +1,19 @@
-package com.dobrihlopez.financeassistant.feature.transaction_core.expenses.presentation
+package com.dobrihlopez.financeassistant.feature.transaction.expenses.presentation
 
 import androidx.annotation.StringRes
 import com.arkivanov.mvikotlin.core.store.Reducer
 import com.arkivanov.mvikotlin.core.store.Store
 import com.arkivanov.mvikotlin.core.store.StoreFactory
+import com.arkivanov.mvikotlin.extensions.coroutines.CoroutineBootstrapper
 import com.arkivanov.mvikotlin.extensions.coroutines.CoroutineExecutor
 import com.dobrihlopez.financeassistant.core.Transaction
 import com.dobrihlopez.financeassistant.core.domain.expenses.ExpenseRepository
+import com.dobrihlopez.financeassistant.feature.transaction.core.GetTransactionsForPeriodUseCase
+import com.dobrihlopez.financeassistant.feature.accounts.domain.GetFirstAccountUseCase
 import javax.inject.Inject
 import kotlinx.serialization.Serializable
+import kotlinx.coroutines.launch
+import java.time.LocalDate
 
 interface ExpenseStore: Store<ExpenseStore.Intent, ExpenseStore.ExpenseScreenState, Nothing> {
     @Serializable
@@ -34,29 +39,71 @@ interface ExpenseStore: Store<ExpenseStore.Intent, ExpenseStore.ExpenseScreenSta
 
     class ExpenseStoreFactory @Inject constructor(
         private val storeFactory: StoreFactory,
-        private val expenseRepository: ExpenseRepository
+        private val expenseRepository: ExpenseRepository,
+        private val getTransactionsForPeriodUseCase: GetTransactionsForPeriodUseCase,
+        private val getFirstAccountUseCase: GetFirstAccountUseCase
     ) {
         fun create(initialState: ExpenseScreenState): ExpenseStore =
-            ExpenseStoreImpl(storeFactory, initialState, expenseRepository)
+            ExpenseStoreImpl(storeFactory, initialState, getTransactionsForPeriodUseCase, getFirstAccountUseCase)
 
         private class ExpenseStoreImpl(
             storeFactory: StoreFactory,
             initialState: ExpenseScreenState,
-            expenseRepository: ExpenseRepository
+            private val getTransactionsForPeriodUseCase: GetTransactionsForPeriodUseCase,
+            private val getFirstAccountUseCase: GetFirstAccountUseCase
         ) : ExpenseStore, Store<Intent, ExpenseScreenState, Nothing> by storeFactory.create(
             name = "ExpenseStore",
             initialState = initialState,
-            executorFactory = { ExecutorImpl() },
+            bootstrapper = BootstrapperImpl(),
+            executorFactory = { ExecutorImpl(getTransactionsForPeriodUseCase, getFirstAccountUseCase) },
             reducer = ReducerImpl
         )
 
-        private class ExecutorImpl: CoroutineExecutor<Intent, Nothing, ExpenseScreenState, Message, Nothing>() {
+        private class BootstrapperImpl : CoroutineBootstrapper<Action>() {
+            override fun invoke() {
+                dispatch(Action.LoadExpenses)
+            }
+        }
+
+        sealed class Action {
+            data object LoadExpenses : Action()
+        }
+
+        private class ExecutorImpl(
+            private val getTransactionsForPeriodUseCase: GetTransactionsForPeriodUseCase,
+            private val getFirstAccountUseCase: GetFirstAccountUseCase
+        ) : CoroutineExecutor<Intent, Action, ExpenseScreenState, Message, Nothing>() {
+            override fun executeAction(action: Action) {
+                when (action) {
+                    Action.LoadExpenses -> executeIntent(Intent.LoadExpenses)
+                }
+            }
             override fun executeIntent(intent: Intent) {
                 when (intent) {
-                    Intent.LoadExpenses -> {}
+                    Intent.LoadExpenses -> loadExpensesToday()
                     Intent.AddExpense -> {}
                     Intent.HistoryClick -> {}
                     is Intent.OnExpenseClick -> {}
+                }
+            }
+            private fun loadExpensesToday() {
+                scope.launch {
+                    try {
+                        val account = getFirstAccountUseCase() ?: run {
+                            dispatch(Message.Failed())
+                            return@launch
+                        }
+                        val today = LocalDate.now().toString()
+                        val transactions = getTransactionsForPeriodUseCase(
+                            accountId = account.id,
+                            startDate = today,
+                            endDate = today
+                        ).filter { !it.category.isIncome }
+                        val summaryValue = transactions.sumOf { it.amount.toDoubleOrNull() ?: 0.0 }.toString()
+                        dispatch(Message.Succeeded(transactions, "Расходы сегодня", summaryValue))
+                    } catch (e: Exception) {
+                        dispatch(Message.Failed())
+                    }
                 }
             }
         }

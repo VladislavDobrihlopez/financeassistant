@@ -1,14 +1,14 @@
-package com.dobrihlopez.financeassistant.feature.transaction_core.income.presentation
+package com.dobrihlopez.financeassistant.feature.transaction.income.presentation
 
 import com.arkivanov.decompose.ComponentContext
 import com.arkivanov.mvikotlin.core.instancekeeper.getStore
 import com.arkivanov.mvikotlin.core.store.StoreFactory
 import com.arkivanov.mvikotlin.extensions.coroutines.stateFlow
-import com.dobrihlopez.financeassistant.feature.transaction_core.core.previewIncomeTransactions
+import com.dobrihlopez.financeassistant.feature.transaction.core.previewIncomeTransactions
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.StateFlow
 import com.dobrihlopez.financeassistant.core.domain.income.IncomeRepository
-import com.dobrihlopez.financeassistant.feature.transaction_core.income.presentation.IncomeStore.IncomeStoreFactory
+import com.dobrihlopez.financeassistant.feature.transaction.income.presentation.IncomeStore.IncomeStoreFactory
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
@@ -25,11 +25,7 @@ interface IncomeComponent {
     ) : IncomeComponent, ComponentContext by componentContext {
 
         private val initState = stateKeeper.consume(STATE_KEY, strategy = IncomeStore.IncomeScreenState.serializer())
-            ?: IncomeStore.IncomeScreenState.Succeeded(
-                transactions = previewIncomeTransactions(),
-                summaryText = "Всего",
-                summaryValue = "900 000 ₽"
-            )
+            ?: IncomeStore.IncomeScreenState.Loading
 
         private val store = instanceKeeper.getStore {
             incomeStoreFactory.create(initState)

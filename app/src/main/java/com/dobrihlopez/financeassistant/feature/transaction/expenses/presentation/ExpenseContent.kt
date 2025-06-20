@@ -30,10 +30,10 @@ import com.dobrihlopez.financeassistant.R
 import com.dobrihlopez.financeassistant.core.Transaction
 import com.dobrihlopez.financeassistant.core_ui.composable.LoadingProgressBar
 import com.dobrihlopez.financeassistant.core_ui.ui.theme.FinanceAssistantTheme
-import com.dobrihlopez.financeassistant.feature.transaction_core.core.TransactionItem
-import com.dobrihlopez.financeassistant.feature.transaction_core.core.OverViewListItem
-import com.dobrihlopez.financeassistant.feature.transaction_core.core.previewTransactions
-import com.dobrihlopez.financeassistant.feature.transaction_core.expenses.presentation.ExpenseStore
+import com.dobrihlopez.financeassistant.feature.transaction.core.TransactionItem
+import com.dobrihlopez.financeassistant.feature.transaction.core.OverViewListItem
+import com.dobrihlopez.financeassistant.feature.transaction.core.previewTransactions
+import com.dobrihlopez.financeassistant.feature.transaction.expenses.presentation.ExpenseStore
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

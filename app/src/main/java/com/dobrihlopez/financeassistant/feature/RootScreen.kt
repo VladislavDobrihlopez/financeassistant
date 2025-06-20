@@ -21,8 +21,8 @@ import com.dobrihlopez.financeassistant.core_ui.composable.NavigationItem
 import com.dobrihlopez.financeassistant.feature.accounts.presentation.AccountsScreen
 import com.dobrihlopez.financeassistant.feature.categories.presentation.CategoriesScreen
 import com.dobrihlopez.financeassistant.feature.settings.presentation.SettingScreen
-import com.dobrihlopez.financeassistant.feature.transaction_core.expenses.presentation.ExpenseScreen
-import com.dobrihlopez.financeassistant.feature.transaction_core.income.presentation.IncomeScreen
+import com.dobrihlopez.financeassistant.feature.transaction.expenses.presentation.ExpenseScreen
+import com.dobrihlopez.financeassistant.feature.transaction.income.presentation.IncomeScreen
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

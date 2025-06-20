@@ -1,4 +1,4 @@
-package com.dobrihlopez.financeassistant.feature.transaction_core.income.presentation
+package com.dobrihlopez.financeassistant.feature.transaction.income.presentation
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -29,9 +29,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.dobrihlopez.financeassistant.R
 import com.dobrihlopez.financeassistant.core_ui.composable.LoadingProgressBar
 import com.dobrihlopez.financeassistant.core_ui.ui.theme.FinanceAssistantTheme
-import com.dobrihlopez.financeassistant.feature.transaction_core.core.OverViewListItem
-import com.dobrihlopez.financeassistant.feature.transaction_core.core.TransactionItem
-import com.dobrihlopez.financeassistant.feature.transaction_core.core.previewIncomeTransactions
+import com.dobrihlopez.financeassistant.feature.transaction.core.OverViewListItem
+import com.dobrihlopez.financeassistant.feature.transaction.core.TransactionItem
+import com.dobrihlopez.financeassistant.feature.transaction.core.previewIncomeTransactions
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

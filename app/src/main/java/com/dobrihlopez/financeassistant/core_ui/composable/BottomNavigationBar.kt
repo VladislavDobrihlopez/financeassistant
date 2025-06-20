@@ -24,7 +24,7 @@ import com.arkivanov.mvikotlin.main.store.DefaultStoreFactory
 import com.dobrihlopez.financeassistant.R
 import com.dobrihlopez.financeassistant.core_ui.ui.theme.FinanceAssistantTheme
 import com.dobrihlopez.financeassistant.feature.RootComponent
-import com.dobrihlopez.financeassistant.feature.transaction_core.expenses.presentation.ExpenseComponent
+import com.dobrihlopez.financeassistant.feature.transaction.expenses.presentation.ExpenseComponent
 import kotlin.reflect.KClass
 
 sealed class NavigationItem(

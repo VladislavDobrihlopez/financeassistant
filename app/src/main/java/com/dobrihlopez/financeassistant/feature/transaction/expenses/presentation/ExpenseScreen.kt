@@ -1,4 +1,4 @@
-package com.dobrihlopez.financeassistant.feature.transaction_core.expenses.presentation
+package com.dobrihlopez.financeassistant.feature.transaction.expenses.presentation
 
 import androidx.compose.runtime.Composable
 import androidx.lifecycle.compose.collectAsStateWithLifecycle

@@ -1,4 +1,4 @@
-package com.dobrihlopez.financeassistant.feature.transaction_core.core
+package com.dobrihlopez.financeassistant.feature.transaction.core
 
 import com.dobrihlopez.financeassistant.core.Transaction
 import com.dobrihlopez.financeassistant.feature.accounts.domain.UserAccountDetailed

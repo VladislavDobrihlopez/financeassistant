@@ -9,8 +9,8 @@ import com.arkivanov.decompose.value.Value
 import com.dobrihlopez.financeassistant.feature.accounts.presentation.AccountsComponent
 import com.dobrihlopez.financeassistant.feature.categories.presentation.CategoriesComponent
 import com.dobrihlopez.financeassistant.feature.settings.presentation.SettingsComponent
-import com.dobrihlopez.financeassistant.feature.transaction_core.expenses.presentation.ExpenseComponent
-import com.dobrihlopez.financeassistant.feature.transaction_core.income.presentation.IncomeComponent
+import com.dobrihlopez.financeassistant.feature.transaction.expenses.presentation.ExpenseComponent
+import com.dobrihlopez.financeassistant.feature.transaction.income.presentation.IncomeComponent
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
