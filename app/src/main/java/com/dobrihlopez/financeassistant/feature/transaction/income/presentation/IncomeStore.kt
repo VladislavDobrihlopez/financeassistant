@@ -86,6 +86,7 @@ interface IncomeStore: Store<IncomeStore.Intent, IncomeStore.IncomeScreenState, 
             private fun loadIncomeToday() {
                 scope.launch {
                     try {
+                        dispatch(Message.Loading)
                         val account = getFirstAccountUseCase() ?: run {
                             dispatch(Message.Failed())
                             return@launch

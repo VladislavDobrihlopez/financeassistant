@@ -6,8 +6,11 @@ import com.arkivanov.decompose.router.stack.StackNavigation
 import com.arkivanov.decompose.router.stack.childStack
 import com.arkivanov.decompose.router.stack.push
 import com.arkivanov.decompose.value.Value
+import com.arkivanov.essenty.lifecycle.doOnResume
+import com.arkivanov.essenty.lifecycle.doOnStart
 import com.arkivanov.mvikotlin.core.instancekeeper.getStore
 import com.arkivanov.mvikotlin.extensions.coroutines.stateFlow
+import com.dobrihlopez.financeassistant.feature.categories.presentation.CategoriesStore
 import com.dobrihlopez.financeassistant.feature.transaction.history.presentation.HistoryComponent
 import com.dobrihlopez.financeassistant.feature.transaction.income.presentation.IncomeStore.IncomeStoreFactory
 import dagger.assisted.Assisted
@@ -65,6 +68,12 @@ interface IncomeComponent {
         init {
             stateKeeper.register("income_state", IncomeStore.IncomeScreenState.serializer()) {
                 state.value
+            }
+
+            lifecycle.doOnResume {
+                if (state.value is IncomeStore.IncomeScreenState.Failed) {
+                    store.accept(IncomeStore.Intent.LoadIncome)
+                }
             }
         }
 

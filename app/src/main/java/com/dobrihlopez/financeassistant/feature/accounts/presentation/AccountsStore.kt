@@ -81,6 +81,7 @@ interface AccountsStore: Store<AccountsStore.Intent, AccountsStore.AccountScreen
                     Intent.LoadAccount -> {
                         scope.launch {
                             try {
+                                dispatch(Message.Loading)
                                 val account = getFirstAccountUseCase()
                                 if (account != null) {
                                     dispatch(Message.Succeeded(account))
@@ -115,7 +116,7 @@ interface AccountsStore: Store<AccountsStore.Intent, AccountsStore.AccountScreen
                     Intent.AddAccount -> {}
                     Intent.BalanceClick -> {}
                     Intent.CurrencyClick -> {}
-                    Intent.RefreshAccount -> {}
+                    Intent.RefreshAccount -> executeIntent(Intent.LoadAccount)
                 }
             }
         }

@@ -6,11 +6,13 @@ import com.arkivanov.decompose.router.stack.StackNavigation
 import com.arkivanov.decompose.router.stack.childStack
 import com.arkivanov.decompose.router.stack.push
 import com.arkivanov.decompose.value.Value
+import com.arkivanov.essenty.lifecycle.doOnResume
 import com.arkivanov.mvikotlin.core.instancekeeper.getStore
 import com.arkivanov.mvikotlin.extensions.coroutines.stateFlow
 import com.dobrihlopez.financeassistant.core.Transaction
 import com.dobrihlopez.financeassistant.feature.transaction.expenses.presentation.ExpenseStore.ExpenseStoreFactory
 import com.dobrihlopez.financeassistant.feature.transaction.history.presentation.HistoryComponent
+import com.dobrihlopez.financeassistant.feature.transaction.income.presentation.IncomeStore
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
@@ -73,6 +75,12 @@ interface ExpenseComponent {
         init {
             stateKeeper.register("expense_state", ExpenseStore.ExpenseScreenState.serializer()) {
                 state.value
+            }
+
+            lifecycle.doOnResume {
+                if (state.value is ExpenseStore.ExpenseScreenState.Failed) {
+                    store.accept(ExpenseStore.Intent.LoadExpenses)
+                }
             }
         }
 

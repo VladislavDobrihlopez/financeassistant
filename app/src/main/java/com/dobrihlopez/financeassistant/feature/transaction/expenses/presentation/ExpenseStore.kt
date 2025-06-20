@@ -10,6 +10,7 @@ import com.dobrihlopez.financeassistant.core.Transaction
 import com.dobrihlopez.financeassistant.feature.transaction.expenses.domain.ExpenseRepository
 import com.dobrihlopez.financeassistant.feature.transaction.core.GetTransactionsForPeriodUseCase
 import com.dobrihlopez.financeassistant.feature.accounts.domain.usecase.GetFirstAccountUseCase
+import com.dobrihlopez.financeassistant.feature.transaction.income.presentation.IncomeStore
 import javax.inject.Inject
 import kotlinx.serialization.Serializable
 import kotlinx.coroutines.launch
@@ -88,6 +89,7 @@ interface ExpenseStore: Store<ExpenseStore.Intent, ExpenseStore.ExpenseScreenSta
             private fun loadExpensesToday() {
                 scope.launch {
                     try {
+                        dispatch(Message.Loading)
                         val account = getFirstAccountUseCase() ?: run {
                             dispatch(Message.Failed())
                             return@launch

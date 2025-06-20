@@ -59,8 +59,12 @@ interface CategoriesStore: Store<CategoriesStore.Intent, CategoriesStore.Categor
         ): CoroutineBootstrapper<Action>() {
             override fun invoke() {
                 scope.launch {
-                    val items = getCategoriesUsecase()
-                    dispatch(Action.LoadedCategoriesList(items))
+                    try {
+                        val items = getCategoriesUsecase()
+                        dispatch(Action.LoadedCategoriesList(items))
+                    } catch (_: Exception) {
+                        dispatch(Action.LoadedCategoriesList(emptyList<Category>()))
+                    }
                 }
             }
         }
@@ -74,8 +78,12 @@ interface CategoriesStore: Store<CategoriesStore.Intent, CategoriesStore.Categor
                 super.executeAction(action)
                 when (action) {
                     is Action.LoadedCategoriesList -> {
-                        categories = action.categories.toList()
-                        dispatch(Message.UpdateCategories(action.categories))
+                        if (action.categories.isEmpty()) {
+                            dispatch(Message.Error)
+                        } else {
+                            categories = action.categories.toList()
+                            dispatch(Message.UpdateCategories(action.categories))
+                        }
                     }
                 }
             }
@@ -95,8 +103,12 @@ interface CategoriesStore: Store<CategoriesStore.Intent, CategoriesStore.Categor
                     }
                     Intent.RefreshList -> {
                         scope.launch {
-                            val items = getCategoriesUsecase()
-                            executeAction(Action.LoadedCategoriesList(items))
+                            try {
+                                val items = getCategoriesUsecase()
+                                executeAction(Action.LoadedCategoriesList(items))
+                            } catch(_: Exception) {
+                                dispatch(Message.Error)
+                            }
                         }
                     }
                 }
@@ -134,6 +146,10 @@ interface CategoriesStore: Store<CategoriesStore.Intent, CategoriesStore.Categor
                             )
                         }
                     }
+
+                    Message.Error -> {
+                        CategoriesScreenState.Failed()
+                    }
                 }
             }
         }
@@ -145,6 +161,7 @@ interface CategoriesStore: Store<CategoriesStore.Intent, CategoriesStore.Categor
         private sealed class Message {
             data class UpdateSearchBar(val text: String): Message()
             data class UpdateCategories(val categories: List<Category>): Message()
+            data object Error: Message()
         }
     }
 }

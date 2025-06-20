@@ -1,11 +1,14 @@
 package com.dobrihlopez.financeassistant.feature.accounts.presentation
 
 import com.arkivanov.decompose.ComponentContext
+import com.arkivanov.essenty.lifecycle.doOnResume
 import com.arkivanov.mvikotlin.core.instancekeeper.getStore
 import com.arkivanov.mvikotlin.extensions.coroutines.stateFlow
 import com.dobrihlopez.financeassistant.feature.accounts.domain.UserAccountDetailed
 import com.dobrihlopez.financeassistant.feature.accounts.presentation.AccountsStore.AccountsStoreFactory
 import com.dobrihlopez.financeassistant.feature.accounts.presentation.composable.Currency
+import com.dobrihlopez.financeassistant.feature.categories.presentation.CategoriesStore
+import com.dobrihlopez.financeassistant.feature.categories.presentation.CategoriesStore.CategoriesScreenState
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
@@ -46,6 +49,12 @@ interface AccountsComponent {
         init {
             stateKeeper.register("accounts_state", AccountsStore.AccountScreenState.serializer()) {
                 state.value
+            }
+
+            lifecycle.doOnResume {
+                if (state.value is AccountsStore.AccountScreenState.Failed) {
+                    store.accept(AccountsStore.Intent.RefreshAccount)
+                }
             }
         }
 
