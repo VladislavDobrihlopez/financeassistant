@@ -33,4 +33,6 @@
     <string name="history_end">Конец</string>
     <string name="history_summary">Сумма</string>
     <string name="history_topbar_title">Моя история</string>
+    <string name="error_network_try_again">Ошибка сети, попробуйте снова</string>
+    <string name="retry">Повторить</string>
 </resources>

@@ -7,39 +7,53 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.dobrihlopez.financeassistant.core_ui.composable.ErrorSnackbarHost
 import com.dobrihlopez.financeassistant.core_ui.composable.LoadingProgressBar
 import com.dobrihlopez.financeassistant.core_ui.ui.theme.FinanceAssistantTheme
+import com.dobrihlopez.financeassistant.feature.transaction.core.previewIncomeTransactions
 import com.dobrihlopez.financeassistant.feature.transaction.core_ui.OverViewListItem
 import com.dobrihlopez.financeassistant.feature.transaction.core_ui.TransactionItem
-import com.dobrihlopez.financeassistant.feature.transaction.core.previewIncomeTransactions
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun IncomeContent(
     state: IncomeStore.IncomeScreenState,
     paddingValues: PaddingValues,
+    onRetry: () -> Unit = {},
 ) {
-
-    when (state) {
-        is IncomeStore.IncomeScreenState.Loading -> LoadingProgressBar()
-        is IncomeStore.IncomeScreenState.Failed -> {}
-        is IncomeStore.IncomeScreenState.Succeeded -> {
-            LazyColumn(
-                modifier = Modifier
-                    .padding(paddingValues)
-                    .fillMaxSize()
-            ) {
-                item {
-                    OverViewListItem(content = state.summaryText, value = state.summaryValue)
-                    HorizontalDivider()
-                }
-                items(state.transactions, key = { it.id }) { transaction ->
-                    TransactionItem(transaction, onClick = { })
-                    HorizontalDivider()
+    Scaffold(
+        snackbarHost = {
+            if (state is IncomeStore.IncomeScreenState.Failed) {
+                ErrorSnackbarHost(
+                    errorResId = state.errorResId,
+                    onRetry = onRetry
+                )
+            }
+        }
+    ) { innerPadding ->
+        when (state) {
+            is IncomeStore.IncomeScreenState.Loading -> LoadingProgressBar()
+            is IncomeStore.IncomeScreenState.Failed -> {}
+            is IncomeStore.IncomeScreenState.Succeeded -> {
+                LazyColumn(
+                    modifier = Modifier
+                        .padding(paddingValues)
+                        .padding(innerPadding)
+                        .fillMaxSize()
+                ) {
+                    item {
+                        OverViewListItem(content = state.summaryText, value = state.summaryValue)
+                        HorizontalDivider()
+                    }
+                    items(state.transactions, key = { it.id }) { transaction ->
+                        TransactionItem(transaction, onClick = { })
+                        HorizontalDivider()
+                    }
                 }
             }
         }

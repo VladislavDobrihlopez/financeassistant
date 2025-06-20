@@ -28,6 +28,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.dobrihlopez.financeassistant.R
+import com.dobrihlopez.financeassistant.core_ui.composable.ErrorSnackbarHost
 import com.dobrihlopez.financeassistant.core_ui.composable.LoadingProgressBar
 import com.dobrihlopez.financeassistant.core_ui.ui.theme.FinanceAssistantTheme
 import com.dobrihlopez.financeassistant.feature.accounts.domain.UserAccountDetailed
@@ -41,7 +42,8 @@ fun AccountContent(
     onEditClick: () -> Unit,
     onFabClick: () -> Unit,
     onBalanceClick: () -> Unit,
-    onCurrencyClick: () -> Unit
+    onCurrencyClick: () -> Unit,
+    onRetry: () -> Unit = {}
 ) {
     Scaffold(
         topBar = {
@@ -73,15 +75,21 @@ fun AccountContent(
             ) {
                 Icon(Icons.Default.Add, contentDescription = null)
             }
+        },
+        snackbarHost = {
+            if (state is AccountScreenState.Failed) {
+                ErrorSnackbarHost(
+                    errorResId = state.errorResId,
+                    onRetry = onRetry
+                )
+            }
         }
     ) { innerPadding ->
-
         when (state) {
             is AccountScreenState.Loading -> LoadingProgressBar()
-            is AccountScreenState.Failed -> TODO()
+            is AccountScreenState.Failed -> {}
             is AccountScreenState.Succeeded -> {
                 val account = state.account
-
                 val items = remember(state.account) {
                     listOf(
                         AccountActionItem(
@@ -98,18 +106,16 @@ fun AccountContent(
                         )
                     )
                 }
-
                 LazyColumn(
                     modifier = Modifier
-                        .padding(innerPadding)
                         .fillMaxSize()
                         .background(MaterialTheme.colorScheme.surface)
+                        .padding(innerPadding)
                 ) {
                     items(items = items, key = { it.id }) { item ->
                         AccountItem(item, onClick = { item.onClick() })
                         HorizontalDivider()
                     }
-
                     // TODO: график заботать кастомную вьюху на канвасе
                 }
             }

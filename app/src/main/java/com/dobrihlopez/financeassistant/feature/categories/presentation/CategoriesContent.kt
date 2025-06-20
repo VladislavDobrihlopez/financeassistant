@@ -35,6 +35,7 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.dobrihlopez.financeassistant.R
+import com.dobrihlopez.financeassistant.core_ui.composable.ErrorSnackbarHost
 import com.dobrihlopez.financeassistant.core_ui.composable.LoadingProgressBar
 import com.dobrihlopez.financeassistant.core_ui.ui.theme.FinanceAssistantTheme
 import com.dobrihlopez.financeassistant.core_ui.ui.theme.spacing
@@ -47,6 +48,7 @@ fun CategoriesContent(
     state: CategoriesScreenState,
     onSearchBarTextChange: (String) -> Unit,
     onSearchClick: () -> Unit,
+    onRetry: () -> Unit = {},
 ) {
     Scaffold(topBar = {
         TopAppBar(
@@ -63,10 +65,16 @@ fun CategoriesContent(
                 titleContentColor = MaterialTheme.colorScheme.onSurface,
             )
         )
+    }, snackbarHost = {
+        if (state is CategoriesScreenState.Failed) {
+            ErrorSnackbarHost(
+                errorResId = state.errorResId,
+                onRetry = onRetry
+            )
+        }
     }) { values ->
-
         when (state) {
-            is CategoriesScreenState.Failed -> TODO()
+            is CategoriesScreenState.Failed -> {}
             CategoriesScreenState.Loading -> LoadingProgressBar()
             is CategoriesScreenState.Succeeded -> {
                 Column(modifier = Modifier.padding(values)) {
@@ -76,8 +84,6 @@ fun CategoriesContent(
                         onSearchClick = onSearchClick,
                     )
                     HorizontalDivider()
-
-
                     LazyColumn {
                         items(items = state.categories, key = { it.id }) { category ->
                             CategoriesItem(category = category)

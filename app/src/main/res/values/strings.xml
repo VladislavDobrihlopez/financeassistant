@@ -29,4 +29,7 @@
     <string name="history_end">End</string>
     <string name="history_summary">Sum</string>
     <string name="history_topbar_title">My history</string>
+    <string name="error_network_try_again">Network error, please try again</string>
+    <string name="error_validation">Validation error</string>
+    <string name="retry">Retry</string>
 </resources>
