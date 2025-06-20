@@ -29,4 +29,7 @@
     <string name="accounts_pattern_russian_rubble">Российский рубль %s</string>
     <string name="accounts_pattern_dollar">Американский доллар %s</string>
     <string name="accounts_pattern_euro">Евро %s</string>
+    <string name="history_start">Начало</string>
+    <string name="history_end">Конец</string>
+    <string name="history_summary">Сумма</string>
 </resources>

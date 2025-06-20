@@ -8,11 +8,12 @@ import androidx.compose.ui.unit.dp
 import com.dobrihlopez.financeassistant.core_ui.composable.BasicListItem
 
 @Composable
-fun OverViewListItem(content: String, value: String) {
+fun OverViewListItem(content: String, value: String, onClick: () -> Unit = {}) {
     BasicListItem(
         modifier = Modifier.height(50.dp),
         content = content,
         value = value,
-        backgroundColor = MaterialTheme.colorScheme.primaryContainer
+        backgroundColor = MaterialTheme.colorScheme.primaryContainer,
+        onClick = onClick
     )
 }

@@ -2,7 +2,6 @@ package com.dobrihlopez.financeassistant.feature.transaction.expenses.presentati
 
 import androidx.compose.runtime.Composable
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.dobrihlopez.financeassistant.feature.income.presentation.ExpenseContent
 
 @Composable
 fun ExpenseScreen(componentContext: ExpenseComponent) {
