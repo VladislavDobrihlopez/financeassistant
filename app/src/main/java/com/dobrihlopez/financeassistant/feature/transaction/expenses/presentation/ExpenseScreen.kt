@@ -3,6 +3,7 @@ package com.dobrihlopez.financeassistant.feature.transaction.expenses.presentati
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.expandHorizontally
 import androidx.compose.animation.fadeIn
+import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.shape.CircleShape
@@ -30,6 +31,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.arkivanov.decompose.extensions.compose.stack.Children
+import com.arkivanov.decompose.extensions.compose.stack.animation.slide
+import com.arkivanov.decompose.extensions.compose.stack.animation.stackAnimation
 import com.dobrihlopez.financeassistant.R
 import com.dobrihlopez.financeassistant.feature.transaction.history.presentation.HistoryScreen
 
@@ -95,7 +98,10 @@ fun ExpenseScreen(component: ExpenseComponent) {
             }
         }
     ) { paddingValues ->
-        Children(stack = childStack) { child ->
+        Children(
+            stack = childStack,
+            animation = stackAnimation(animator = slide(orientation = Orientation.Vertical))
+        ) { child ->
             when (val instance = child.instance) {
                 is ExpenseComponent.Child.Main -> {
                     topBarTitle = stringResource(R.string.expenses_topbar_title)
