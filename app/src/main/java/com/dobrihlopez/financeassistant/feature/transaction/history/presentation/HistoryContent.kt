@@ -38,9 +38,7 @@ fun HistoryContent(
             else -> {
                 LazyColumn(
                     modifier = Modifier
-                        .fillMaxSize()
-                        .padding(horizontal = spacing.medium, vertical = spacing.small),
-                    contentPadding = PaddingValues(bottom = spacing.large)
+                        .fillMaxSize(),
                 ) {
                     item {
                         OverViewListItem(
@@ -48,21 +46,25 @@ fun HistoryContent(
                             value = state.dateText,
                             onClick = { showDatePicker = true }
                         )
-                        Spacer(modifier = Modifier.height(spacing.small))
+                        HorizontalDivider()
+                    }
+                    item {
                         OverViewListItem(
                             content = stringResource(R.string.history_end),
                             value = state.endText
                         )
-                        Spacer(modifier = Modifier.height(spacing.small))
+                        HorizontalDivider()
+                    }
+                    item {
                         OverViewListItem(
                             content = stringResource(R.string.history_summary),
                             value = state.summaryValue
                         )
-                        Spacer(modifier = Modifier.height(spacing.medium))
+                        HorizontalDivider()
                     }
                     items(state.transactions, key = { it.id }) { transaction ->
-                        TransactionItem(transaction, onClick = {})
-                        Spacer(modifier = Modifier.height(spacing.small))
+                        TransactionItem(transaction, onClick = {}, showTime = true)
+                        HorizontalDivider()
                     }
                 }
             }

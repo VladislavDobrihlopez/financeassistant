@@ -19,17 +19,25 @@ import androidx.compose.ui.unit.dp
 import com.dobrihlopez.financeassistant.R
 import com.dobrihlopez.financeassistant.core.Transaction
 import com.dobrihlopez.financeassistant.core_ui.composable.BasicListItem
+import java.time.LocalDateTime
+import java.time.LocalTime
+import java.time.OffsetDateTime
+import java.time.format.DateTimeFormatter
 
 @Composable
 fun TransactionItem(
     transaction: Transaction,
     onClick: () -> Unit,
+    showTime: Boolean = false,
 ) {
     BasicListItem(
         modifier = Modifier.height(70.dp),
         content = transaction.category.name,
         subContent = transaction.comment,
         value = transaction.amount,
+        valueSubtitle = if (showTime) {
+            OffsetDateTime.parse(transaction.updatedAt).format(DateTimeFormatter.ofPattern("HH:mm"))
+        } else null,
         leadingContent = transaction.category.emoji?.run {
             {
                 Box(
