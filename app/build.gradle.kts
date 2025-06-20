@@ -1,9 +1,11 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
-    alias(libs.plugins.kotlin.compose)
     id("kotlin-parcelize")
-    kotlin("plugin.serialization") version libs.versions.kotlin
+    kotlin("plugin.serialization") version "2.0.21"
+    id("com.google.dagger.hilt.android") version "2.48"
+    id("com.google.devtools.ksp") version "2.0.21-1.0.27"
+    id("org.jetbrains.kotlin.plugin.compose") version "2.0.21"
 }
 
 android {
@@ -18,6 +20,7 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        buildConfigField("String", "API_TOKEN", "\"${project.findProperty("API_TOKEN") as String}\"")
     }
 
     buildTypes {
@@ -38,6 +41,10 @@ android {
     }
     buildFeatures {
         compose = true
+        buildConfig = true
+    }
+    hilt {
+        enableAggregatingTask = false
     }
 }
 
@@ -75,4 +82,12 @@ dependencies {
 
     implementation(libs.kotlinx.coroutines.core)
     implementation(libs.kotlinx.coroutines.android)
+
+    implementation("com.squareup.retrofit2:retrofit:2.11.0")
+    implementation("com.squareup.retrofit2:converter-gson:2.11.0")
+    implementation("com.squareup.okhttp3:logging-interceptor:4.9.3")
+
+    implementation("com.google.dagger:hilt-android:2.48")
+    ksp("com.google.dagger:hilt-android-compiler:2.48")
+    implementation("androidx.hilt:hilt-navigation-compose:1.1.0")
 }

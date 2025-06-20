@@ -12,9 +12,14 @@ import com.arkivanov.mvikotlin.main.store.DefaultStoreFactory
 import com.dobrihlopez.financeassistant.core_ui.ui.theme.FinanceAssistantTheme
 import com.dobrihlopez.financeassistant.feature.RootComponent
 import com.dobrihlopez.financeassistant.feature.RootScreen
+import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 import kotlinx.coroutines.delay
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
+    @Inject
+    lateinit var rootComponentFactory: RootComponent.DefaultRootComponent.Factory
     private var isSplashVisible = true
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -26,10 +31,7 @@ class MainActivity : ComponentActivity() {
             isSplashVisible
         }
 
-        val rootComponent = RootComponent.DefaultRootComponent(
-            defaultComponentContext = defaultComponentContext(),
-            storeFactory = DefaultStoreFactory()
-        )
+        val rootComponent = rootComponentFactory.create(defaultComponentContext())
 
         setContent {
             FinanceAssistantTheme {
@@ -37,7 +39,6 @@ class MainActivity : ComponentActivity() {
                     delay(SPLASH_DURATION_IN_MS)
                     isSplashVisible = false
                 }
-
                 RootScreen(rootComponent)
             }
         }

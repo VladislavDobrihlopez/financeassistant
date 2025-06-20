@@ -13,6 +13,8 @@ import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.FloatingActionButtonDefaults.bottomAppBarFabElevation
+import androidx.compose.material3.FloatingActionButtonElevation
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -28,6 +30,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.dobrihlopez.financeassistant.R
+import com.dobrihlopez.financeassistant.core_ui.composable.ErrorSnackbarHost
 import com.dobrihlopez.financeassistant.core_ui.composable.LoadingProgressBar
 import com.dobrihlopez.financeassistant.core_ui.ui.theme.FinanceAssistantTheme
 import com.dobrihlopez.financeassistant.feature.accounts.domain.UserAccountDetailed
@@ -41,7 +44,8 @@ fun AccountContent(
     onEditClick: () -> Unit,
     onFabClick: () -> Unit,
     onBalanceClick: () -> Unit,
-    onCurrencyClick: () -> Unit
+    onCurrencyClick: () -> Unit,
+    onRetry: () -> Unit = {}
 ) {
     Scaffold(
         topBar = {
@@ -67,49 +71,55 @@ fun AccountContent(
         },
         floatingActionButton = {
             FloatingActionButton(
+                elevation = bottomAppBarFabElevation(),
                 shape = CircleShape,
                 onClick = onFabClick,
-                containerColor = MaterialTheme.colorScheme.primary
+                containerColor = MaterialTheme.colorScheme.primary,
+                contentColor = MaterialTheme.colorScheme.background,
             ) {
                 Icon(Icons.Default.Add, contentDescription = null)
             }
+        },
+        snackbarHost = {
+            if (state is AccountScreenState.Failed) {
+                ErrorSnackbarHost(
+                    errorResId = state.errorResId,
+                    onRetry = onRetry
+                )
+            }
         }
     ) { innerPadding ->
-
         when (state) {
             is AccountScreenState.Loading -> LoadingProgressBar()
-            is AccountScreenState.Failed -> TODO()
+            is AccountScreenState.Failed -> {}
             is AccountScreenState.Succeeded -> {
                 val account = state.account
-
                 val items = remember(state.account) {
                     listOf(
                         AccountActionItem(
                             title = R.string.account_balance,
                             value = account.balance,
-                            currency = "₽",
+                            currency = account.currency,
                             onClick = onBalanceClick,
                             emoji = "\uD83D\uDCB0"
                         ),
                         AccountActionItem(
                             title = R.string.account_currency,
-                            currency = "₽",
+                            currency = account.currency,
                             onClick = onCurrencyClick,
                         )
                     )
                 }
-
                 LazyColumn(
                     modifier = Modifier
-                        .padding(innerPadding)
                         .fillMaxSize()
-                        .background(MaterialTheme.colorScheme.surface)
+                        .background(MaterialTheme.colorScheme.background)
+                        .padding(innerPadding)
                 ) {
                     items(items = items, key = { it.id }) { item ->
                         AccountItem(item, onClick = { item.onClick() })
                         HorizontalDivider()
                     }
-
                     // TODO: график заботать кастомную вьюху на канвасе
                 }
             }

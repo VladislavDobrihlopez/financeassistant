@@ -1,11 +1,16 @@
 package com.dobrihlopez.financeassistant.feature.categories.presentation
 
 import com.arkivanov.decompose.ComponentContext
+import com.arkivanov.essenty.lifecycle.doOnResume
+import com.arkivanov.essenty.lifecycle.doOnStart
 import com.arkivanov.mvikotlin.core.instancekeeper.getStore
-import com.arkivanov.mvikotlin.core.store.StoreFactory
 import com.arkivanov.mvikotlin.extensions.coroutines.stateFlow
 import com.dobrihlopez.financeassistant.feature.categories.domain.Category
 import com.dobrihlopez.financeassistant.feature.categories.presentation.CategoriesStore.CategoriesScreenState
+import com.dobrihlopez.financeassistant.feature.categories.presentation.CategoriesStore.CategoriesStoreFactory
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.StateFlow
 
@@ -15,22 +20,16 @@ interface CategoriesComponent {
     fun onSearchBarTextChange(text: String)
     fun onSearchClick()
 
-    class DefaultCategoriesComponent(
-        val componentContext: ComponentContext,
-        private val storeFactory: StoreFactory,
-    ): CategoriesComponent, ComponentContext by componentContext {
+    class DefaultCategoriesComponent @AssistedInject constructor(
+        @Assisted("componentContext") private val componentContext: ComponentContext,
+        private val categoriesStoreFactory: CategoriesStoreFactory
+    ) : CategoriesComponent, ComponentContext by componentContext {
 
-        private fun restoreState() = stateKeeper.consume(STATE_KEY, strategy = CategoriesScreenState.serializer())
-
-        private val initState = restoreState() ?: CategoriesScreenState.Succeeded(
-            searchText = "",
-            categories = provideCategories()
-        )
+        private val initState = stateKeeper.consume(STATE_KEY, strategy = CategoriesScreenState.serializer())
+            ?: CategoriesScreenState.Loading
 
         private val store = instanceKeeper.getStore {
-            CategoriesStore.CategoriesStoreFactory(storeFactory).create(
-                initialState = initState
-            )
+            categoriesStoreFactory.create(initState)
         }
 
         @OptIn(ExperimentalCoroutinesApi::class)
@@ -40,6 +39,12 @@ interface CategoriesComponent {
         init {
             stateKeeper.register("categories_state", CategoriesScreenState.serializer()) {
                 state.value
+            }
+
+            lifecycle.doOnResume {
+                if (state.value is CategoriesScreenState.Failed) {
+                    store.accept(CategoriesStore.Intent.RefreshList)
+                }
             }
         }
 
@@ -55,8 +60,14 @@ interface CategoriesComponent {
             const val STATE_KEY = "categories"
         }
     }
+
+    @AssistedFactory
+    interface Factory {
+        fun create(@Assisted("componentContext") componentContext: ComponentContext): DefaultCategoriesComponent
+    }
 }
 
+// mock data
 fun provideCategories(): List<Category> = listOf(
     Category(id = 1, emoji = "🏠", isIncome = false, name = "Аренда квартиры"),
     Category(id = 2, emoji = "👗", isIncome = false, name = "Одежда"),

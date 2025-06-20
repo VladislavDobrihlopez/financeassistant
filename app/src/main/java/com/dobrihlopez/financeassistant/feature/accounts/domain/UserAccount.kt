@@ -1,5 +1,7 @@
 package com.dobrihlopez.financeassistant.feature.accounts.domain
 
+import com.dobrihlopez.financeassistant.feature.accounts.data.network.AccountDto
+
 data class UserAccount(
     val balance: String,
     val createdAt: String,
@@ -9,3 +11,14 @@ data class UserAccount(
     val updatedAt: String,
     val userId: Int,
 )
+
+fun AccountDto.toDomainAccount(): UserAccount =
+    UserAccount(
+        id = id,
+        name = name,
+        balance = balance,
+        currency = currency,
+        createdAt = createdAt,
+        updatedAt = updatedAt,
+        userId = userId
+    )

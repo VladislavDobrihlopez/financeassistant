@@ -18,4 +18,19 @@
     <string name="account_currency">Currency</string>
     <string name="incomes_topbar_title">Incomes today</string>
     <string name="expenses_topbar_title">Expenses today</string>
+    <string name="accounts_input_field_balance">Balance</string>
+    <string name="accounts_balance_validation_helper">Enter valid values (up to 2 digits after a comma)</string>
+    <string name="cancel">Cancel</string>
+    <string name="okay">OK</string>
+    <string name="accounts_pattern_russian_rubble">Russian ruble %s</string>
+    <string name="accounts_pattern_dollar">American dollar %s</string>
+    <string name="accounts_pattern_euro">Euro %s</string>
+    <string name="history_start">Start</string>
+    <string name="history_end">End</string>
+    <string name="history_summary">Sum</string>
+    <string name="history_topbar_title">My history</string>
+    <string name="error_network_try_again">Network error, please try again</string>
+    <string name="error_validation">Validation error</string>
+    <string name="retry">Retry</string>
+    <string name="error_unknown">Unknown error</string>
 </resources>

@@ -6,14 +6,15 @@ import com.arkivanov.decompose.router.stack.StackNavigation
 import com.arkivanov.decompose.router.stack.bringToFront
 import com.arkivanov.decompose.router.stack.childStack
 import com.arkivanov.decompose.value.Value
-import com.arkivanov.mvikotlin.core.store.StoreFactory
 import com.dobrihlopez.financeassistant.feature.accounts.presentation.AccountsComponent
 import com.dobrihlopez.financeassistant.feature.categories.presentation.CategoriesComponent
 import com.dobrihlopez.financeassistant.feature.settings.presentation.SettingsComponent
-import com.dobrihlopez.financeassistant.feature.transaction_core.expenses.presentation.ExpenseComponent
-import com.dobrihlopez.financeassistant.feature.transaction_core.income.presentation.IncomeComponent
+import com.dobrihlopez.financeassistant.feature.transaction.expenses.presentation.ExpenseComponent
+import com.dobrihlopez.financeassistant.feature.transaction.income.presentation.IncomeComponent
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 import kotlinx.serialization.Serializable
-import java.util.UUID
 
 interface RootComponent {
     val state: Value<ChildStack<*, Child>>
@@ -24,37 +25,55 @@ interface RootComponent {
     fun onCategoriesClick()
     fun onSettingsClick()
 
-    sealed class Child {
-        data class Accounts(val accountComponent: AccountsComponent) : Child()
-        data class Income(val incomeComponent: IncomeComponent) : Child()
-        data class Expenses(val expensesComponent: ExpenseComponent) : Child()
-        data class Settings(val settingsComponent: SettingsComponent) : Child()
-        data class Category(val categoryComponent: CategoriesComponent) : Child()
+    sealed interface Child {
+        data class Accounts(val component: AccountsComponent) : Child
+        data class Category(val component: CategoriesComponent) : Child
+        data class Expenses(val component: ExpenseComponent) : Child
+        data class Income(val component: IncomeComponent) : Child
+        data class Settings(val component: SettingsComponent) : Child
     }
 
-    class DefaultRootComponent(
-        val defaultComponentContext: ComponentContext,
-        private val storeFactory: StoreFactory,
-    ) : RootComponent, ComponentContext by defaultComponentContext {
+    @Serializable
+    sealed interface Config {
+        @Serializable
+        data object Accounts : Config
+        @Serializable
+        data object Categories : Config
+        @Serializable
+        data object Expenses : Config
+        @Serializable
+        data object Income : Config
+        @Serializable
+        data object Settings : Config
+    }
+
+    class DefaultRootComponent @AssistedInject constructor(
+        private val expenseComponentFactory: ExpenseComponent.Factory,
+        private val incomeComponentFactory: IncomeComponent.Factory,
+        private val categoriesComponentFactory: CategoriesComponent.Factory,
+        private val accountsComponentFactory: AccountsComponent.Factory,
+        private val settingsComponentFactory: SettingsComponent.Factory,
+        @Assisted("componentContext") private val componentContext: ComponentContext,
+    ) : RootComponent, ComponentContext by componentContext {
 
         private val stack = StackNavigation<Config>()
 
-        override val state: Value<ChildStack<*, Child>> = childStack(
-            key = "root_stack",
-            source = stack,
-            initialConfiguration = Config.Expenses,
-            handleBackButton = true,
-            childFactory = ::child,
-            serializer = Config.serializer()
-        )
+        override val state: Value<ChildStack<Config, Child>> = childStack(
+                key = "root_stack",
+                source = stack,
+                initialConfiguration = Config.Expenses,
+                handleBackButton = true,
+                childFactory = ::child,
+                serializer = Config.serializer()
+            )
 
         private fun child(config: Config, componentContext: ComponentContext): Child {
             return when (config) {
-                Config.Accounts -> Child.Accounts(AccountsComponent.DefaultAccountComponent(componentContext, storeFactory))
-                Config.Categories -> Child.Category(CategoriesComponent.DefaultCategoriesComponent(componentContext, storeFactory))
-                Config.Expenses -> Child.Expenses(ExpenseComponent.DefaultExpenseComponent(componentContext, storeFactory))
-                Config.Income -> Child.Income(IncomeComponent.DefaultIncomeComponent(componentContext, storeFactory))
-                Config.Settings -> Child.Settings(SettingsComponent.DefaultAccountComponent(componentContext, storeFactory))
+                Config.Accounts -> Child.Accounts(accountsComponentFactory.create(componentContext))
+                Config.Categories -> Child.Category(categoriesComponentFactory.create(componentContext))
+                Config.Expenses -> Child.Expenses(expenseComponentFactory.create(componentContext))
+                Config.Income -> Child.Income(incomeComponentFactory.create(componentContext))
+                Config.Settings -> Child.Settings(settingsComponentFactory.create(componentContext))
             }
         }
 
@@ -78,19 +97,9 @@ interface RootComponent {
             stack.bringToFront(Config.Settings)
         }
 
-        @Serializable
-        sealed class Config {
-            @Serializable
-            data object Accounts : Config()
-            // TODO add ids, other parameters to navigate to different screen
-            @Serializable
-            data object Categories : Config()
-            @Serializable
-            data object Expenses : Config()
-            @Serializable
-            data object Income : Config()
-            @Serializable
-            data object Settings : Config()
+        @AssistedFactory
+        interface Factory {
+            fun create(@Assisted("componentContext") componentContext: ComponentContext): DefaultRootComponent
         }
     }
 }

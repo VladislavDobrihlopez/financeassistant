@@ -1,10 +1,17 @@
 package com.dobrihlopez.financeassistant.feature.accounts.presentation
 
 import com.arkivanov.decompose.ComponentContext
+import com.arkivanov.essenty.lifecycle.doOnResume
 import com.arkivanov.mvikotlin.core.instancekeeper.getStore
-import com.arkivanov.mvikotlin.core.store.StoreFactory
 import com.arkivanov.mvikotlin.extensions.coroutines.stateFlow
 import com.dobrihlopez.financeassistant.feature.accounts.domain.UserAccountDetailed
+import com.dobrihlopez.financeassistant.feature.accounts.presentation.AccountsStore.AccountsStoreFactory
+import com.dobrihlopez.financeassistant.feature.accounts.presentation.composable.Currency
+import com.dobrihlopez.financeassistant.feature.categories.presentation.CategoriesStore
+import com.dobrihlopez.financeassistant.feature.categories.presentation.CategoriesStore.CategoriesScreenState
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.StateFlow
 
@@ -15,22 +22,24 @@ interface AccountsComponent {
     fun onFabClick()
     fun onBalanceClick()
     fun onCurrencyClick()
+    fun onCurrencySelected(account: UserAccountDetailed, currency: Currency)
+    fun onBalanceChanged(account: UserAccountDetailed, newBalance: String)
 
-    class DefaultAccountComponent(
-        val componentContext: ComponentContext,
-        private val storeFactory: StoreFactory,
-    ): AccountsComponent, ComponentContext by componentContext {
+    @AssistedFactory
+    interface Factory {
+        fun create(@Assisted("componentContext") componentContext: ComponentContext): DefaultAccountComponent
+    }
 
-        private fun restoreState() = stateKeeper.consume(STATE_KEY, strategy = AccountsStore.AccountScreenState.serializer())
+    class DefaultAccountComponent @AssistedInject constructor(
+        @Assisted("componentContext") private val componentContext: ComponentContext,
+        private val accountsStoreFactory: AccountsStoreFactory
+    ) : AccountsComponent, ComponentContext by componentContext {
 
-        private val initState = restoreState() ?: AccountsStore.AccountScreenState.Succeeded(
-            account = provideAccount()
-        )
+        private val initState = stateKeeper.consume(STATE_KEY, strategy = AccountsStore.AccountScreenState.serializer())
+            ?: AccountsStore.AccountScreenState.Loading
 
         private val store = instanceKeeper.getStore {
-            AccountsStore.AccountsStoreFactory(storeFactory).create(
-                initialState = initState
-            )
+            accountsStoreFactory.create(initState)
         }
 
         @OptIn(ExperimentalCoroutinesApi::class)
@@ -40,6 +49,12 @@ interface AccountsComponent {
         init {
             stateKeeper.register("accounts_state", AccountsStore.AccountScreenState.serializer()) {
                 state.value
+            }
+
+            lifecycle.doOnResume {
+                if (state.value is AccountsStore.AccountScreenState.Failed) {
+                    store.accept(AccountsStore.Intent.RefreshAccount)
+                }
             }
         }
 
@@ -57,6 +72,33 @@ interface AccountsComponent {
 
         override fun onCurrencyClick() {
             store.accept(AccountsStore.Intent.CurrencyClick)
+        }
+
+        override fun onCurrencySelected(account: UserAccountDetailed, currency: Currency) {
+            val currencyCode = when (currency) {
+                Currency.Ruble -> "RUB"
+                Currency.Usd -> "USD"
+                Currency.Euro -> "EUR"
+            }
+            store.accept(
+                AccountsStore.Intent.UpdateAccount(
+                    id = account.id,
+                    name = account.name,
+                    balance = account.balance,
+                    currency = currencyCode
+                )
+            )
+        }
+
+        override fun onBalanceChanged(account: UserAccountDetailed, newBalance: String) {
+            store.accept(
+                AccountsStore.Intent.UpdateAccount(
+                    id = account.id,
+                    name = account.name,
+                    balance = newBalance,
+                    currency = account.currency
+                )
+            )
         }
 
         private companion object {
