@@ -28,4 +28,5 @@
     <string name="history_start">Start</string>
     <string name="history_end">End</string>
     <string name="history_summary">Sum</string>
+    <string name="history_topbar_title">My history</string>
 </resources>

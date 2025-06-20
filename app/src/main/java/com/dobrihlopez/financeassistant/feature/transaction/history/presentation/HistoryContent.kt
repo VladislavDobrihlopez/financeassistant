@@ -23,6 +23,7 @@ fun HistoryContent(
     onStartDateClick: (LocalDate) -> Unit,
     onEndDateClick: (LocalDate) -> Unit,
     onRefresh: () -> Unit,
+    paddingValues: PaddingValues,
 ) {
     var showStartDatePicker by remember { mutableStateOf(false) }
     var showEndDatePicker by remember { mutableStateOf(false) }
@@ -33,7 +34,7 @@ fun HistoryContent(
         initialSelectedDateMillis = state.endDate.atEndOfDay(ZoneId.systemDefault()).toInstant().toEpochMilli()
     )
 
-    Box(modifier = Modifier.fillMaxSize()) {
+    Box(modifier = Modifier.fillMaxSize().padding(paddingValues)) {
         when {
             state.isLoading -> LoadingProgressBar()
             state.errorResId != null -> {
