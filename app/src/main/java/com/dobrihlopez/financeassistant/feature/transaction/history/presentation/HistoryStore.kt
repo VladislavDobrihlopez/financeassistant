@@ -13,7 +13,6 @@ import kotlinx.serialization.Contextual
 import kotlinx.serialization.Serializable
 import kotlinx.coroutines.launch
 import java.time.LocalDate
-import java.time.LocalTime
 import java.time.format.DateTimeFormatter
 import javax.inject.Inject
 
@@ -23,17 +22,19 @@ interface HistoryStore : Store<HistoryStore.Intent, HistoryStore.State, Nothing>
         val isLoading: Boolean = false,
         val errorResId: Int? = null,
         val transactions: List<Transaction> = emptyList(),
-        @Contextual val selectedDate: LocalDate = LocalDate.now().withDayOfMonth(1),
+        @Contextual val startDate: LocalDate = LocalDate.now().withDayOfMonth(1),
+        @Contextual val endDate: LocalDate = LocalDate.now(),
         val isIncome: Boolean = true
     ) {
         val summaryValue: String get() = transactions.sumOf { it.amount.toDoubleOrNull() ?: 0.0 }.toString()
-        val dateText: String get() = selectedDate.format(DateTimeFormatter.ofPattern("dd MMMM yyyy"))
-        val endText: String get() = LocalTime.now().toString().substring(0,5)
+        val startText: String get() = startDate.format(DateTimeFormatter.ofPattern("dd MMMM yyyy"))
+        val endText: String get() = endDate.format(DateTimeFormatter.ofPattern("dd MMMM yyyy"))
     }
 
     sealed class Intent {
         data class Init(val isIncome: Boolean) : Intent()
-        data class ChangeDate(val date: LocalDate) : Intent()
+        data class ChangeStartDate(val date: LocalDate) : Intent()
+        data class ChangeEndDate(val date: LocalDate) : Intent()
         data object Refresh : Intent()
     }
 
@@ -79,12 +80,13 @@ interface HistoryStore : Store<HistoryStore.Intent, HistoryStore.State, Nothing>
             }
             override fun executeIntent(intent: Intent) {
                 when (intent) {
-                    is Intent.Init -> loadHistory(state().selectedDate, intent.isIncome)
-                    is Intent.ChangeDate -> loadHistory(intent.date, state().isIncome)
-                    Intent.Refresh -> loadHistory(state().selectedDate, state().isIncome)
+                    is Intent.Init -> loadHistory(state().startDate, state().endDate, intent.isIncome)
+                    is Intent.ChangeStartDate -> loadHistory(intent.date, state().endDate, state().isIncome)
+                    is Intent.ChangeEndDate -> loadHistory(state().startDate, intent.date, state().isIncome)
+                    Intent.Refresh -> loadHistory(state().startDate, state().endDate, state().isIncome)
                 }
             }
-            private fun loadHistory(date: LocalDate, isIncome: Boolean) {
+            private fun loadHistory(startDate: LocalDate, endDate: LocalDate, isIncome: Boolean) {
                 scope.launch {
                     dispatch(Message.Loading)
                     try {
@@ -92,14 +94,14 @@ interface HistoryStore : Store<HistoryStore.Intent, HistoryStore.State, Nothing>
                             dispatch(Message.Failed())
                             return@launch
                         }
-                        val startDate = date.toString()
-                        val endDate = LocalDate.now().toString()
+                        val start = startDate.toString()
+                        val end = endDate.toString()
                         val transactions = getTransactionsForPeriodUseCase(
                             accountId = account.id,
-                            startDate = startDate,
-                            endDate = endDate
+                            startDate = start,
+                            endDate = end
                         ).filter { it.category.isIncome == isIncome }
-                        dispatch(Message.Succeeded(transactions, date, isIncome))
+                        dispatch(Message.Succeeded(transactions, startDate, endDate, isIncome))
                     } catch (e: Exception) {
                         dispatch(Message.Failed())
                     }
@@ -115,7 +117,8 @@ interface HistoryStore : Store<HistoryStore.Intent, HistoryStore.State, Nothing>
                     isLoading = false,
                     errorResId = null,
                     transactions = msg.transactions,
-                    selectedDate = msg.date,
+                    startDate = msg.startDate,
+                    endDate = msg.endDate,
                     isIncome = msg.isIncome
                 )
             }
@@ -126,9 +129,10 @@ interface HistoryStore : Store<HistoryStore.Intent, HistoryStore.State, Nothing>
             data class Failed(@StringRes val errorResId: Int? = null) : Message()
             data class Succeeded(
                 val transactions: List<Transaction>,
-                val date: LocalDate,
+                val startDate: LocalDate,
+                val endDate: LocalDate,
                 val isIncome: Boolean
             ) : Message()
         }
     }
-} 
+}

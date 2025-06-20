@@ -26,7 +26,7 @@ import com.dobrihlopez.financeassistant.feature.accounts.presentation.AccountAct
 fun AccountItem(accountActionItem: AccountActionItem, onClick: () -> Unit) {
     val context = LocalContext.current
     BasicListItem(
-        modifier = Modifier.height(70.dp),
+        modifier = Modifier.height(50.dp),
         backgroundColor = MaterialTheme.colorScheme.primaryContainer,
         content = context.getString(accountActionItem.title),
         value = (accountActionItem.value ?: "") + " " + accountActionItem.currency,

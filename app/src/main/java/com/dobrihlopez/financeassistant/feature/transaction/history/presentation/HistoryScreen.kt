@@ -8,7 +8,8 @@ fun HistoryScreen(component: HistoryComponent) {
     val state = component.state.collectAsStateWithLifecycle().value
     HistoryContent(
         state = state,
-        onDateClick = component::onDateClick,
+        onStartDateClick = component::onStartDateClick,
+        onEndDateClick = component::onEndDateClick,
         onRefresh = component::onRefresh
     )
 } 

@@ -14,7 +14,8 @@ import java.time.LocalDate
 
 interface HistoryComponent {
     val state: StateFlow<State>
-    fun onDateClick(date: LocalDate)
+    fun onStartDateClick(date: LocalDate)
+    fun onEndDateClick(date: LocalDate)
     fun onRefresh()
 
     class DefaultHistoryComponent @AssistedInject constructor(
@@ -31,8 +32,12 @@ interface HistoryComponent {
         override val state: StateFlow<State>
             get() = store.stateFlow
 
-        override fun onDateClick(date: LocalDate) {
-            store.accept(Intent.ChangeDate(date))
+        override fun onStartDateClick(date: LocalDate) {
+            store.accept(Intent.ChangeStartDate(date))
+        }
+
+        override fun onEndDateClick(date: LocalDate) {
+            store.accept(Intent.ChangeEndDate(date))
         }
 
         override fun onRefresh() {

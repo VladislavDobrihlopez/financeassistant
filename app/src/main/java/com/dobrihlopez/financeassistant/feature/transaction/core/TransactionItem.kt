@@ -27,7 +27,7 @@ import java.time.format.DateTimeFormatter
 @Composable
 fun TransactionItem(
     transaction: Transaction,
-    onClick: () -> Unit,
+    onClick: (() -> Unit)? = null,
     showTime: Boolean = false,
 ) {
     BasicListItem(
@@ -45,7 +45,9 @@ fun TransactionItem(
                         .size(28.dp)
                         .clip(CircleShape)
                         .background(MaterialTheme.colorScheme.primaryContainer)
-                        .clickable(onClick = onClick),
+                        .run {
+                            if (onClick != null) this.clickable(onClick = onClick) else this
+                        },
                     contentAlignment = Alignment.Center,
                 ) {
                     Text(

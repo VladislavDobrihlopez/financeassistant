@@ -8,8 +8,8 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import com.dobrihlopez.financeassistant.R
+import com.dobrihlopez.financeassistant.core.atEndOfDay
 import com.dobrihlopez.financeassistant.core_ui.composable.LoadingProgressBar
-import com.dobrihlopez.financeassistant.core_ui.ui.theme.spacing
 import com.dobrihlopez.financeassistant.feature.transaction.core.OverViewListItem
 import com.dobrihlopez.financeassistant.feature.transaction.core.TransactionItem
 import java.time.Instant
@@ -20,14 +20,18 @@ import java.time.ZoneId
 @Composable
 fun HistoryContent(
     state: HistoryStore.State,
-    onDateClick: (LocalDate) -> Unit,
+    onStartDateClick: (LocalDate) -> Unit,
+    onEndDateClick: (LocalDate) -> Unit,
     onRefresh: () -> Unit,
 ) {
-    var showDatePicker by remember { mutableStateOf(false) }
-    val datePickerState = rememberDatePickerState(
-        initialSelectedDateMillis = state.selectedDate.atStartOfDay(ZoneId.systemDefault()).toInstant().toEpochMilli()
+    var showStartDatePicker by remember { mutableStateOf(false) }
+    var showEndDatePicker by remember { mutableStateOf(false) }
+    val startDatePickerState = rememberDatePickerState(
+        initialSelectedDateMillis = state.startDate.atStartOfDay(ZoneId.systemDefault()).toInstant().toEpochMilli()
     )
-    val spacing = MaterialTheme.spacing
+    val endDatePickerState = rememberDatePickerState(
+        initialSelectedDateMillis = state.endDate.atEndOfDay(ZoneId.systemDefault()).toInstant().toEpochMilli()
+    )
 
     Box(modifier = Modifier.fillMaxSize()) {
         when {
@@ -43,15 +47,16 @@ fun HistoryContent(
                     item {
                         OverViewListItem(
                             content = stringResource(R.string.history_start),
-                            value = state.dateText,
-                            onClick = { showDatePicker = true }
+                            value = state.startText,
+                            onClick = { showStartDatePicker = true }
                         )
                         HorizontalDivider()
                     }
                     item {
                         OverViewListItem(
                             content = stringResource(R.string.history_end),
-                            value = state.endText
+                            value = state.endText,
+                            onClick = { showEndDatePicker = true }
                         )
                         HorizontalDivider()
                     }
@@ -69,26 +74,48 @@ fun HistoryContent(
                 }
             }
         }
-        if (showDatePicker) {
+        if (showStartDatePicker) {
             DatePickerDialog(
-                onDismissRequest = { showDatePicker = false },
+                onDismissRequest = { showStartDatePicker = false },
                 confirmButton = {
                     TextButton(onClick = {
-                        val millis = datePickerState.selectedDateMillis
+                        val millis = startDatePickerState.selectedDateMillis
                         if (millis != null) {
                             val localDate = Instant.ofEpochMilli(millis)
                                 .atZone(ZoneId.systemDefault())
                                 .toLocalDate()
-                            onDateClick(localDate)
+                            onStartDateClick(localDate)
                         }
-                        showDatePicker = false
+                        showStartDatePicker = false
                     }) { Text(stringResource(android.R.string.ok)) }
                 },
                 dismissButton = {
-                    TextButton(onClick = { showDatePicker = false }) { Text(stringResource(android.R.string.cancel)) }
+                    TextButton(onClick = { showStartDatePicker = false }) { Text(stringResource(android.R.string.cancel)) }
                 }
             ) {
-                DatePicker(state = datePickerState, showModeToggle = false)
+                DatePicker(state = startDatePickerState, showModeToggle = false)
+            }
+        }
+        if (showEndDatePicker) {
+            DatePickerDialog(
+                onDismissRequest = { showEndDatePicker = false },
+                confirmButton = {
+                    TextButton(onClick = {
+                        val millis = endDatePickerState.selectedDateMillis
+                        if (millis != null) {
+                            val localDate = Instant.ofEpochMilli(millis)
+                                .atZone(ZoneId.systemDefault())
+                                .toLocalDate()
+                            onEndDateClick(localDate)
+                        }
+                        showEndDatePicker = false
+                    }) { Text(stringResource(android.R.string.ok)) }
+                },
+                dismissButton = {
+                    TextButton(onClick = { showEndDatePicker = false }) { Text(stringResource(android.R.string.cancel)) }
+                }
+            ) {
+                DatePicker(state = endDatePickerState, showModeToggle = false)
             }
         }
     }
