@@ -13,6 +13,8 @@ import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.FloatingActionButtonDefaults.bottomAppBarFabElevation
+import androidx.compose.material3.FloatingActionButtonElevation
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -69,9 +71,11 @@ fun AccountContent(
         },
         floatingActionButton = {
             FloatingActionButton(
+                elevation = bottomAppBarFabElevation(),
                 shape = CircleShape,
                 onClick = onFabClick,
-                containerColor = MaterialTheme.colorScheme.primary
+                containerColor = MaterialTheme.colorScheme.primary,
+                contentColor = MaterialTheme.colorScheme.background,
             ) {
                 Icon(Icons.Default.Add, contentDescription = null)
             }
@@ -109,7 +113,7 @@ fun AccountContent(
                 LazyColumn(
                     modifier = Modifier
                         .fillMaxSize()
-                        .background(MaterialTheme.colorScheme.surface)
+                        .background(MaterialTheme.colorScheme.background)
                         .padding(innerPadding)
                 ) {
                     items(items = items, key = { it.id }) { item ->

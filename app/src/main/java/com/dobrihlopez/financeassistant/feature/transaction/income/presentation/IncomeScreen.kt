@@ -11,6 +11,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.FloatingActionButtonDefaults.bottomAppBarFabElevation
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -90,9 +91,11 @@ fun IncomeScreen(component: IncomeComponent) {
         },
         floatingActionButton = {
             FloatingActionButton(
+                elevation = bottomAppBarFabElevation(),
                 shape = CircleShape,
                 onClick = onFabButtonClick,
-                containerColor = MaterialTheme.colorScheme.primary
+                containerColor = MaterialTheme.colorScheme.primary,
+                contentColor = MaterialTheme.colorScheme.background,
             ) {
                 Icon(Icons.Default.Add, contentDescription = null)
             }
