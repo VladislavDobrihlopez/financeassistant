@@ -32,4 +32,5 @@
     <string name="error_network_try_again">Network error, please try again</string>
     <string name="error_validation">Validation error</string>
     <string name="retry">Retry</string>
+    <string name="error_unknown">Unknown error</string>
 </resources>
