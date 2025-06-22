@@ -70,15 +70,12 @@ fun IncomeScreen(component: IncomeComponent) {
                     IconButton(onClick = onActionButtonClick) {
                         val resId = actionButtonResId
                         AnimatedVisibility(
-                            resId != null,
-                            enter = fadeIn() + expandHorizontally(
-                                clip = false,
-                                expandFrom = Alignment.Start
-                            )
+                            visible = resId != null,
+                            enter = fadeIn() + expandHorizontally(clip = false, expandFrom = Alignment.Start,)
                         ) {
                             Icon(
                                 ImageVector.vectorResource(resId!!),
-                                contentDescription = null
+                                contentDescription = null,
                             )
                         }
                     }

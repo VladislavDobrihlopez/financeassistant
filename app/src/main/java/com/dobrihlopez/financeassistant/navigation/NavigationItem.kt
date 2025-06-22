@@ -5,7 +5,7 @@ import com.dobrihlopez.financeassistant.R
 sealed class NavigationItem(
     val route: String,
     val icon: Int,
-    val label: String
+    val label: String,
 ) {
     data object Expenses : NavigationItem("expenses", R.drawable.ic_expenses, "Расходы")
     data object Incomes : NavigationItem("incomes", R.drawable.ic_incomes, "Доходы")

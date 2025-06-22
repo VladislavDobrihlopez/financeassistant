@@ -9,52 +9,63 @@ import com.arkivanov.mvikotlin.extensions.coroutines.CoroutineExecutor
 import com.dobrihlopez.financeassistant.feature.transaction.core.model.Transaction
 import com.dobrihlopez.financeassistant.feature.transaction.core.usecase.GetTransactionsForPeriodUseCase
 import com.dobrihlopez.financeassistant.feature.accounts.domain.usecase.GetFirstAccountUseCase
-import com.dobrihlopez.financeassistant.feature.transaction.income.presentation.IncomeStore
 import javax.inject.Inject
 import kotlinx.serialization.Serializable
 import kotlinx.coroutines.launch
 import java.time.LocalDate
 
-interface ExpenseStore: Store<ExpenseStore.Intent, ExpenseStore.ExpenseScreenState, Nothing> {
+interface ExpenseStore : Store<ExpenseStore.Intent, ExpenseStore.ExpenseScreenState, Nothing> {
     @Serializable
     sealed class ExpenseScreenState {
         @Serializable
-        data object Loading: ExpenseScreenState()
+        data object Loading : ExpenseScreenState()
+
         @Serializable
-        data class Failed(@StringRes val errorResId: Int? = null): ExpenseScreenState()
+        data class Failed(@StringRes val errorResId: Int? = null) : ExpenseScreenState()
+
         @Serializable
         data class Succeeded(
             val transactions: List<Transaction>,
             val summaryText: String,
-            val summaryValue: String
-        ): ExpenseScreenState()
+            val summaryValue: String,
+        ) : ExpenseScreenState()
     }
 
     sealed class Intent {
-        data object LoadExpenses: Intent()
-        data object AddExpense: Intent()
-        data object HistoryClick: Intent()
-        data class OnExpenseClick(val transaction: Transaction): Intent()
+        data object LoadExpenses : Intent()
+        data object AddExpense : Intent()
+        data object HistoryClick : Intent()
+        data class OnExpenseClick(val transaction: Transaction) : Intent()
     }
 
     class ExpenseStoreFactory @Inject constructor(
         private val storeFactory: StoreFactory,
         private val getTransactionsForPeriodUseCase: GetTransactionsForPeriodUseCase,
-        private val getFirstAccountUseCase: GetFirstAccountUseCase
+        private val getFirstAccountUseCase: GetFirstAccountUseCase,
     ) {
         fun create(initialState: ExpenseScreenState): ExpenseStore =
-            ExpenseStoreImpl(storeFactory, initialState, getTransactionsForPeriodUseCase, getFirstAccountUseCase)
+            ExpenseStoreImpl(
+                storeFactory,
+                initialState,
+                getTransactionsForPeriodUseCase,
+                getFirstAccountUseCase
+            )
 
         private class ExpenseStoreImpl(
             storeFactory: StoreFactory,
             initialState: ExpenseScreenState,
             private val getTransactionsForPeriodUseCase: GetTransactionsForPeriodUseCase,
-            private val getFirstAccountUseCase: GetFirstAccountUseCase
+            private val getFirstAccountUseCase: GetFirstAccountUseCase,
         ) : ExpenseStore, Store<Intent, ExpenseScreenState, Nothing> by storeFactory.create(
             name = "ExpenseStore",
             initialState = initialState,
             bootstrapper = BootstrapperImpl(),
-            executorFactory = { ExecutorImpl(getTransactionsForPeriodUseCase, getFirstAccountUseCase) },
+            executorFactory = {
+                ExecutorImpl(
+                    getTransactionsForPeriodUseCase,
+                    getFirstAccountUseCase
+                )
+            },
             reducer = ReducerImpl
         )
 
@@ -70,13 +81,14 @@ interface ExpenseStore: Store<ExpenseStore.Intent, ExpenseStore.ExpenseScreenSta
 
         private class ExecutorImpl(
             private val getTransactionsForPeriodUseCase: GetTransactionsForPeriodUseCase,
-            private val getFirstAccountUseCase: GetFirstAccountUseCase
+            private val getFirstAccountUseCase: GetFirstAccountUseCase,
         ) : CoroutineExecutor<Intent, Action, ExpenseScreenState, Message, Nothing>() {
             override fun executeAction(action: Action) {
                 when (action) {
                     Action.LoadExpenses -> executeIntent(Intent.LoadExpenses)
                 }
             }
+
             override fun executeIntent(intent: Intent) {
                 when (intent) {
                     Intent.LoadExpenses -> loadExpensesToday()
@@ -85,6 +97,7 @@ interface ExpenseStore: Store<ExpenseStore.Intent, ExpenseStore.ExpenseScreenSta
                     is Intent.OnExpenseClick -> {}
                 }
             }
+
             private fun loadExpensesToday() {
                 scope.launch {
                     try {
@@ -99,7 +112,8 @@ interface ExpenseStore: Store<ExpenseStore.Intent, ExpenseStore.ExpenseScreenSta
                             startDate = today,
                             endDate = today
                         ).filter { !it.category.isIncome }
-                        val summaryValue = transactions.sumOf { it.amount.toDoubleOrNull() ?: 0.0 }.toString()
+                        val summaryValue =
+                            transactions.sumOf { it.amount.toDoubleOrNull() ?: 0.0 }.toString()
                         dispatch(Message.Succeeded(transactions, "Расходы сегодня", summaryValue))
                     } catch (e: Exception) {
                         dispatch(Message.Failed())
@@ -108,7 +122,7 @@ interface ExpenseStore: Store<ExpenseStore.Intent, ExpenseStore.ExpenseScreenSta
             }
         }
 
-        private object ReducerImpl: Reducer<ExpenseScreenState, Message> {
+        private object ReducerImpl : Reducer<ExpenseScreenState, Message> {
             override fun ExpenseScreenState.reduce(
                 msg: Message,
             ): ExpenseScreenState {
@@ -118,20 +132,20 @@ interface ExpenseStore: Store<ExpenseStore.Intent, ExpenseStore.ExpenseScreenSta
                     is Message.Succeeded -> ExpenseScreenState.Succeeded(
                         transactions = msg.transactions,
                         summaryText = msg.summaryText,
-                        summaryValue = msg.summaryValue
+                        summaryValue = msg.summaryValue,
                     )
                 }
             }
         }
 
         sealed class Message {
-            data object Loading: Message()
-            data class Failed(@StringRes val errorResId: Int? = null): Message()
+            data object Loading : Message()
+            data class Failed(@StringRes val errorResId: Int? = null) : Message()
             data class Succeeded(
                 val transactions: List<Transaction>,
                 val summaryText: String,
-                val summaryValue: String
-            ): Message()
+                val summaryValue: String,
+            ) : Message()
         }
     }
 } 

@@ -45,17 +45,23 @@ fun HistoryContent(
     var showStartDatePicker by rememberSaveable { mutableStateOf(false) }
     var showEndDatePicker by rememberSaveable { mutableStateOf(false) }
     val startDatePickerState = rememberDatePickerState(
-        initialSelectedDateMillis = state.startDate.atStartOfDay(ZoneId.systemDefault()).toInstant().toEpochMilli()
+        initialSelectedDateMillis = state.startDate
+            .atStartOfDay(ZoneId.systemDefault())
+            .toInstant()
+            .toEpochMilli()
     )
     val endDatePickerState = rememberDatePickerState(
-        initialSelectedDateMillis = state.endDate.atStartOfDay(ZoneId.systemDefault()).toInstant().toEpochMilli()
+        initialSelectedDateMillis = state.endDate
+            .atStartOfDay(ZoneId.systemDefault())
+            .toInstant()
+            .toEpochMilli()
     )
     Scaffold(
         snackbarHost = {
             if (state.errorResId != null) {
                 ErrorSnackbarHost(
                     errorResId = state.errorResId,
-                    onRetry = onRetry
+                    onRetry = onRetry,
                 )
             }
         }
@@ -71,16 +77,14 @@ fun HistoryContent(
                 state.errorResId != null -> {
                     Text(text = stringResource(id = state.errorResId))
                 }
+
                 else -> {
-                    LazyColumn(
-                        modifier = Modifier
-                            .fillMaxSize(),
-                    ) {
+                    LazyColumn(modifier = Modifier.fillMaxSize()) {
                         item {
                             OverViewListItem(
                                 content = stringResource(R.string.history_start),
                                 value = state.startText,
-                                onClick = { showStartDatePicker = true }
+                                onClick = { showStartDatePicker = true },
                             )
                             HorizontalDivider()
                         }
@@ -88,14 +92,14 @@ fun HistoryContent(
                             OverViewListItem(
                                 content = stringResource(R.string.history_end),
                                 value = state.endText,
-                                onClick = { showEndDatePicker = true }
+                                onClick = { showEndDatePicker = true },
                             )
                             HorizontalDivider()
                         }
                         item {
                             OverViewListItem(
                                 content = stringResource(R.string.history_summary),
-                                value = state.summaryValue
+                                value = state.summaryValue,
                             )
                             HorizontalDivider()
                         }
@@ -112,7 +116,9 @@ fun HistoryContent(
                     confirmButton = {
                         TextButton(onClick = {
                             startDatePickerState.selectedDateMillis?.let {
-                                val selectedDate = Instant.ofEpochMilli(it).atZone(ZoneId.systemDefault()).toLocalDate()
+                                val selectedDate =
+                                    Instant.ofEpochMilli(it).atZone(ZoneId.systemDefault())
+                                        .toLocalDate()
                                 if (selectedDate > state.endDate) {
                                     onEndDateClick(selectedDate)
                                 }
@@ -120,29 +126,36 @@ fun HistoryContent(
                             }
                             showStartDatePicker = false
                         }) {
-                            Text(text = stringResource(android.R.string.ok), color = MaterialTheme.colorScheme.onPrimary)
+                            Text(
+                                text = stringResource(android.R.string.ok),
+                                color = MaterialTheme.colorScheme.onPrimary
+                            )
                         }
                     },
                     dismissButton = {
                         TextButton(onClick = { showStartDatePicker = false }) {
-                            Text(text = stringResource(android.R.string.cancel), color = MaterialTheme.colorScheme.onPrimary)
+                            Text(
+                                text = stringResource(android.R.string.cancel),
+                                color = MaterialTheme.colorScheme.onPrimary
+                            )
                         }
                     },
                     colors = DatePickerDefaults.colors().copy(
                         containerColor = MaterialTheme.colorScheme.primaryContainer,
-                    )
+                    ),
                 ) {
                     DatePicker(
-                        colors = DatePickerDefaults.colors(
-                            containerColor = MaterialTheme.colorScheme.primaryContainer,
-                            selectedDayContainerColor = MaterialTheme.colorScheme.primary,
-                            selectedDayContentColor = MaterialTheme.colorScheme.onPrimary,
-                            todayContentColor = MaterialTheme.colorScheme.onPrimary,
-                        ),
+                        colors =
+                            DatePickerDefaults.colors(
+                                containerColor = MaterialTheme.colorScheme.primaryContainer,
+                                selectedDayContainerColor = MaterialTheme.colorScheme.primary,
+                                selectedDayContentColor = MaterialTheme.colorScheme.onPrimary,
+                                todayContentColor = MaterialTheme.colorScheme.onPrimary,
+                            ),
                         state = startDatePickerState,
                         title = null,
                         headline = null,
-                        showModeToggle = false
+                        showModeToggle = false,
                     )
                 }
             }
@@ -152,7 +165,9 @@ fun HistoryContent(
                     confirmButton = {
                         TextButton(onClick = {
                             endDatePickerState.selectedDateMillis?.let {
-                                val selectedDate = Instant.ofEpochMilli(it).atZone(ZoneId.systemDefault()).toLocalDate()
+                                val selectedDate =
+                                    Instant.ofEpochMilli(it).atZone(ZoneId.systemDefault())
+                                        .toLocalDate()
                                 if (selectedDate < state.startDate) {
                                     onStartDateClick(selectedDate)
                                 }
@@ -160,12 +175,18 @@ fun HistoryContent(
                             }
                             showEndDatePicker = false
                         }) {
-                            Text(text = stringResource(android.R.string.ok), color = MaterialTheme.colorScheme.onPrimary)
+                            Text(
+                                text = stringResource(android.R.string.ok),
+                                color = MaterialTheme.colorScheme.onPrimary
+                            )
                         }
                     },
                     dismissButton = {
                         TextButton(onClick = { showEndDatePicker = false }) {
-                            Text(text = stringResource(android.R.string.cancel), color = MaterialTheme.colorScheme.onPrimary)
+                            Text(
+                                text = stringResource(android.R.string.cancel),
+                                color = MaterialTheme.colorScheme.onPrimary
+                            )
                         }
                     },
                     colors = DatePickerDefaults.colors().copy(
@@ -182,10 +203,10 @@ fun HistoryContent(
                         state = endDatePickerState,
                         title = null,
                         headline = null,
-                        showModeToggle = false
+                        showModeToggle = false,
                     )
                 }
             }
         }
     }
-} 
+}

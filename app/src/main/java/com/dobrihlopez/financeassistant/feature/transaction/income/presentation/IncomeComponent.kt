@@ -7,10 +7,8 @@ import com.arkivanov.decompose.router.stack.childStack
 import com.arkivanov.decompose.router.stack.push
 import com.arkivanov.decompose.value.Value
 import com.arkivanov.essenty.lifecycle.doOnResume
-import com.arkivanov.essenty.lifecycle.doOnStart
 import com.arkivanov.mvikotlin.core.instancekeeper.getStore
 import com.arkivanov.mvikotlin.extensions.coroutines.stateFlow
-import com.dobrihlopez.financeassistant.feature.categories.presentation.CategoriesStore
 import com.dobrihlopez.financeassistant.feature.transaction.history.domain.GetSortedTransactionsUsecase
 import com.dobrihlopez.financeassistant.feature.transaction.history.presentation.HistoryComponent
 import com.dobrihlopez.financeassistant.feature.transaction.income.presentation.IncomeStore.IncomeStoreFactory
@@ -39,7 +37,6 @@ interface IncomeComponent {
         private val historyComponentFactory: HistoryComponent.Factory,
         @Named("usecaseIncome") private val getSortedTransactionsUsecase: GetSortedTransactionsUsecase,
     ) : IncomeComponent, ComponentContext by componentContext {
-
         private val stack = StackNavigation<Config>()
 
         override val childStack: Value<ChildStack<Config, Child>> = childStack(
@@ -58,13 +55,14 @@ interface IncomeComponent {
                     historyComponentFactory.create(
                         componentContext,
                         isIncome = true,
-                        getSortedTransactionsUsecase
+                        getSortedTransactionsUsecase,
                     )
                 )
             }
 
-        private val initState = stateKeeper.consume(STATE_KEY, strategy = IncomeStore.IncomeScreenState.serializer())
-            ?: IncomeStore.IncomeScreenState.Loading
+        private val initState =
+            stateKeeper.consume(STATE_KEY, strategy = IncomeStore.IncomeScreenState.serializer())
+                ?: IncomeStore.IncomeScreenState.Loading
 
         private val store = instanceKeeper.getStore {
             incomeStoreFactory.create(initState)
@@ -102,6 +100,7 @@ interface IncomeComponent {
         sealed class Config {
             @Serializable
             object Main : Config()
+
             @Serializable
             object History : Config()
         }

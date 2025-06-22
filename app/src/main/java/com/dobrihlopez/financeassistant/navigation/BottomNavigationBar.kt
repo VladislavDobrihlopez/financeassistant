@@ -20,7 +20,7 @@ import com.dobrihlopez.financeassistant.feature.RootComponent
 @Composable
 fun BottomNavigationBar(
     currentRoute: RootComponent.Child,
-    onNavigate: (NavigationItem) -> Unit
+    onNavigate: (NavigationItem) -> Unit,
 ) {
     NavigationBar(
         modifier = Modifier
@@ -28,23 +28,24 @@ fun BottomNavigationBar(
             .windowInsetsPadding(WindowInsets.navigationBars),
         containerColor = MaterialTheme.colorScheme.surface,
         contentColor = MaterialTheme.colorScheme.onSurface,
-        tonalElevation = 0.dp
+        tonalElevation = 0.dp,
     ) {
         NavigationItem.items.forEach { item ->
-            val selected = when (item) {
-                NavigationItem.Expenses -> currentRoute is RootComponent.Child.Expenses
-                NavigationItem.Incomes -> currentRoute is RootComponent.Child.Income
-                NavigationItem.Accounts -> currentRoute is RootComponent.Child.Accounts
-                NavigationItem.Categories -> currentRoute is RootComponent.Child.Category
-                NavigationItem.Settings -> currentRoute is RootComponent.Child.Settings
-            }
+            val selected =
+                when (item) {
+                    NavigationItem.Expenses -> currentRoute is RootComponent.Child.Expenses
+                    NavigationItem.Incomes -> currentRoute is RootComponent.Child.Income
+                    NavigationItem.Accounts -> currentRoute is RootComponent.Child.Accounts
+                    NavigationItem.Categories -> currentRoute is RootComponent.Child.Category
+                    NavigationItem.Settings -> currentRoute is RootComponent.Child.Settings
+                }
             NavigationBarItem(
                 selected = selected,
                 onClick = { onNavigate(item) },
                 icon = {
                     Icon(
                         imageVector = ImageVector.vectorResource(item.icon),
-                        contentDescription = item.label
+                        contentDescription = item.label,
                     )
                 },
                 label = { Text(text = item.label) },
@@ -53,7 +54,7 @@ fun BottomNavigationBar(
                     selectedTextColor = MaterialTheme.colorScheme.onSurface,
                     indicatorColor = MaterialTheme.colorScheme.primaryContainer,
                     unselectedIconColor = MaterialTheme.colorScheme.onSurfaceVariant,
-                    unselectedTextColor = MaterialTheme.colorScheme.onSurfaceVariant
+                    unselectedTextColor = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
             )
         }

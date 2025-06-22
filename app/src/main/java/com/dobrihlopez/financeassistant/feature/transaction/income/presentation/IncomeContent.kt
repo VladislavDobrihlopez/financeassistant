@@ -31,7 +31,7 @@ fun IncomeContent(
             if (state is IncomeStore.IncomeScreenState.Failed) {
                 ErrorSnackbarHost(
                     errorResId = state.errorResId,
-                    onRetry = onRetry
+                    onRetry = onRetry,
                 )
             }
         }
@@ -44,7 +44,7 @@ fun IncomeContent(
                     modifier = Modifier
                         .padding(paddingValues)
                         .padding(innerPadding)
-                        .fillMaxSize()
+                        .fillMaxSize(),
                 ) {
                     item {
                         OverViewListItem(content = state.summaryText, value = state.summaryValue)
@@ -70,7 +70,7 @@ private fun PreviewIncomeLight() {
                 summaryText = "Всего",
                 summaryValue = "600 000 ₽"
             ),
-            paddingValues = PaddingValues(0.dp)
+            paddingValues = PaddingValues(0.dp),
         )
     }
 }
@@ -83,9 +83,9 @@ private fun PreviewIncomeDark() {
             state = IncomeStore.IncomeScreenState.Succeeded(
                 transactions = previewIncomeTransactions(),
                 summaryText = "Всего",
-                summaryValue = "600 000 ₽"
+                summaryValue = "600 000 ₽",
             ),
-            paddingValues = PaddingValues(0.dp)
+            paddingValues = PaddingValues(0.dp),
         )
     }
 }

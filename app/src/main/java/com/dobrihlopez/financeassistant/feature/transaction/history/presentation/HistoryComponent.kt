@@ -55,4 +55,4 @@ interface HistoryComponent {
             store.accept(Intent.Refresh)
         }
     }
-} 
+}

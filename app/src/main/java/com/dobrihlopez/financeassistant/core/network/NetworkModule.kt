@@ -17,7 +17,6 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 object NetworkModule {
-
     @Provides
     @Singleton
     fun provideBaseUrl(): String = "https://shmr-finance.ru/api/"
@@ -33,7 +32,8 @@ object NetworkModule {
             level = HttpLoggingInterceptor.Level.BODY
         }
         val authInterceptor = Interceptor { chain ->
-            val request = chain.request().newBuilder()
+            val request = chain.request()
+                .newBuilder()
                 .addHeader("Authorization", "Bearer ${BuildConfig.API_TOKEN}")
                 .build()
             chain.proceed(request)
@@ -46,11 +46,15 @@ object NetworkModule {
 
     @Provides
     @Singleton
-    fun provideRetrofit(baseUrl: String, client: OkHttpClient, gson: Gson): Retrofit =
+    fun provideRetrofit(
+        baseUrl: String,
+        client: OkHttpClient,
+        gson: Gson,
+    ): Retrofit =
         Retrofit.Builder()
             .baseUrl(baseUrl)
             .addConverterFactory(GsonConverterFactory.create(gson))
             .client(client)
             .build()
 
- }
+}

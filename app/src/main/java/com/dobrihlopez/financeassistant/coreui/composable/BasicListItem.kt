@@ -46,7 +46,7 @@ fun BasicListItem(
             .clickable(enabled = onClick != null) { onClick?.invoke() }
             .animateContentSize()
             .padding(horizontal = spacing.medium),
-        verticalAlignment = Alignment.CenterVertically
+        verticalAlignment = Alignment.CenterVertically,
     ) {
         leadingContent?.let {
             it.invoke()
@@ -54,18 +54,18 @@ fun BasicListItem(
         }
 
         Column(
-            modifier = Modifier.weight(1f)
+            modifier = Modifier.weight(1f),
         ) {
             Text(
                 text = content,
                 style = MaterialTheme.typography.bodyLarge,
-                color = MaterialTheme.colorScheme.onBackground
+                color = MaterialTheme.colorScheme.onBackground,
             )
             if (subContent != null && subContent.isNotEmpty()) {
                 Text(
                     text = subContent,
                     style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
             }
         }

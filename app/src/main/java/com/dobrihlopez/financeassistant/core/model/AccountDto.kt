@@ -16,5 +16,5 @@ data class AccountDto(
     @SerializedName("createdAt")
     val createdAt: String,
     @SerializedName("updatedAt")
-    val updatedAt: String
+    val updatedAt: String,
 )
