@@ -6,9 +6,8 @@ import com.arkivanov.mvikotlin.core.store.Store
 import com.arkivanov.mvikotlin.core.store.StoreFactory
 import com.arkivanov.mvikotlin.extensions.coroutines.CoroutineBootstrapper
 import com.arkivanov.mvikotlin.extensions.coroutines.CoroutineExecutor
-import com.dobrihlopez.financeassistant.core.Transaction
-import com.dobrihlopez.financeassistant.feature.transaction.expenses.domain.ExpenseRepository
-import com.dobrihlopez.financeassistant.feature.transaction.core.GetTransactionsForPeriodUseCase
+import com.dobrihlopez.financeassistant.feature.transaction.core.model.Transaction
+import com.dobrihlopez.financeassistant.feature.transaction.core.usecase.GetTransactionsForPeriodUseCase
 import com.dobrihlopez.financeassistant.feature.accounts.domain.usecase.GetFirstAccountUseCase
 import com.dobrihlopez.financeassistant.feature.transaction.income.presentation.IncomeStore
 import javax.inject.Inject

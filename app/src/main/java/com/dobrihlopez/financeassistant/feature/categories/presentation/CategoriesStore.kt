@@ -6,10 +6,9 @@ import com.arkivanov.mvikotlin.core.store.Store
 import com.arkivanov.mvikotlin.core.store.StoreFactory
 import com.arkivanov.mvikotlin.extensions.coroutines.CoroutineBootstrapper
 import com.arkivanov.mvikotlin.extensions.coroutines.CoroutineExecutor
-import com.dobrihlopez.financeassistant.feature.categories.domain.Category
-import com.dobrihlopez.financeassistant.core.domain.article.ArticleRepository
+import com.dobrihlopez.financeassistant.feature.categories.domain.model.Category
 import com.dobrihlopez.financeassistant.feature.categories.domain.CategoriesRepository
-import com.dobrihlopez.financeassistant.feature.categories.domain.GetCategoriesUsecase
+import com.dobrihlopez.financeassistant.feature.categories.domain.usecase.GetCategoriesUsecase
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 import kotlinx.serialization.Serializable

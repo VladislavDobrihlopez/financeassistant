@@ -11,6 +11,7 @@ import com.arkivanov.essenty.lifecycle.doOnStart
 import com.arkivanov.mvikotlin.core.instancekeeper.getStore
 import com.arkivanov.mvikotlin.extensions.coroutines.stateFlow
 import com.dobrihlopez.financeassistant.feature.categories.presentation.CategoriesStore
+import com.dobrihlopez.financeassistant.feature.transaction.history.domain.GetSortedTransactionsUsecase
 import com.dobrihlopez.financeassistant.feature.transaction.history.presentation.HistoryComponent
 import com.dobrihlopez.financeassistant.feature.transaction.income.presentation.IncomeStore.IncomeStoreFactory
 import dagger.assisted.Assisted
@@ -19,6 +20,7 @@ import dagger.assisted.AssistedInject
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.serialization.Serializable
+import javax.inject.Named
 
 interface IncomeComponent {
     val childStack: Value<ChildStack<*, Child>>
@@ -34,7 +36,8 @@ interface IncomeComponent {
     class DefaultIncomeComponent @AssistedInject constructor(
         @Assisted("componentContext") private val componentContext: ComponentContext,
         private val incomeStoreFactory: IncomeStoreFactory,
-        private val historyComponentFactory: HistoryComponent.DefaultHistoryComponent.Factory
+        private val historyComponentFactory: HistoryComponent.Factory,
+        @Named("usecaseIncome") private val getSortedTransactionsUsecase: GetSortedTransactionsUsecase,
     ) : IncomeComponent, ComponentContext by componentContext {
 
         private val stack = StackNavigation<Config>()
@@ -51,7 +54,13 @@ interface IncomeComponent {
         private fun child(config: Config, componentContext: ComponentContext): Child =
             when (config) {
                 Config.Main -> Child.Main(this)
-                Config.History -> Child.History(historyComponentFactory.create(componentContext, isIncome = true))
+                Config.History -> Child.History(
+                    historyComponentFactory.create(
+                        componentContext,
+                        isIncome = true,
+                        getSortedTransactionsUsecase
+                    )
+                )
             }
 
         private val initState = stateKeeper.consume(STATE_KEY, strategy = IncomeStore.IncomeScreenState.serializer())

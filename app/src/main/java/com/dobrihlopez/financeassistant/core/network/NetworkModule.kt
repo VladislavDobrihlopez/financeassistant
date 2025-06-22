@@ -53,7 +53,4 @@ object NetworkModule {
             .client(client)
             .build()
 
-    @Provides
-    @Singleton
-    fun provideArticleApi(retrofit: Retrofit): ArticleApi = retrofit.create(ArticleApi::class.java)
-}
+ }

@@ -14,7 +14,6 @@ import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.FloatingActionButtonDefaults.bottomAppBarFabElevation
-import androidx.compose.material3.FloatingActionButtonElevation
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -30,10 +29,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.dobrihlopez.financeassistant.R
-import com.dobrihlopez.financeassistant.core_ui.composable.ErrorSnackbarHost
-import com.dobrihlopez.financeassistant.core_ui.composable.LoadingProgressBar
-import com.dobrihlopez.financeassistant.core_ui.ui.theme.FinanceAssistantTheme
-import com.dobrihlopez.financeassistant.feature.accounts.domain.UserAccountDetailed
+import com.dobrihlopez.financeassistant.coreui.composable.ErrorSnackbarHost
+import com.dobrihlopez.financeassistant.coreui.composable.LoadingProgressBar
+import com.dobrihlopez.financeassistant.coreui.ui.theme.FinanceAssistantTheme
+import com.dobrihlopez.financeassistant.feature.accounts.domain.model.UserAccountDetailed
 import com.dobrihlopez.financeassistant.feature.accounts.presentation.AccountsStore.AccountScreenState
 import com.dobrihlopez.financeassistant.feature.accounts.presentation.composable.AccountItem
 
@@ -148,7 +147,7 @@ private fun provideAccount(): UserAccountDetailed = UserAccountDetailed(
 private fun PreviewLightRussian() {
     FinanceAssistantTheme(darkTheme = false) {
         AccountContent(
-            state = AccountsStore.AccountScreenState.Succeeded(
+            state = AccountScreenState.Succeeded(
                 account = provideAccount()
             ),
             onEditClick = {},

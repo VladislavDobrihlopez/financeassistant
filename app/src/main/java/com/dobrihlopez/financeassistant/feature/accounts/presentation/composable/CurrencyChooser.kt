@@ -24,15 +24,15 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import com.dobrihlopez.financeassistant.R
-import com.dobrihlopez.financeassistant.core_ui.ui.theme.spacing
+import com.dobrihlopez.financeassistant.coreui.ui.theme.spacing
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CurrencyChooser(
-    modifier: Modifier = Modifier,
     sheetState: SheetState,
     onDismiss: () -> Unit,
     onCurrencySelected: (Currency) -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     val currencies = listOf(Currency.Ruble, Currency.Usd, Currency.Euro)
     val spacing = MaterialTheme.spacing

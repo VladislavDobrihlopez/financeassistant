@@ -8,8 +8,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.compose.runtime.LaunchedEffect
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import com.arkivanov.decompose.defaultComponentContext
-import com.arkivanov.mvikotlin.main.store.DefaultStoreFactory
-import com.dobrihlopez.financeassistant.core_ui.ui.theme.FinanceAssistantTheme
+import com.dobrihlopez.financeassistant.coreui.ui.theme.FinanceAssistantTheme
 import com.dobrihlopez.financeassistant.feature.RootComponent
 import com.dobrihlopez.financeassistant.feature.RootScreen
 import dagger.hilt.android.AndroidEntryPoint

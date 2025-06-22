@@ -1,9 +1,9 @@
 package com.dobrihlopez.financeassistant.feature.transaction.core_data
 
 import com.dobrihlopez.financeassistant.core.CoroutineDispatchers
-import com.dobrihlopez.financeassistant.core.Transaction
-import com.dobrihlopez.financeassistant.core.network.TransactionApi
-import com.dobrihlopez.financeassistant.feature.transaction.core_data.transactions.toDomain
+import com.dobrihlopez.financeassistant.feature.transaction.core.model.Transaction
+import com.dobrihlopez.financeassistant.feature.transaction.core_data.network.TransactionApi
+import com.dobrihlopez.financeassistant.feature.transaction.core_data.mapper.toDomain
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 

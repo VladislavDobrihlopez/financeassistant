@@ -7,9 +7,11 @@ import com.arkivanov.mvikotlin.core.store.StoreFactory
 import com.arkivanov.mvikotlin.extensions.coroutines.CoroutineBootstrapper
 import com.arkivanov.mvikotlin.extensions.coroutines.CoroutineExecutor
 import com.dobrihlopez.financeassistant.core.CoroutineDispatchers
-import com.dobrihlopez.financeassistant.core.Transaction
+import com.dobrihlopez.financeassistant.feature.transaction.core.model.Transaction
 import com.dobrihlopez.financeassistant.feature.accounts.domain.usecase.GetFirstAccountUseCase
-import com.dobrihlopez.financeassistant.feature.transaction.core.GetTransactionsForPeriodUseCase
+import com.dobrihlopez.financeassistant.feature.transaction.core.usecase.GetTransactionsForPeriodUseCase
+import com.dobrihlopez.financeassistant.feature.transaction.history.domain.GetSortedTransactionsUsecase
+import com.dobrihlopez.financeassistant.feature.transaction.history.domain.impl.GetSortedIncomeTransactionsUsecase
 import kotlinx.serialization.Contextual
 import kotlinx.serialization.Serializable
 import kotlinx.coroutines.launch
@@ -45,13 +47,12 @@ interface HistoryStore : Store<HistoryStore.Intent, HistoryStore.State, Nothing>
     class HistoryStoreFactory @Inject constructor(
         private val storeFactory: StoreFactory,
         private val getFirstAccountUseCase: GetFirstAccountUseCase,
-        private val getTransactionsForPeriodUseCase: GetTransactionsForPeriodUseCase,
         private val coroutineDispatchers: CoroutineDispatchers,
     ) {
-        fun create(isIncome: Boolean): HistoryStore =
+        fun create(isIncome: Boolean, getSortedTransactionsUsecase: GetSortedTransactionsUsecase): HistoryStore =
             HistoryStoreImpl(
                 storeFactory,
-                getTransactionsForPeriodUseCase,
+                getSortedTransactionsUsecase,
                 getFirstAccountUseCase,
                 coroutineDispatchers,
                 isIncome
@@ -59,7 +60,7 @@ interface HistoryStore : Store<HistoryStore.Intent, HistoryStore.State, Nothing>
 
         private class HistoryStoreImpl(
             storeFactory: StoreFactory,
-            private val getTransactionsForPeriodUseCase: GetTransactionsForPeriodUseCase,
+            private val getSortedTransactionsUsecase: GetSortedTransactionsUsecase,
             private val getFirstAccountUseCase: GetFirstAccountUseCase,
             private val coroutineDispatchers: CoroutineDispatchers,
             private val isIncome: Boolean
@@ -67,7 +68,7 @@ interface HistoryStore : Store<HistoryStore.Intent, HistoryStore.State, Nothing>
             name = "HistoryStore",
             initialState = State(isIncome = isIncome),
             bootstrapper = BootstrapperImpl(isIncome),
-            executorFactory = { ExecutorImpl(getTransactionsForPeriodUseCase, getFirstAccountUseCase, coroutineDispatchers) },
+            executorFactory = { ExecutorImpl(getSortedTransactionsUsecase, getFirstAccountUseCase, coroutineDispatchers) },
             reducer = ReducerImpl
         )
 
@@ -82,7 +83,7 @@ interface HistoryStore : Store<HistoryStore.Intent, HistoryStore.State, Nothing>
         }
 
         private class ExecutorImpl(
-            private val getTransactionsForPeriodUseCase: GetTransactionsForPeriodUseCase,
+            private val getSortedTransactionsUsecase: GetSortedTransactionsUsecase,
             private val getFirstAccountUseCase: GetFirstAccountUseCase,
             private val coroutineDispatchers: CoroutineDispatchers,
         ) : CoroutineExecutor<Intent, Action, State, Message, Nothing>() {
@@ -110,14 +111,11 @@ interface HistoryStore : Store<HistoryStore.Intent, HistoryStore.State, Nothing>
                         val start = startDate.toString()
                         val end = endDate.toString()
                         val transactions = withContext(coroutineDispatchers.default) {
-                            getTransactionsForPeriodUseCase(
+                            getSortedTransactionsUsecase(
                                 accountId = account.id,
                                 startDate = start,
                                 endDate = end
-                            ).filter { it.category.isIncome == isIncome }
-                                .sortedByDescending {
-                                    OffsetDateTime.parse(it.updatedAt).toLocalDateTime()
-                                }
+                            )
                         }
                         dispatch(Message.Succeeded(transactions, startDate, endDate, isIncome))
                     } catch (e: Exception) {

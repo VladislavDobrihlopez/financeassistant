@@ -4,7 +4,7 @@ import com.arkivanov.decompose.ComponentContext
 import com.arkivanov.mvikotlin.core.instancekeeper.getStore
 import com.arkivanov.mvikotlin.core.store.StoreFactory
 import com.arkivanov.mvikotlin.extensions.coroutines.stateFlow
-import com.dobrihlopez.financeassistant.feature.settings.domain.AppSettingItem
+import com.dobrihlopez.financeassistant.feature.settings.domain.model.AppSettingItem
 import com.dobrihlopez.financeassistant.feature.settings.presentation.SettingsStore.SettingsStoreFactory
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.StateFlow
@@ -27,7 +27,7 @@ interface SettingsComponent {
         private val settingsStoreFactory: SettingsStoreFactory
     ) : SettingsComponent, ComponentContext by componentContext {
 
-        private val initState = stateKeeper.consume(STATE_KEY, strategy = SettingsStore.SettingsScreenState.serializer())
+        private val initState = stateKeeper.consume(STATE_KEY, SettingsStore.SettingsScreenState.serializer())
             ?: SettingsStore.SettingsScreenState.Succeeded(
                 items = AppSettingItem.all
             )
@@ -41,7 +41,7 @@ interface SettingsComponent {
             get() = store.stateFlow
 
         init {
-            stateKeeper.register("settings_state", SettingsStore.SettingsScreenState.serializer()) {
+            stateKeeper.register(STATE_KEY, SettingsStore.SettingsScreenState.serializer()) {
                 state.value
             }
         }

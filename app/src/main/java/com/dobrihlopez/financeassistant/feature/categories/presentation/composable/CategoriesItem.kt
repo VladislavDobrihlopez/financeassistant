@@ -12,8 +12,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
-import com.dobrihlopez.financeassistant.core_ui.composable.BasicListItem
-import com.dobrihlopez.financeassistant.feature.categories.domain.Category
+import com.dobrihlopez.financeassistant.coreui.composable.BasicListItem
+import com.dobrihlopez.financeassistant.feature.categories.domain.model.Category
 
 @Composable
 fun CategoriesItem(category: Category) {

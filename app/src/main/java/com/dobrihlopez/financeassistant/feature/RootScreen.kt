@@ -16,13 +16,13 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import com.arkivanov.decompose.extensions.compose.stack.Children
 import com.arkivanov.decompose.extensions.compose.subscribeAsState
-import com.dobrihlopez.financeassistant.core_ui.composable.BottomNavigationBar
-import com.dobrihlopez.financeassistant.core_ui.composable.NavigationItem
 import com.dobrihlopez.financeassistant.feature.accounts.presentation.AccountsScreen
-import com.dobrihlopez.financeassistant.feature.categories.presentation.CategoriesScreen
-import com.dobrihlopez.financeassistant.feature.settings.presentation.SettingScreen
+import com.dobrihlopez.financeassistant.feature.categories.presentation.screen.CategoriesScreen
+import com.dobrihlopez.financeassistant.feature.settings.presentation.screen.SettingScreen
 import com.dobrihlopez.financeassistant.feature.transaction.expenses.presentation.ExpenseScreen
 import com.dobrihlopez.financeassistant.feature.transaction.income.presentation.IncomeScreen
+import com.dobrihlopez.financeassistant.navigation.BottomNavigationBar
+import com.dobrihlopez.financeassistant.navigation.NavigationItem
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

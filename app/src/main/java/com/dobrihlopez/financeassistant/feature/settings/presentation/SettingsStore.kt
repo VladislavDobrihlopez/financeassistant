@@ -5,7 +5,7 @@ import com.arkivanov.mvikotlin.core.store.Reducer
 import com.arkivanov.mvikotlin.core.store.Store
 import com.arkivanov.mvikotlin.core.store.StoreFactory
 import com.arkivanov.mvikotlin.extensions.coroutines.CoroutineExecutor
-import com.dobrihlopez.financeassistant.feature.settings.domain.AppSettingItem
+import com.dobrihlopez.financeassistant.feature.settings.domain.model.AppSettingItem
 import kotlinx.serialization.Serializable
 import javax.inject.Inject
 
@@ -46,7 +46,9 @@ interface SettingsStore: Store<SettingsStore.Intent, SettingsStore.SettingsScree
         private class ExecutorImpl: CoroutineExecutor<Intent, Nothing, SettingsScreenState, Message, Nothing>() {
             override fun executeIntent(intent: Intent) {
                 when (intent) {
-                    Intent.LoadSettings -> {}
+                    Intent.LoadSettings -> {
+                        dispatch(Message.Succeeded(AppSettingItem.all))
+                    }
                     is Intent.SettingClick -> {}
                 }
             }
@@ -64,7 +66,7 @@ interface SettingsStore: Store<SettingsStore.Intent, SettingsStore.SettingsScree
             }
         }
 
-        sealed class Message {
+        private sealed class Message {
             data object Loading: Message()
             data class Failed(@StringRes val errorResId: Int? = null): Message()
             data class Succeeded(val items: List<AppSettingItem>): Message()

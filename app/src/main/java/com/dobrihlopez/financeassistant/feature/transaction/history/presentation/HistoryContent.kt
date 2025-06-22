@@ -24,8 +24,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import com.dobrihlopez.financeassistant.R
-import com.dobrihlopez.financeassistant.core_ui.composable.ErrorSnackbarHost
-import com.dobrihlopez.financeassistant.core_ui.composable.LoadingProgressBar
+import com.dobrihlopez.financeassistant.coreui.composable.ErrorSnackbarHost
+import com.dobrihlopez.financeassistant.coreui.composable.LoadingProgressBar
 import com.dobrihlopez.financeassistant.feature.transaction.core_ui.OverViewListItem
 import com.dobrihlopez.financeassistant.feature.transaction.core_ui.TransactionItem
 import java.time.Instant

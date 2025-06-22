@@ -9,16 +9,18 @@ import com.arkivanov.decompose.value.Value
 import com.arkivanov.essenty.lifecycle.doOnResume
 import com.arkivanov.mvikotlin.core.instancekeeper.getStore
 import com.arkivanov.mvikotlin.extensions.coroutines.stateFlow
-import com.dobrihlopez.financeassistant.core.Transaction
+import com.dobrihlopez.financeassistant.feature.transaction.core.model.Transaction
 import com.dobrihlopez.financeassistant.feature.transaction.expenses.presentation.ExpenseStore.ExpenseStoreFactory
+import com.dobrihlopez.financeassistant.feature.transaction.history.domain.GetSortedTransactionsUsecase
+import com.dobrihlopez.financeassistant.feature.transaction.history.domain.impl.GetSortedExpenseTransactionsUsecase
 import com.dobrihlopez.financeassistant.feature.transaction.history.presentation.HistoryComponent
-import com.dobrihlopez.financeassistant.feature.transaction.income.presentation.IncomeStore
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.serialization.Serializable
+import javax.inject.Named
 
 interface ExpenseComponent {
     val childStack: Value<ChildStack<*, Child>>
@@ -32,10 +34,16 @@ interface ExpenseComponent {
         data class History(val component: HistoryComponent) : Child
     }
 
+    @AssistedFactory
+    interface Factory {
+        fun create(@Assisted("componentContext") componentContext: ComponentContext): DefaultExpenseComponent
+    }
+
     class DefaultExpenseComponent @AssistedInject constructor(
         @Assisted("componentContext") private val componentContext: ComponentContext,
         private val expenseStoreFactory: ExpenseStoreFactory,
-        private val historyComponentFactory: HistoryComponent.DefaultHistoryComponent.Factory,
+        private val historyComponentFactory: HistoryComponent.Factory,
+        @Named("usecaseExpense") private val getSortedExpenseTransactionsUsecase: GetSortedTransactionsUsecase,
     ) : ExpenseComponent, ComponentContext by componentContext {
 
         private val stack = StackNavigation<Config>()
@@ -55,7 +63,8 @@ interface ExpenseComponent {
                 Config.History -> Child.History(
                     historyComponentFactory.create(
                         componentContext,
-                        isIncome = false
+                        isIncome = false,
+                        getSortedExpenseTransactionsUsecase
                     )
                 )
             }
@@ -108,10 +117,5 @@ interface ExpenseComponent {
             @Serializable
             object History : Config()
         }
-    }
-
-    @AssistedFactory
-    interface Factory {
-        fun create(@Assisted("componentContext") componentContext: ComponentContext): DefaultExpenseComponent
     }
 }
