@@ -1,4 +1,4 @@
-package com.dobrihlopez.financeassistant.feature.transaction.history.presentation
+package com.dobrihlopez.financeassistant.feature.transaction.history.presentation.screen
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
@@ -28,6 +28,7 @@ import com.dobrihlopez.financeassistant.coreui.composable.ErrorSnackbarHost
 import com.dobrihlopez.financeassistant.coreui.composable.LoadingProgressBar
 import com.dobrihlopez.financeassistant.feature.transaction.core_ui.OverViewListItem
 import com.dobrihlopez.financeassistant.feature.transaction.core_ui.TransactionItem
+import com.dobrihlopez.financeassistant.feature.transaction.history.presentation.HistoryStore
 import java.time.Instant
 import java.time.LocalDate
 import java.time.ZoneId

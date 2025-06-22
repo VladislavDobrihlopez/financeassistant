@@ -1,5 +1,10 @@
 package com.dobrihlopez.financeassistant.feature.accounts.presentation.screen
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.expandHorizontally
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.shrinkHorizontally
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -11,6 +16,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Edit
+import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.FloatingActionButtonDefaults.bottomAppBarFabElevation
@@ -48,7 +54,7 @@ fun AccountContent(
 ) {
     Scaffold(
         topBar = {
-            TopAppBar(
+            CenterAlignedTopAppBar(
                 title = {
                     Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
                         Text(
@@ -58,8 +64,17 @@ fun AccountContent(
                     }
                 },
                 actions = {
-                    IconButton(onClick = onEditClick) {
-                        Icon(imageVector = Icons.Default.Edit, contentDescription = null)
+                    AnimatedVisibility(
+                        visible = state is AccountScreenState.Succeeded,
+                        enter = fadeIn() + expandHorizontally(
+                            clip = false,
+                            expandFrom = Alignment.Start
+                        ),
+                        exit = fadeOut() + shrinkHorizontally(clip = false)
+                    ) {
+                        IconButton(onClick = onEditClick) {
+                            Icon(imageVector = Icons.Default.Edit, contentDescription = null)
+                        }
                     }
                 },
                 colors =

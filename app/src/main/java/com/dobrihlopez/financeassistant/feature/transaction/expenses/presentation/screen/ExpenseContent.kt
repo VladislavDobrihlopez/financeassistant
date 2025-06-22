@@ -1,4 +1,4 @@
-package com.dobrihlopez.financeassistant.feature.transaction.expenses.presentation
+package com.dobrihlopez.financeassistant.feature.transaction.expenses.presentation.screen
 
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
@@ -19,6 +19,7 @@ import com.dobrihlopez.financeassistant.feature.transaction.core.model.Transacti
 import com.dobrihlopez.financeassistant.feature.transaction.core.previewTransactions
 import com.dobrihlopez.financeassistant.feature.transaction.core_ui.OverViewListItem
 import com.dobrihlopez.financeassistant.feature.transaction.core_ui.TransactionItem
+import com.dobrihlopez.financeassistant.feature.transaction.expenses.presentation.ExpenseStore
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

@@ -4,6 +4,7 @@ import com.arkivanov.decompose.ComponentContext
 import com.arkivanov.decompose.router.stack.ChildStack
 import com.arkivanov.decompose.router.stack.StackNavigation
 import com.arkivanov.decompose.router.stack.childStack
+import com.arkivanov.decompose.router.stack.pop
 import com.arkivanov.decompose.router.stack.push
 import com.arkivanov.decompose.value.Value
 import com.arkivanov.essenty.lifecycle.doOnResume
@@ -30,6 +31,8 @@ interface ExpenseComponent {
     fun onFabClick()
 
     fun onExpenseClick(transaction: Transaction)
+
+    fun onNavigateBack()
 
     sealed interface Child {
         data class Main(val component: ExpenseComponent) : Child
@@ -94,7 +97,7 @@ interface ExpenseComponent {
                 get() = store.stateFlow
 
             init {
-                stateKeeper.register("expense_state", ExpenseStore.ExpenseScreenState.serializer()) {
+                stateKeeper.register(STATE_KEY, ExpenseStore.ExpenseScreenState.serializer()) {
                     state.value
                 }
 
@@ -103,6 +106,10 @@ interface ExpenseComponent {
                         store.accept(ExpenseStore.Intent.LoadExpenses)
                     }
                 }
+            }
+
+            override fun onNavigateBack() {
+                stack.pop()
             }
 
             override fun onHistoryClick() {

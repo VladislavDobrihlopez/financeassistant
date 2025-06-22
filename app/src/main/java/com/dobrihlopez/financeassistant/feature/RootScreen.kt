@@ -27,8 +27,8 @@ import com.dobrihlopez.financeassistant.coreui.ui.theme.spacing
 import com.dobrihlopez.financeassistant.feature.accounts.presentation.screen.AccountsScreen
 import com.dobrihlopez.financeassistant.feature.categories.presentation.screen.CategoriesScreen
 import com.dobrihlopez.financeassistant.feature.settings.presentation.screen.SettingScreen
-import com.dobrihlopez.financeassistant.feature.transaction.expenses.presentation.ExpenseScreen
-import com.dobrihlopez.financeassistant.feature.transaction.income.presentation.IncomeScreen
+import com.dobrihlopez.financeassistant.feature.transaction.expenses.presentation.screen.ExpenseScreen
+import com.dobrihlopez.financeassistant.feature.transaction.income.presentation.screen.IncomeScreen
 import com.dobrihlopez.financeassistant.navigation.BottomNavigationBar
 import com.dobrihlopez.financeassistant.navigation.NavigationItem
 

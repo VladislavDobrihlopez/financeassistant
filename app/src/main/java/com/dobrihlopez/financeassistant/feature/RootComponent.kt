@@ -59,6 +59,13 @@ interface RootComponent {
         data object Settings : Config
     }
 
+    @AssistedFactory
+    interface Factory {
+        fun create(
+            @Assisted("componentContext") componentContext: ComponentContext,
+        ): DefaultRootComponent
+    }
+
     class DefaultRootComponent
         @AssistedInject
         constructor(
@@ -112,13 +119,6 @@ interface RootComponent {
 
             override fun onSettingsClick() {
                 stack.bringToFront(Config.Settings)
-            }
-
-            @AssistedFactory
-            interface Factory {
-                fun create(
-                    @Assisted("componentContext") componentContext: ComponentContext,
-                ): DefaultRootComponent
             }
         }
 }

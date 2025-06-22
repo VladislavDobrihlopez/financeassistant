@@ -22,10 +22,10 @@ import com.dobrihlopez.financeassistant.R
 import com.dobrihlopez.financeassistant.coreui.composable.ErrorSnackbarHost
 import com.dobrihlopez.financeassistant.coreui.composable.LoadingProgressBar
 import com.dobrihlopez.financeassistant.coreui.ui.theme.FinanceAssistantTheme
+import com.dobrihlopez.financeassistant.feature.categories.domain.model.Category
 import com.dobrihlopez.financeassistant.feature.categories.presentation.CategoriesStore.CategoriesScreenState
 import com.dobrihlopez.financeassistant.feature.categories.presentation.composable.CategoriesItem
 import com.dobrihlopez.financeassistant.feature.categories.presentation.composable.SearchBar
-import com.dobrihlopez.financeassistant.feature.categories.presentation.provideCategories
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -165,3 +165,21 @@ private fun PreviewDarkEnglish() {
         )
     }
 }
+
+// mock data
+fun provideCategories(): List<Category> =
+    listOf(
+        Category(id = 1, emoji = "🏠", isIncome = false, name = "Аренда квартиры"),
+        Category(id = 2, emoji = "👗", isIncome = false, name = "Одежда"),
+        Category(id = 3, emoji = "🐶", isIncome = false, name = "На собачку"),
+        Category(id = 4, emoji = "🐶", isIncome = false, name = "На собачку"),
+        Category(
+            id = 5,
+            emoji = "рк",
+            isIncome = false,
+            name = "Ремонт квартиры",
+        ),
+        Category(id = 6, emoji = "🍭", isIncome = false, name = "Продукты"),
+        Category(id = 7, emoji = "🤸‍♂️", isIncome = false, name = "Спортзал"),
+        Category(id = 8, emoji = "💊", isIncome = false, name = "Медицина"),
+    )

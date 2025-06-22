@@ -4,6 +4,7 @@ import com.arkivanov.decompose.ComponentContext
 import com.arkivanov.decompose.router.stack.ChildStack
 import com.arkivanov.decompose.router.stack.StackNavigation
 import com.arkivanov.decompose.router.stack.childStack
+import com.arkivanov.decompose.router.stack.pop
 import com.arkivanov.decompose.router.stack.push
 import com.arkivanov.decompose.value.Value
 import com.arkivanov.essenty.lifecycle.doOnResume
@@ -27,6 +28,8 @@ interface IncomeComponent {
     fun onHistoryClick()
 
     fun onFabClick()
+
+    fun onNavigateBack()
 
     sealed interface Child {
         data class Main(val component: IncomeComponent) : Child
@@ -70,7 +73,7 @@ interface IncomeComponent {
                         )
                 }
 
-            private val initState =
+        private val initState =
                 stateKeeper.consume(STATE_KEY, strategy = IncomeStore.IncomeScreenState.serializer())
                     ?: IncomeStore.IncomeScreenState.Loading
 
@@ -84,7 +87,7 @@ interface IncomeComponent {
                 get() = store.stateFlow
 
             init {
-                stateKeeper.register("income_state", IncomeStore.IncomeScreenState.serializer()) {
+                stateKeeper.register(STATE_KEY, IncomeStore.IncomeScreenState.serializer()) {
                     state.value
                 }
 
@@ -93,6 +96,10 @@ interface IncomeComponent {
                         store.accept(IncomeStore.Intent.LoadIncome)
                     }
                 }
+            }
+
+            override fun onNavigateBack() {
+                stack.pop()
             }
 
             override fun onHistoryClick() {

@@ -71,21 +71,3 @@ interface CategoriesComponent {
         ): DefaultCategoriesComponent
     }
 }
-
-// mock data
-fun provideCategories(): List<Category> =
-    listOf(
-        Category(id = 1, emoji = "🏠", isIncome = false, name = "Аренда квартиры"),
-        Category(id = 2, emoji = "👗", isIncome = false, name = "Одежда"),
-        Category(id = 3, emoji = "🐶", isIncome = false, name = "На собачку"),
-        Category(id = 4, emoji = "🐶", isIncome = false, name = "На собачку"),
-        Category(
-            id = 5,
-            emoji = "рк",
-            isIncome = false,
-            name = "Ремонт квартиры",
-        ),
-        Category(id = 6, emoji = "🍭", isIncome = false, name = "Продукты"),
-        Category(id = 7, emoji = "🤸‍♂️", isIncome = false, name = "Спортзал"),
-        Category(id = 8, emoji = "💊", isIncome = false, name = "Медицина"),
-    )

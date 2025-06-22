@@ -16,7 +16,7 @@ suspend fun <T> retryWithDelay(
             return block()
         } catch (e: HttpException) {
             if (e.code() != 500) throw e
-        } catch (e: IOException) {
+        } catch (_: IOException) {
 
         }
 

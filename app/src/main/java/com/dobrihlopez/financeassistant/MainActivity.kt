@@ -20,7 +20,7 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     @Inject
-    lateinit var rootComponentFactory: RootComponent.DefaultRootComponent.Factory
+    lateinit var rootComponentFactory: RootComponent.Factory
 
     @Inject
     lateinit var connectivityObserver: ConnectivityObserver
