@@ -25,9 +25,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.dobrihlopez.financeassistant.R
 import com.dobrihlopez.financeassistant.core_ui.ui.theme.FinanceAssistantTheme
 import com.dobrihlopez.financeassistant.core_ui.ui.theme.spacing
 
@@ -60,7 +62,7 @@ fun InternetConnectionStatus(hasInternet: Boolean, modifier: Modifier = Modifier
             Spacer(modifier = Modifier.width(spacing))
             Text(
                 modifier = Modifier.weight(1f),
-                text = "Internet issues",
+                text = stringResource(R.string.error_internet_issues),
                 style = MaterialTheme.typography.bodyLarge,
                 textAlign = TextAlign.Center,
                 color = if (!hasInternet) MaterialTheme.colorScheme.onError else Color.Black
