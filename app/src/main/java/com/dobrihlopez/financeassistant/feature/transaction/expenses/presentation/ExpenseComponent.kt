@@ -57,7 +57,7 @@ interface ExpenseComponent {
         ) : ExpenseComponent, ComponentContext by componentContext {
             private val stack = StackNavigation<Config>()
 
-            override val childStack: Value<ChildStack<Config, Child>> =
+            override val childStack: Value<ChildStack<*, Child>> =
                 childStack(
                     source = stack,
                     initialConfiguration = Config.Main,
@@ -129,7 +129,7 @@ interface ExpenseComponent {
             }
 
             @Serializable
-            sealed class Config {
+            private sealed class Config {
                 @Serializable
                 object Main : Config()
 

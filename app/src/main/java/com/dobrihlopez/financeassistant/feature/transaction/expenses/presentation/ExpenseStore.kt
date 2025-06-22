@@ -28,7 +28,6 @@ interface ExpenseStore : Store<ExpenseStore.Intent, ExpenseStore.ExpenseScreenSt
         @Serializable
         data class Succeeded(
             val transactions: List<Transaction>,
-            val summaryText: String,
             val summaryValue: String,
         ) : ExpenseScreenState()
     }
@@ -124,7 +123,7 @@ interface ExpenseStore : Store<ExpenseStore.Intent, ExpenseStore.ExpenseScreenSt
                                 ).filter { !it.category.isIncome }
                             val summaryValue =
                                 transactions.sumOf { it.amount.toDoubleOrNull() ?: 0.0 }.toString()
-                            dispatch(Message.Succeeded(transactions, "Расходы сегодня", summaryValue))
+                            dispatch(Message.Succeeded(transactions, summaryValue))
                         } catch (e: Exception) {
                             dispatch(Message.Failed())
                         }
@@ -140,14 +139,13 @@ interface ExpenseStore : Store<ExpenseStore.Intent, ExpenseStore.ExpenseScreenSt
                         is Message.Succeeded ->
                             ExpenseScreenState.Succeeded(
                                 transactions = msg.transactions,
-                                summaryText = msg.summaryText,
                                 summaryValue = msg.summaryValue,
                             )
                     }
                 }
             }
 
-            sealed class Message {
+            private sealed class Message {
                 data object Loading : Message()
 
                 data class Failed(
@@ -156,7 +154,6 @@ interface ExpenseStore : Store<ExpenseStore.Intent, ExpenseStore.ExpenseScreenSt
 
                 data class Succeeded(
                     val transactions: List<Transaction>,
-                    val summaryText: String,
                     val summaryValue: String,
                 ) : Message()
             }

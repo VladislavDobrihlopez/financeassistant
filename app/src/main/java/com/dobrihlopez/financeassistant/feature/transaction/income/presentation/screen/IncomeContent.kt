@@ -10,8 +10,10 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.dobrihlopez.financeassistant.R
 import com.dobrihlopez.financeassistant.coreui.composable.ErrorSnackbarHost
 import com.dobrihlopez.financeassistant.coreui.composable.LoadingProgressBar
 import com.dobrihlopez.financeassistant.coreui.ui.theme.FinanceAssistantTheme
@@ -49,7 +51,7 @@ fun IncomeContent(
                             .fillMaxSize(),
                 ) {
                     item {
-                        OverViewListItem(content = state.summaryText, value = state.summaryValue)
+                        OverViewListItem(content = stringResource(R.string.in_total), value = state.summaryValue)
                         HorizontalDivider()
                     }
                     items(state.transactions, key = { it.id }) { transaction ->
@@ -70,7 +72,6 @@ private fun PreviewIncomeLight() {
             state =
                 IncomeStore.IncomeScreenState.Succeeded(
                     transactions = previewIncomeTransactions(),
-                    summaryText = "Всего",
                     summaryValue = "600 000 ₽",
                 ),
             paddingValues = PaddingValues(0.dp),
@@ -86,7 +87,6 @@ private fun PreviewIncomeDark() {
             state =
                 IncomeStore.IncomeScreenState.Succeeded(
                     transactions = previewIncomeTransactions(),
-                    summaryText = "Всего",
                     summaryValue = "600 000 ₽",
                 ),
             paddingValues = PaddingValues(0.dp),

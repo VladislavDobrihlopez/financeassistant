@@ -1,7 +1,5 @@
 package com.dobrihlopez.financeassistant.feature.accounts.presentation.composable
 
-import androidx.annotation.DrawableRes
-import androidx.annotation.StringRes
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Row
@@ -25,6 +23,7 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import com.dobrihlopez.financeassistant.R
 import com.dobrihlopez.financeassistant.coreui.ui.theme.spacing
+import com.dobrihlopez.financeassistant.feature.accounts.presentation.screen.Currency
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -94,28 +93,4 @@ private fun CurrencyItem(
         Spacer(modifier = Modifier.width(16.dp))
         Text(text = stringResource(currency.textResId).format(currency.symbol))
     }
-}
-
-sealed class Currency(
-    @DrawableRes val iconResId: Int,
-    val symbol: Char,
-    @StringRes val textResId: Int,
-) {
-    data object Euro : Currency(
-        iconResId = R.drawable.ic_euro,
-        symbol = '€',
-        textResId = R.string.accounts_pattern_euro,
-    )
-
-    data object Usd : Currency(
-        iconResId = R.drawable.ic_dollar,
-        symbol = '$',
-        textResId = R.string.accounts_pattern_dollar,
-    )
-
-    data object Ruble : Currency(
-        iconResId = R.drawable.ic_ruble,
-        symbol = '₽',
-        textResId = R.string.accounts_pattern_russian_rubble,
-    )
 }

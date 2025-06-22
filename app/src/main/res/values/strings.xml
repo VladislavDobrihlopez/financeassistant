@@ -34,4 +34,5 @@
     <string name="retry">Retry</string>
     <string name="error_unknown">Unknown error</string>
     <string name="error_internet_issues">Internet issues</string>
+    <string name="in_total">Total</string>
 </resources>

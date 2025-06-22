@@ -38,4 +38,5 @@
     <string name="retry">Повторить</string>
     <string name="error_unknown">Неизвестная ошибка</string>
     <string name="error_internet_issues">Проблемы с инетом</string>
+    <string name="in_total">Всего</string>
 </resources>

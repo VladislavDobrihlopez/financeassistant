@@ -186,7 +186,7 @@ interface HistoryStore : Store<HistoryStore.Intent, HistoryStore.State, Nothing>
                     }
             }
 
-            sealed class Message {
+            private sealed class Message {
                 data object Loading : Message()
 
                 data class Failed(

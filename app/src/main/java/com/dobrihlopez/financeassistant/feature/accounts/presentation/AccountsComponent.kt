@@ -6,7 +6,7 @@ import com.arkivanov.mvikotlin.core.instancekeeper.getStore
 import com.arkivanov.mvikotlin.extensions.coroutines.stateFlow
 import com.dobrihlopez.financeassistant.feature.accounts.domain.model.UserAccountDetailed
 import com.dobrihlopez.financeassistant.feature.accounts.presentation.AccountsStore.AccountsStoreFactory
-import com.dobrihlopez.financeassistant.feature.accounts.presentation.composable.Currency
+import com.dobrihlopez.financeassistant.feature.accounts.presentation.screen.Currency
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject

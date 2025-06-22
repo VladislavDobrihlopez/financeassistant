@@ -5,7 +5,12 @@ import com.arkivanov.decompose.router.stack.ChildStack
 import com.arkivanov.decompose.router.stack.StackNavigation
 import com.arkivanov.decompose.router.stack.bringToFront
 import com.arkivanov.decompose.router.stack.childStack
+import com.arkivanov.decompose.router.stack.pop
+import com.arkivanov.decompose.router.stack.popToFirst
 import com.arkivanov.decompose.value.Value
+import com.arkivanov.essenty.backhandler.BackCallback
+import com.arkivanov.essenty.lifecycle.doOnCreate
+import com.arkivanov.essenty.lifecycle.doOnDestroy
 import com.dobrihlopez.financeassistant.feature.accounts.presentation.AccountsComponent
 import com.dobrihlopez.financeassistant.feature.categories.presentation.CategoriesComponent
 import com.dobrihlopez.financeassistant.feature.settings.presentation.SettingsComponent
@@ -63,6 +68,7 @@ interface RootComponent {
     interface Factory {
         fun create(
             @Assisted("componentContext") componentContext: ComponentContext,
+            @Assisted("lambdaFinish") onExitApp: () -> Unit,
         ): DefaultRootComponent
     }
 
@@ -75,6 +81,7 @@ interface RootComponent {
             private val accountsComponentFactory: AccountsComponent.Factory,
             private val settingsComponentFactory: SettingsComponent.Factory,
             @Assisted("componentContext") private val componentContext: ComponentContext,
+            @Assisted("lambdaFinish") private val onExitApp: () -> Unit,
         ) : RootComponent, ComponentContext by componentContext {
             private val stack = StackNavigation<Config>()
 
@@ -87,6 +94,23 @@ interface RootComponent {
                     childFactory = ::child,
                     serializer = Config.serializer(),
                 )
+
+            private val backCallback = BackCallback(onBack = {
+                if (state.value.active.instance is Child.Expenses) {
+                    onExitApp()
+                } else {
+                    stack.popToFirst()
+                }
+            })
+
+            init {
+                lifecycle.doOnCreate {
+                    backHandler.register(backCallback)
+                }
+                lifecycle.doOnDestroy {
+                    backHandler.unregister(backCallback)
+                }
+            }
 
             private fun child(
                 config: Config,
