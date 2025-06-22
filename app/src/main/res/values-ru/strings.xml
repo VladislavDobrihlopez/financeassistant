@@ -37,4 +37,5 @@
     <string name="error_validation">Ошибка валидации</string>
     <string name="retry">Повторить</string>
     <string name="error_unknown">Неизвестная ошибка</string>
+    <string name="error_internet_issues">Проблемы с инетом</string>
 </resources>
