@@ -18,7 +18,7 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import com.dobrihlopez.financeassistant.R
 import com.dobrihlopez.financeassistant.coreui.composable.BasicListItem
-import com.dobrihlopez.financeassistant.feature.accounts.presentation.AccountActionItem
+import com.dobrihlopez.financeassistant.feature.accounts.presentation.screen.AccountActionItem
 
 @Composable
 fun AccountItem(

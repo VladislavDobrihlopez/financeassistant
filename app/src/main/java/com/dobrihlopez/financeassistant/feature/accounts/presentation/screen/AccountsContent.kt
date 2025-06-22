@@ -1,4 +1,4 @@
-package com.dobrihlopez.financeassistant.feature.accounts.presentation
+package com.dobrihlopez.financeassistant.feature.accounts.presentation.screen
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -174,7 +174,7 @@ private fun PreviewDarkRussian() {
     FinanceAssistantTheme(darkTheme = true) {
         AccountContent(
             state =
-                AccountsStore.AccountScreenState.Succeeded(
+                AccountScreenState.Succeeded(
                     account = provideAccount(),
                 ),
             onEditClick = {},
@@ -196,7 +196,7 @@ private fun PreviewLightEnglish() {
     FinanceAssistantTheme(darkTheme = false) {
         AccountContent(
             state =
-                AccountsStore.AccountScreenState.Succeeded(
+                AccountScreenState.Succeeded(
                     account = provideAccount(),
                 ),
             onEditClick = {},
@@ -218,7 +218,7 @@ private fun PreviewDarkEnglish() {
     FinanceAssistantTheme(darkTheme = true) {
         AccountContent(
             state =
-                AccountsStore.AccountScreenState.Succeeded(
+                AccountScreenState.Succeeded(
                     account = provideAccount(),
                 ),
             onEditClick = {},

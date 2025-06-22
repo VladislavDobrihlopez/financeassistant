@@ -1,4 +1,4 @@
-package com.dobrihlopez.financeassistant.feature.accounts.presentation
+package com.dobrihlopez.financeassistant.feature.accounts.presentation.screen
 
 import androidx.annotation.StringRes
 import kotlin.uuid.ExperimentalUuidApi
