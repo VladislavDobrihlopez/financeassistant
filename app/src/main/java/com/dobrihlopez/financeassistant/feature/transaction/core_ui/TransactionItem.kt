@@ -17,8 +17,8 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import com.dobrihlopez.financeassistant.R
-import com.dobrihlopez.financeassistant.feature.transaction.core.model.Transaction
 import com.dobrihlopez.financeassistant.coreui.composable.BasicListItem
+import com.dobrihlopez.financeassistant.feature.transaction.core.model.Transaction
 import java.time.OffsetDateTime
 import java.time.format.DateTimeFormatter
 
@@ -33,31 +33,36 @@ fun TransactionItem(
         content = transaction.category.name,
         subContent = transaction.comment,
         value = transaction.amount,
-        valueSubtitle = if (showTime) {
-            OffsetDateTime.parse(transaction.updatedAt).format(DateTimeFormatter.ofPattern("dd.MM.yyyy, HH:mm"))
-        } else null,
-        leadingContent = transaction.category.emoji?.run {
-            {
-                Box(
-                    modifier = Modifier
-                        .size(28.dp)
-                        .clip(CircleShape)
-                        .background(MaterialTheme.colorScheme.primaryContainer)
-                        .run {
-                            if (onClick != null) this.clickable(onClick = onClick) else this
-                        },
-                    contentAlignment = Alignment.Center,
-                ) {
-                    Text(
-                        text = transaction.category.emoji,
-                        style = MaterialTheme.typography.titleSmall
-                    )
+        valueSubtitle =
+            if (showTime) {
+                OffsetDateTime.parse(transaction.updatedAt).format(DateTimeFormatter.ofPattern("dd.MM.yyyy, HH:mm"))
+            } else {
+                null
+            },
+        leadingContent =
+            transaction.category.emoji?.run {
+                {
+                    Box(
+                        modifier =
+                            Modifier
+                                .size(28.dp)
+                                .clip(CircleShape)
+                                .background(MaterialTheme.colorScheme.primaryContainer)
+                                .run {
+                                    if (onClick != null) this.clickable(onClick = onClick) else this
+                                },
+                        contentAlignment = Alignment.Center,
+                    ) {
+                        Text(
+                            text = transaction.category.emoji,
+                            style = MaterialTheme.typography.titleSmall,
+                        )
+                    }
                 }
-            }
-        },
+            },
         trailingContent = {
             Icon(imageVector = ImageVector.vectorResource(R.drawable.ic_arrow_head), contentDescription = null)
         },
-        onClick = onClick
+        onClick = onClick,
     )
 }

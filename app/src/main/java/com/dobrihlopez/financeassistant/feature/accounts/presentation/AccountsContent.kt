@@ -44,7 +44,7 @@ fun AccountContent(
     onFabClick: () -> Unit,
     onBalanceClick: () -> Unit,
     onCurrencyClick: () -> Unit,
-    onRetry: () -> Unit = {}
+    onRetry: () -> Unit = {},
 ) {
     Scaffold(
         topBar = {
@@ -53,7 +53,7 @@ fun AccountContent(
                     Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
                         Text(
                             text = stringResource(R.string.account_topbar_title),
-                            style = MaterialTheme.typography.titleLarge
+                            style = MaterialTheme.typography.titleLarge,
                         )
                     }
                 },
@@ -62,10 +62,11 @@ fun AccountContent(
                         Icon(imageVector = Icons.Default.Edit, contentDescription = null)
                     }
                 },
-                colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = MaterialTheme.colorScheme.primary,
-                    titleContentColor = MaterialTheme.colorScheme.onSurface
-                )
+                colors =
+                    TopAppBarDefaults.topAppBarColors(
+                        containerColor = MaterialTheme.colorScheme.primary,
+                        titleContentColor = MaterialTheme.colorScheme.onSurface,
+                    ),
             )
         },
         floatingActionButton = {
@@ -83,37 +84,39 @@ fun AccountContent(
             if (state is AccountScreenState.Failed) {
                 ErrorSnackbarHost(
                     errorResId = state.errorResId,
-                    onRetry = onRetry
+                    onRetry = onRetry,
                 )
             }
-        }
+        },
     ) { innerPadding ->
         when (state) {
             is AccountScreenState.Loading -> LoadingProgressBar()
             is AccountScreenState.Failed -> {}
             is AccountScreenState.Succeeded -> {
                 val account = state.account
-                val items = remember(state.account) {
-                    listOf(
-                        AccountActionItem(
-                            title = R.string.account_balance,
-                            value = account.balance,
-                            currency = account.currency,
-                            onClick = onBalanceClick,
-                            emoji = "\uD83D\uDCB0"
-                        ),
-                        AccountActionItem(
-                            title = R.string.account_currency,
-                            currency = account.currency,
-                            onClick = onCurrencyClick,
+                val items =
+                    remember(state.account) {
+                        listOf(
+                            AccountActionItem(
+                                title = R.string.account_balance,
+                                value = account.balance,
+                                currency = account.currency,
+                                onClick = onBalanceClick,
+                                emoji = "\uD83D\uDCB0",
+                            ),
+                            AccountActionItem(
+                                title = R.string.account_currency,
+                                currency = account.currency,
+                                onClick = onCurrencyClick,
+                            ),
                         )
-                    )
-                }
+                    }
                 LazyColumn(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .background(MaterialTheme.colorScheme.background)
-                        .padding(innerPadding)
+                    modifier =
+                        Modifier
+                            .fillMaxSize()
+                            .background(MaterialTheme.colorScheme.background)
+                            .padding(innerPadding),
                 ) {
                     items(items = items, key = { it.id }) { item ->
                         AccountItem(item, onClick = { item.onClick() })
@@ -126,34 +129,36 @@ fun AccountContent(
     }
 }
 
-private fun provideAccount(): UserAccountDetailed = UserAccountDetailed(
-    id = 1,
-    name = "Мой счёт",
-    balance = "-670 000",
-    currency = "₽",
-    createdAt = "",
-    updatedAt = "",
-    expenseStats = emptyList(),
-    incomeStatistics = emptyList()
-)
+private fun provideAccount(): UserAccountDetailed =
+    UserAccountDetailed(
+        id = 1,
+        name = "Мой счёт",
+        balance = "-670 000",
+        currency = "₽",
+        createdAt = "",
+        updatedAt = "",
+        expenseStats = emptyList(),
+        incomeStatistics = emptyList(),
+    )
 
 @Preview(
     name = "Light Theme - RU",
     group = "Russian",
     locale = "ru",
-    showBackground = true
+    showBackground = true,
 )
 @Composable
 private fun PreviewLightRussian() {
     FinanceAssistantTheme(darkTheme = false) {
         AccountContent(
-            state = AccountScreenState.Succeeded(
-                account = provideAccount()
-            ),
+            state =
+                AccountScreenState.Succeeded(
+                    account = provideAccount(),
+                ),
             onEditClick = {},
             onFabClick = {},
             onBalanceClick = {},
-            onCurrencyClick = {}
+            onCurrencyClick = {},
         )
     }
 }
@@ -162,19 +167,20 @@ private fun PreviewLightRussian() {
     name = "Dark Theme - RU",
     group = "Russian",
     locale = "ru",
-    showBackground = true
+    showBackground = true,
 )
 @Composable
 private fun PreviewDarkRussian() {
     FinanceAssistantTheme(darkTheme = true) {
         AccountContent(
-            state = AccountsStore.AccountScreenState.Succeeded(
-                account = provideAccount()
-            ),
+            state =
+                AccountsStore.AccountScreenState.Succeeded(
+                    account = provideAccount(),
+                ),
             onEditClick = {},
             onFabClick = {},
             onBalanceClick = {},
-            onCurrencyClick = {}
+            onCurrencyClick = {},
         )
     }
 }
@@ -183,19 +189,20 @@ private fun PreviewDarkRussian() {
     name = "Light Theme - EN",
     group = "English",
     locale = "en",
-    showBackground = true
+    showBackground = true,
 )
 @Composable
 private fun PreviewLightEnglish() {
     FinanceAssistantTheme(darkTheme = false) {
         AccountContent(
-            state = AccountsStore.AccountScreenState.Succeeded(
-                account = provideAccount()
-            ),
+            state =
+                AccountsStore.AccountScreenState.Succeeded(
+                    account = provideAccount(),
+                ),
             onEditClick = {},
             onFabClick = {},
             onBalanceClick = {},
-            onCurrencyClick = {}
+            onCurrencyClick = {},
         )
     }
 }
@@ -204,19 +211,20 @@ private fun PreviewLightEnglish() {
     name = "Dark Theme - EN",
     group = "English",
     locale = "en",
-    showBackground = true
+    showBackground = true,
 )
 @Composable
 private fun PreviewDarkEnglish() {
     FinanceAssistantTheme(darkTheme = true) {
         AccountContent(
-            state = AccountsStore.AccountScreenState.Succeeded(
-                account = provideAccount()
-            ),
+            state =
+                AccountsStore.AccountScreenState.Succeeded(
+                    account = provideAccount(),
+                ),
             onEditClick = {},
             onFabClick = {},
             onBalanceClick = {},
-            onCurrencyClick = {}
+            onCurrencyClick = {},
         )
     }
 }

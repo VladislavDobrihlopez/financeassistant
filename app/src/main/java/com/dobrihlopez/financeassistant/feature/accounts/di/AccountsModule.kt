@@ -25,19 +25,18 @@ abstract class AccountsModule {
     companion object {
         @Provides
         @Singleton
-        fun provideAccountsApiService(retrofit: Retrofit): AccountsApiService =
-            retrofit.create(AccountsApiService::class.java)
+        fun provideAccountsApiService(retrofit: Retrofit): AccountsApiService = retrofit.create(AccountsApiService::class.java)
 
         @Provides
         fun provideAccountsStoreFactory(
             storeFactory: StoreFactory,
             getFirstAccountUseCase: GetFirstAccountUseCase,
-            updateAccountUseCase: UpdateAccountUseCase
+            updateAccountUseCase: UpdateAccountUseCase,
         ): AccountsStore.AccountsStoreFactory =
             AccountsStore.AccountsStoreFactory(
                 storeFactory,
                 getFirstAccountUseCase,
-                updateAccountUseCase
+                updateAccountUseCase,
             )
     }
 }

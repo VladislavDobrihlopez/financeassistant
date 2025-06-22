@@ -4,9 +4,15 @@ import com.dobrihlopez.financeassistant.feature.accounts.domain.AccountsReposito
 import com.dobrihlopez.financeassistant.feature.accounts.domain.model.UserAccountDetailed
 import javax.inject.Inject
 
-class UpdateAccountUseCase @Inject constructor(
-    private val repository: AccountsRepository
-) {
-    suspend operator fun invoke(id: Int, name: String, balance: String, currency: String): UserAccountDetailed =
-        repository.updateAccount(id, name, balance, currency)
-} 
+class UpdateAccountUseCase
+    @Inject
+    constructor(
+        private val repository: AccountsRepository,
+    ) {
+        suspend operator fun invoke(
+            id: Int,
+            name: String,
+            balance: String,
+            currency: String,
+        ): UserAccountDetailed = repository.updateAccount(id, name, balance, currency)
+    }

@@ -71,22 +71,25 @@ fun ExpenseScreen(component: ExpenseComponent) {
                         val resId = actionButtonResId
                         AnimatedVisibility(
                             resId != null,
-                            enter = fadeIn() + expandHorizontally(
-                                clip = false,
-                                expandFrom = Alignment.Start
-                            )
+                            enter =
+                                fadeIn() +
+                                    expandHorizontally(
+                                        clip = false,
+                                        expandFrom = Alignment.Start,
+                                    ),
                         ) {
                             Icon(
                                 ImageVector.vectorResource(resId!!),
-                                contentDescription = null
+                                contentDescription = null,
                             )
                         }
                     }
                 },
-                colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = MaterialTheme.colorScheme.primary,
-                    titleContentColor = MaterialTheme.colorScheme.onSurface
-                ),
+                colors =
+                    TopAppBarDefaults.topAppBarColors(
+                        containerColor = MaterialTheme.colorScheme.primary,
+                        titleContentColor = MaterialTheme.colorScheme.onSurface,
+                    ),
             )
         },
         floatingActionButton = {
@@ -99,11 +102,11 @@ fun ExpenseScreen(component: ExpenseComponent) {
             ) {
                 Icon(Icons.Default.Add, contentDescription = null)
             }
-        }
+        },
     ) { paddingValues ->
         Children(
             stack = childStack,
-            animation = stackAnimation(animator = slide(orientation = Orientation.Vertical))
+            animation = stackAnimation(animator = slide(orientation = Orientation.Vertical)),
         ) { child ->
             when (val instance = child.instance) {
                 is ExpenseComponent.Child.Main -> {
@@ -118,7 +121,7 @@ fun ExpenseScreen(component: ExpenseComponent) {
                     ExpenseContent(
                         state = component.state.collectAsStateWithLifecycle().value,
                         paddingValues = paddingValues,
-                        onExpenseClick = component::onExpenseClick
+                        onExpenseClick = component::onExpenseClick,
                     )
                 }
 

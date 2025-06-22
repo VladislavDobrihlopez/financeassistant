@@ -11,5 +11,5 @@ data class UserAccountDetailed(
     val id: Int,
     val incomeStatistics: List<IncomeStatistics>,
     val name: String,
-    val updatedAt: String
+    val updatedAt: String,
 )

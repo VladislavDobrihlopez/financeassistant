@@ -9,6 +9,6 @@ interface TransactionApi {
     suspend fun getTransactionsForPeriod(
         @Path("accountId") accountId: Int,
         @Query("startDate") startDate: String?,
-        @Query("endDate") endDate: String?
+        @Query("endDate") endDate: String?,
     ): List<TransactionDto>
-} 
+}

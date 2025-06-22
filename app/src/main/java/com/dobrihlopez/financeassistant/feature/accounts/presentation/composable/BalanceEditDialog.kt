@@ -54,41 +54,45 @@ fun BalanceEditDialog(
             onValueChange = { balance = it.replace(',', '.') },
             label = { Text(stringResource(R.string.accounts_input_field_balance)) },
             isError = !isValid,
-            keyboardOptions = KeyboardOptions(
-                keyboardType = KeyboardType.Number,
-                imeAction = ImeAction.Done
-            ),
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(spacing.medium)
+            keyboardOptions =
+                KeyboardOptions(
+                    keyboardType = KeyboardType.Number,
+                    imeAction = ImeAction.Done,
+                ),
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .padding(spacing.medium),
         )
         if (!isValid) {
             Text(
                 text = stringResource(R.string.accounts_balance_validation_helper),
                 color = errorColor,
                 style = MaterialTheme.typography.bodySmall,
-                modifier = Modifier.padding(start = spacing.medium, top = spacing.tiny)
+                modifier = Modifier.padding(start = spacing.medium, top = spacing.tiny),
             )
         }
         Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(spacing.medium),
-            horizontalArrangement = Arrangement.End
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .padding(spacing.medium),
+            horizontalArrangement = Arrangement.End,
         ) {
             TextButton(
                 onClick = onDismiss,
-                colors = ButtonDefaults.buttonColors().copy(
-                    containerColor = MaterialTheme.colorScheme.errorContainer,
-                    contentColor = errorColor
-                )
+                colors =
+                    ButtonDefaults.buttonColors().copy(
+                        containerColor = MaterialTheme.colorScheme.errorContainer,
+                        contentColor = errorColor,
+                    ),
             ) {
                 Text(stringResource(R.string.cancel), color = errorColor)
             }
             Spacer(Modifier.width(spacing.small))
             Button(
                 onClick = { onBalanceChanged(balance) },
-                enabled = isValid
+                enabled = isValid,
             ) {
                 Text(stringResource(R.string.okay))
             }

@@ -13,7 +13,7 @@ interface AccountsApiService {
     @PUT("$PATH/{id}")
     suspend fun updateAccount(
         @Path("id") id: Int,
-        @Body body: UpdateAccountRequest
+        @Body body: UpdateAccountRequest,
     ): AccountDto
 
     companion object {

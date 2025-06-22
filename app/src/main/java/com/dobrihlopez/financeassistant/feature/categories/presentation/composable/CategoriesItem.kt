@@ -20,21 +20,23 @@ fun CategoriesItem(category: Category) {
     BasicListItem(
         modifier = Modifier.height(70.dp),
         content = category.name,
-        leadingContent = category.emoji?.run {
-            {
-                Box(
-                    modifier = Modifier
-                        .size(28.dp)
-                        .clip(CircleShape)
-                        .background(MaterialTheme.colorScheme.primaryContainer),
-                    contentAlignment = Alignment.Center,
-                ) {
-                    Text(
-                        text = category.emoji,
-                        style = MaterialTheme.typography.titleSmall
-                    )
+        leadingContent =
+            category.emoji?.run {
+                {
+                    Box(
+                        modifier =
+                            Modifier
+                                .size(28.dp)
+                                .clip(CircleShape)
+                                .background(MaterialTheme.colorScheme.primaryContainer),
+                        contentAlignment = Alignment.Center,
+                    ) {
+                        Text(
+                            text = category.emoji,
+                            style = MaterialTheme.typography.titleSmall,
+                        )
+                    }
                 }
-            }
-        },
+            },
     )
 }

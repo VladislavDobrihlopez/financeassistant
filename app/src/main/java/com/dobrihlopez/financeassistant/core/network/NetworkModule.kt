@@ -28,16 +28,19 @@ object NetworkModule {
     @Provides
     @Singleton
     fun provideOkHttpClient(): OkHttpClient {
-        val logging = HttpLoggingInterceptor().apply {
-            level = HttpLoggingInterceptor.Level.BODY
-        }
-        val authInterceptor = Interceptor { chain ->
-            val request = chain.request()
-                .newBuilder()
-                .addHeader("Authorization", "Bearer ${BuildConfig.API_TOKEN}")
-                .build()
-            chain.proceed(request)
-        }
+        val logging =
+            HttpLoggingInterceptor().apply {
+                level = HttpLoggingInterceptor.Level.BODY
+            }
+        val authInterceptor =
+            Interceptor { chain ->
+                val request =
+                    chain.request()
+                        .newBuilder()
+                        .addHeader("Authorization", "Bearer ${BuildConfig.API_TOKEN}")
+                        .build()
+                chain.proceed(request)
+            }
         return OkHttpClient.Builder()
             .addInterceptor(authInterceptor)
             .addInterceptor(logging)
@@ -56,5 +59,4 @@ object NetworkModule {
             .addConverterFactory(GsonConverterFactory.create(gson))
             .client(client)
             .build()
-
 }

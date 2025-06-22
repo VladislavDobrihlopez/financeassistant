@@ -40,49 +40,56 @@ fun CurrencyChooser(
     ModalBottomSheet(sheetState = sheetState, onDismissRequest = onDismiss) {
         currencies.forEach { currency ->
             CurrencyItem(
-                modifier = Modifier
-                    .height(72.dp)
-                    .padding(horizontal = spacing.medium),
+                modifier =
+                    Modifier
+                        .height(72.dp)
+                        .padding(horizontal = spacing.medium),
                 currency = currency,
-                onClick = { onCurrencySelected(currency) }
+                onClick = { onCurrencySelected(currency) },
             )
         }
         Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(72.dp)
-                .background(MaterialTheme.colorScheme.error)
-                .clickable(onClick = onDismiss)
-                .padding(spacing.medium),
-            verticalAlignment = Alignment.CenterVertically
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .height(72.dp)
+                    .background(MaterialTheme.colorScheme.error)
+                    .clickable(onClick = onDismiss)
+                    .padding(spacing.medium),
+            verticalAlignment = Alignment.CenterVertically,
         ) {
             Icon(
                 imageVector = ImageVector.vectorResource(R.drawable.ic_cancel),
                 contentDescription = stringResource(R.string.cancel),
-                tint = MaterialTheme.colorScheme.onError
+                tint = MaterialTheme.colorScheme.onError,
             )
             Spacer(Modifier.width(spacing.small))
             Text(
                 text = stringResource(R.string.cancel),
                 color = MaterialTheme.colorScheme.onError,
-                style = MaterialTheme.typography.bodyLarge
+                style = MaterialTheme.typography.bodyLarge,
             )
         }
     }
 }
 
 @Composable
-private fun CurrencyItem(currency: Currency, onClick: () -> Unit, modifier: Modifier = Modifier) {
+private fun CurrencyItem(
+    currency: Currency,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
     Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .clickable(onClick = onClick)
-            .then(modifier),
+        modifier =
+            Modifier
+                .fillMaxWidth()
+                .clickable(onClick = onClick)
+                .then(modifier),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Icon(
             imageVector = ImageVector.vectorResource(currency.iconResId),
-            contentDescription = currency.symbol.toString()
+            contentDescription = currency.symbol.toString(),
         )
         Spacer(modifier = Modifier.width(16.dp))
         Text(text = stringResource(currency.textResId).format(currency.symbol))
@@ -97,18 +104,18 @@ sealed class Currency(
     data object Euro : Currency(
         iconResId = R.drawable.ic_euro,
         symbol = '€',
-        textResId = R.string.accounts_pattern_euro
+        textResId = R.string.accounts_pattern_euro,
     )
 
     data object Usd : Currency(
         iconResId = R.drawable.ic_dollar,
         symbol = '$',
-        textResId = R.string.accounts_pattern_dollar
+        textResId = R.string.accounts_pattern_dollar,
     )
 
     data object Ruble : Currency(
         iconResId = R.drawable.ic_ruble,
         symbol = '₽',
-        textResId = R.string.accounts_pattern_russian_rubble
+        textResId = R.string.accounts_pattern_russian_rubble,
     )
 }

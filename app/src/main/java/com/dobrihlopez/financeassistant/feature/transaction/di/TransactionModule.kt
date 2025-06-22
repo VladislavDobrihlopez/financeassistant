@@ -12,7 +12,6 @@ import retrofit2.Retrofit
 abstract class TransactionModule {
     companion object {
         @Provides
-        fun provideTransactionApi(retrofit: Retrofit): TransactionApi =
-            retrofit.create(TransactionApi::class.java)
+        fun provideTransactionApi(retrofit: Retrofit): TransactionApi = retrofit.create(TransactionApi::class.java)
     }
 }

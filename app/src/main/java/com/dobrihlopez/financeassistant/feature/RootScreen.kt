@@ -30,11 +30,12 @@ fun RootScreen(rootComponent: RootComponent) {
     val childStack by rootComponent.state.subscribeAsState()
 
     Scaffold(
-        modifier = Modifier.fillMaxSize()
-            .background(MaterialTheme.colorScheme.primary)
-            .windowInsetsPadding(WindowInsets.statusBars)
-            .background(MaterialTheme.colorScheme.background)
-            .windowInsetsPadding(WindowInsets.navigationBars),
+        modifier =
+            Modifier.fillMaxSize()
+                .background(MaterialTheme.colorScheme.primary)
+                .windowInsetsPadding(WindowInsets.statusBars)
+                .background(MaterialTheme.colorScheme.background)
+                .windowInsetsPadding(WindowInsets.navigationBars),
         bottomBar = {
             BottomNavigationBar(
                 currentRoute = childStack.active.instance,
@@ -46,14 +47,15 @@ fun RootScreen(rootComponent: RootComponent) {
                         is NavigationItem.Categories -> rootComponent.onCategoriesClick()
                         is NavigationItem.Settings -> rootComponent.onSettingsClick()
                     }
-                }
+                },
             )
-        }
+        },
     ) { paddingValues ->
         Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(paddingValues)
+            modifier =
+                Modifier
+                    .fillMaxSize()
+                    .padding(paddingValues),
         ) {
             Children(stack = rootComponent.state) { screen ->
                 when (val config = screen.instance) {

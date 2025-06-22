@@ -71,7 +71,7 @@ fun IncomeScreen(component: IncomeComponent) {
                         val resId = actionButtonResId
                         AnimatedVisibility(
                             visible = resId != null,
-                            enter = fadeIn() + expandHorizontally(clip = false, expandFrom = Alignment.Start,)
+                            enter = fadeIn() + expandHorizontally(clip = false, expandFrom = Alignment.Start),
                         ) {
                             Icon(
                                 ImageVector.vectorResource(resId!!),
@@ -80,10 +80,11 @@ fun IncomeScreen(component: IncomeComponent) {
                         }
                     }
                 },
-                colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = MaterialTheme.colorScheme.primary,
-                    titleContentColor = MaterialTheme.colorScheme.onSurface
-                ),
+                colors =
+                    TopAppBarDefaults.topAppBarColors(
+                        containerColor = MaterialTheme.colorScheme.primary,
+                        titleContentColor = MaterialTheme.colorScheme.onSurface,
+                    ),
             )
         },
         floatingActionButton = {
@@ -96,11 +97,11 @@ fun IncomeScreen(component: IncomeComponent) {
             ) {
                 Icon(Icons.Default.Add, contentDescription = null)
             }
-        }
+        },
     ) { paddingValues ->
         Children(
             stack = childStack,
-            animation = stackAnimation(animator = slide(orientation = Orientation.Vertical))
+            animation = stackAnimation(animator = slide(orientation = Orientation.Vertical)),
         ) { child ->
             when (val instance = child.instance) {
                 is IncomeComponent.Child.Main -> {

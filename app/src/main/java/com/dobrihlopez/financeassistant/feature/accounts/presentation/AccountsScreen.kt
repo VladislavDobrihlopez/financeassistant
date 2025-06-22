@@ -23,10 +23,19 @@ fun AccountsScreen(component: AccountsComponent) {
 
     AccountContent(
         state = state,
-        onEditClick = { showCurrencySheet = false; showBalanceSheet = true },
+        onEditClick = {
+            showCurrencySheet = false
+            showBalanceSheet = true
+        },
         onFabClick = { component.onFabClick() },
-        onBalanceClick = { showCurrencySheet = false; showBalanceSheet = true },
-        onCurrencyClick = { showBalanceSheet = false; showCurrencySheet = true }
+        onBalanceClick = {
+            showCurrencySheet = false
+            showBalanceSheet = true
+        },
+        onCurrencyClick = {
+            showBalanceSheet = false
+            showCurrencySheet = true
+        },
     )
 
     if (showCurrencySheet) {
@@ -37,7 +46,7 @@ fun AccountsScreen(component: AccountsComponent) {
                 val account = (state as? AccountScreenState.Succeeded)?.account ?: return@CurrencyChooser
                 component.onCurrencySelected(account, currency)
                 showCurrencySheet = false
-            }
+            },
         )
     }
 
@@ -50,7 +59,7 @@ fun AccountsScreen(component: AccountsComponent) {
                 val account = (state as? AccountScreenState.Succeeded)?.account ?: return@BalanceEditDialog
                 component.onBalanceChanged(account, newBalance)
                 showBalanceSheet = false
-            }
+            },
         )
     }
 }

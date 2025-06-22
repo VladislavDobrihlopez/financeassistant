@@ -34,18 +34,20 @@ fun SearchBar(
     modifier: Modifier = Modifier,
 ) {
     Row(
-        modifier = modifier
-            .fillMaxWidth()
-            .height(56.dp)
-            .background(MaterialTheme.colorScheme.surfaceContainerHigh)
-            .padding(MaterialTheme.spacing.tiny),
+        modifier =
+            modifier
+                .fillMaxWidth()
+                .height(56.dp)
+                .background(MaterialTheme.colorScheme.surfaceContainerHigh)
+                .padding(MaterialTheme.spacing.tiny),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         BasicTextField(
-            modifier = Modifier
-                .fillMaxHeight()
-                .weight(1f)
-                .padding(start = MaterialTheme.spacing.smallPlus),
+            modifier =
+                Modifier
+                    .fillMaxHeight()
+                    .weight(1f)
+                    .padding(start = MaterialTheme.spacing.smallPlus),
             value = searchText,
             onValueChange = onTextChange,
             maxLines = 1,
@@ -54,30 +56,32 @@ fun SearchBar(
             decorationBox = { innerTextField ->
                 Box(
                     modifier = Modifier.fillMaxWidth(),
-                    contentAlignment = Alignment.CenterStart
+                    contentAlignment = Alignment.CenterStart,
                 ) {
                     if (searchText.isEmpty()) {
                         Text(
                             text = stringResource(R.string.categories_searchbar_hint),
-                            style = MaterialTheme.typography.bodyMedium.copy(
-                                color = MaterialTheme.colorScheme.onSurfaceVariant
-                            )
+                            style =
+                                MaterialTheme.typography.bodyMedium.copy(
+                                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                ),
                         )
                     }
                     innerTextField()
                 }
-            }
+            },
         )
         IconButton(
             modifier = Modifier,
-            onClick = onSearchClick
+            onClick = onSearchClick,
         ) {
             Icon(
-                modifier = Modifier
-                    .size(24.dp),
+                modifier =
+                    Modifier
+                        .size(24.dp),
                 tint = MaterialTheme.colorScheme.onSurfaceVariant,
                 imageVector = Icons.Default.Search,
-                contentDescription = null
+                contentDescription = null,
             )
         }
     }

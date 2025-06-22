@@ -17,90 +17,113 @@ interface AccountsComponent {
     val state: StateFlow<AccountsStore.AccountScreenState>
 
     fun onEditClick()
+
     fun onFabClick()
+
     fun onBalanceClick()
+
     fun onCurrencyClick()
-    fun onCurrencySelected(account: UserAccountDetailed, currency: Currency)
-    fun onBalanceChanged(account: UserAccountDetailed, newBalance: String)
+
+    fun onCurrencySelected(
+        account: UserAccountDetailed,
+        currency: Currency,
+    )
+
+    fun onBalanceChanged(
+        account: UserAccountDetailed,
+        newBalance: String,
+    )
 
     @AssistedFactory
     interface Factory {
-        fun create(@Assisted("componentContext") componentContext: ComponentContext): DefaultAccountComponent
+        fun create(
+            @Assisted("componentContext") componentContext: ComponentContext,
+        ): DefaultAccountComponent
     }
 
-    class DefaultAccountComponent @AssistedInject constructor(
-        @Assisted("componentContext") private val componentContext: ComponentContext,
-        private val accountsStoreFactory: AccountsStoreFactory
-    ) : AccountsComponent, ComponentContext by componentContext {
+    class DefaultAccountComponent
+        @AssistedInject
+        constructor(
+            @Assisted("componentContext") private val componentContext: ComponentContext,
+            private val accountsStoreFactory: AccountsStoreFactory,
+        ) : AccountsComponent, ComponentContext by componentContext {
+            private val initState =
+                stateKeeper.consume(STATE_KEY, strategy = AccountsStore.AccountScreenState.serializer())
+                    ?: AccountsStore.AccountScreenState.Loading
 
-        private val initState = stateKeeper.consume(STATE_KEY, strategy = AccountsStore.AccountScreenState.serializer())
-            ?: AccountsStore.AccountScreenState.Loading
+            private val store =
+                instanceKeeper.getStore {
+                    accountsStoreFactory.create(initState)
+                }
 
-        private val store = instanceKeeper.getStore {
-            accountsStoreFactory.create(initState)
-        }
+            @OptIn(ExperimentalCoroutinesApi::class)
+            override val state: StateFlow<AccountsStore.AccountScreenState>
+                get() = store.stateFlow
 
-        @OptIn(ExperimentalCoroutinesApi::class)
-        override val state: StateFlow<AccountsStore.AccountScreenState>
-            get() = store.stateFlow
+            init {
+                stateKeeper.register("accounts_state", AccountsStore.AccountScreenState.serializer()) {
+                    state.value
+                }
 
-        init {
-            stateKeeper.register("accounts_state", AccountsStore.AccountScreenState.serializer()) {
-                state.value
-            }
-
-            lifecycle.doOnResume {
-                if (state.value is AccountsStore.AccountScreenState.Failed) {
-                    store.accept(AccountsStore.Intent.RefreshAccount)
+                lifecycle.doOnResume {
+                    if (state.value is AccountsStore.AccountScreenState.Failed) {
+                        store.accept(AccountsStore.Intent.RefreshAccount)
+                    }
                 }
             }
-        }
 
-        override fun onEditClick() {
-            store.accept(AccountsStore.Intent.EditAccount)
-        }
-
-        override fun onFabClick() {
-            store.accept(AccountsStore.Intent.AddAccount)
-        }
-
-        override fun onBalanceClick() {
-            store.accept(AccountsStore.Intent.BalanceClick)
-        }
-
-        override fun onCurrencyClick() {
-            store.accept(AccountsStore.Intent.CurrencyClick)
-        }
-
-        override fun onCurrencySelected(account: UserAccountDetailed, currency: Currency) {
-            val currencyCode = when (currency) {
-                Currency.Ruble -> "RUB"
-                Currency.Usd -> "USD"
-                Currency.Euro -> "EUR"
+            override fun onEditClick() {
+                store.accept(AccountsStore.Intent.EditAccount)
             }
-            store.accept(
-                AccountsStore.Intent.UpdateAccount(
-                    id = account.id,
-                    name = account.name,
-                    balance = account.balance,
-                    currency = currencyCode
-                )
-            )
-        }
 
-        override fun onBalanceChanged(account: UserAccountDetailed, newBalance: String) {
-            store.accept(
-                AccountsStore.Intent.UpdateAccount(
-                    id = account.id,
-                    name = account.name,
-                    balance = newBalance,
-                    currency = account.currency
-                )
-            )
-        }
+            override fun onFabClick() {
+                store.accept(AccountsStore.Intent.AddAccount)
+            }
 
-        private companion object {
-            const val STATE_KEY = "accounts"
+            override fun onBalanceClick() {
+                store.accept(AccountsStore.Intent.BalanceClick)
+            }
+
+            override fun onCurrencyClick() {
+                store.accept(AccountsStore.Intent.CurrencyClick)
+            }
+
+            override fun onCurrencySelected(
+                account: UserAccountDetailed,
+                currency: Currency,
+            ) {
+                val currencyCode =
+                    when (currency) {
+                        Currency.Ruble -> "RUB"
+                        Currency.Usd -> "USD"
+                        Currency.Euro -> "EUR"
+                    }
+                store.accept(
+                    AccountsStore.Intent.UpdateAccount(
+                        id = account.id,
+                        name = account.name,
+                        balance = account.balance,
+                        currency = currencyCode,
+                    ),
+                )
+            }
+
+            override fun onBalanceChanged(
+                account: UserAccountDetailed,
+                newBalance: String,
+            ) {
+                store.accept(
+                    AccountsStore.Intent.UpdateAccount(
+                        id = account.id,
+                        name = account.name,
+                        balance = newBalance,
+                        currency = account.currency,
+                    ),
+                )
+            }
+
+            private companion object {
+                const val STATE_KEY = "accounts"
+            }
         }
-    }
 }

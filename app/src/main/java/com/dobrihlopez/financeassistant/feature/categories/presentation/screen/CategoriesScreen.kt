@@ -10,6 +10,6 @@ fun CategoriesScreen(componentContext: CategoriesComponent) {
     CategoriesContent(
         state = screenState,
         onSearchBarTextChange = componentContext::onSearchBarTextChange,
-        onSearchClick = componentContext::onSearchClick
+        onSearchClick = componentContext::onSearchClick,
     )
 }

@@ -4,15 +4,15 @@ import androidx.annotation.StringRes
 import com.arkivanov.mvikotlin.core.store.Reducer
 import com.arkivanov.mvikotlin.core.store.Store
 import com.arkivanov.mvikotlin.core.store.StoreFactory
+import com.arkivanov.mvikotlin.extensions.coroutines.CoroutineBootstrapper
 import com.arkivanov.mvikotlin.extensions.coroutines.CoroutineExecutor
+import com.dobrihlopez.financeassistant.feature.accounts.domain.usecase.GetFirstAccountUseCase
 import com.dobrihlopez.financeassistant.feature.transaction.core.model.Transaction
 import com.dobrihlopez.financeassistant.feature.transaction.core.usecase.GetTransactionsForPeriodUseCase
-import com.dobrihlopez.financeassistant.feature.accounts.domain.usecase.GetFirstAccountUseCase
-import javax.inject.Inject
-import kotlinx.serialization.Serializable
 import kotlinx.coroutines.launch
+import kotlinx.serialization.Serializable
 import java.time.LocalDate
-import com.arkivanov.mvikotlin.extensions.coroutines.CoroutineBootstrapper
+import javax.inject.Inject
 
 interface IncomeStore : Store<IncomeStore.Intent, IncomeStore.IncomeScreenState, Nothing> {
     @Serializable
@@ -21,7 +21,9 @@ interface IncomeStore : Store<IncomeStore.Intent, IncomeStore.IncomeScreenState,
         data object Loading : IncomeScreenState()
 
         @Serializable
-        data class Failed(@StringRes val errorResId: Int? = null) : IncomeScreenState()
+        data class Failed(
+            @StringRes val errorResId: Int? = null,
+        ) : IncomeScreenState()
 
         @Serializable
         data class Succeeded(
@@ -33,116 +35,126 @@ interface IncomeStore : Store<IncomeStore.Intent, IncomeStore.IncomeScreenState,
 
     sealed class Intent {
         data object LoadIncome : Intent()
+
         data object AddIncome : Intent()
+
         data object HistoryClick : Intent()
     }
 
-    class IncomeStoreFactory @Inject constructor(
-        private val storeFactory: StoreFactory,
-        private val getTransactionsForPeriodUseCase: GetTransactionsForPeriodUseCase,
-        private val getFirstAccountUseCase: GetFirstAccountUseCase,
-    ) {
-        fun create(initialState: IncomeScreenState): IncomeStore =
-            IncomeStoreImpl(
-                storeFactory,
-                initialState,
-                getTransactionsForPeriodUseCase,
-                getFirstAccountUseCase,
-            )
-
-        private class IncomeStoreImpl(
-            storeFactory: StoreFactory,
-            initialState: IncomeScreenState,
+    class IncomeStoreFactory
+        @Inject
+        constructor(
+            private val storeFactory: StoreFactory,
             private val getTransactionsForPeriodUseCase: GetTransactionsForPeriodUseCase,
             private val getFirstAccountUseCase: GetFirstAccountUseCase,
-        ) : IncomeStore, Store<Intent, IncomeScreenState, Nothing> by storeFactory.create(
-            name = "IncomeStore",
-            initialState = initialState,
-            bootstrapper = BootstrapperImpl(),
-            executorFactory = {
-                ExecutorImpl(
+        ) {
+            fun create(initialState: IncomeScreenState): IncomeStore =
+                IncomeStoreImpl(
+                    storeFactory,
+                    initialState,
                     getTransactionsForPeriodUseCase,
-                    getFirstAccountUseCase
+                    getFirstAccountUseCase,
                 )
-            },
-            reducer = ReducerImpl
-        )
 
-        private class BootstrapperImpl : CoroutineBootstrapper<Action>() {
-            override fun invoke() {
-                dispatch(Action.LoadIncome)
-            }
-        }
+            private class IncomeStoreImpl(
+                storeFactory: StoreFactory,
+                initialState: IncomeScreenState,
+                private val getTransactionsForPeriodUseCase: GetTransactionsForPeriodUseCase,
+                private val getFirstAccountUseCase: GetFirstAccountUseCase,
+            ) : IncomeStore,
+                Store<Intent, IncomeScreenState, Nothing> by storeFactory.create(
+                    name = "IncomeStore",
+                    initialState = initialState,
+                    bootstrapper = BootstrapperImpl(),
+                    executorFactory = {
+                        ExecutorImpl(
+                            getTransactionsForPeriodUseCase,
+                            getFirstAccountUseCase,
+                        )
+                    },
+                    reducer = ReducerImpl,
+                )
 
-        sealed class Action {
-            data object LoadIncome : Action()
-        }
-
-        private class ExecutorImpl(
-            private val getTransactionsForPeriodUseCase: GetTransactionsForPeriodUseCase,
-            private val getFirstAccountUseCase: GetFirstAccountUseCase,
-        ) : CoroutineExecutor<Intent, Action, IncomeScreenState, Message, Nothing>() {
-            override fun executeAction(action: Action) {
-                when (action) {
-                    Action.LoadIncome -> executeIntent(Intent.LoadIncome)
+            private class BootstrapperImpl : CoroutineBootstrapper<Action>() {
+                override fun invoke() {
+                    dispatch(Action.LoadIncome)
                 }
             }
 
-            override fun executeIntent(intent: Intent) {
-                when (intent) {
-                    Intent.LoadIncome -> loadIncomeToday()
-                    Intent.AddIncome -> {}
-                    Intent.HistoryClick -> {}
-                }
+            sealed class Action {
+                data object LoadIncome : Action()
             }
 
-            private fun loadIncomeToday() {
-                scope.launch {
-                    try {
-                        dispatch(Message.Loading)
-                        val account = getFirstAccountUseCase() ?: run {
+            private class ExecutorImpl(
+                private val getTransactionsForPeriodUseCase: GetTransactionsForPeriodUseCase,
+                private val getFirstAccountUseCase: GetFirstAccountUseCase,
+            ) : CoroutineExecutor<Intent, Action, IncomeScreenState, Message, Nothing>() {
+                override fun executeAction(action: Action) {
+                    when (action) {
+                        Action.LoadIncome -> executeIntent(Intent.LoadIncome)
+                    }
+                }
+
+                override fun executeIntent(intent: Intent) {
+                    when (intent) {
+                        Intent.LoadIncome -> loadIncomeToday()
+                        Intent.AddIncome -> {}
+                        Intent.HistoryClick -> {}
+                    }
+                }
+
+                private fun loadIncomeToday() {
+                    scope.launch {
+                        try {
+                            dispatch(Message.Loading)
+                            val account =
+                                getFirstAccountUseCase() ?: run {
+                                    dispatch(Message.Failed())
+                                    return@launch
+                                }
+                            val today = LocalDate.now().toString()
+                            val transactions =
+                                getTransactionsForPeriodUseCase(
+                                    accountId = account.id,
+                                    startDate = today,
+                                    endDate = today,
+                                ).filter { it.category.isIncome }
+                            val summaryValue =
+                                transactions.sumOf { it.amount.toDoubleOrNull() ?: 0.0 }.toString()
+                            dispatch(Message.Succeeded(transactions, "Всего", summaryValue))
+                        } catch (e: Exception) {
                             dispatch(Message.Failed())
-                            return@launch
                         }
-                        val today = LocalDate.now().toString()
-                        val transactions = getTransactionsForPeriodUseCase(
-                            accountId = account.id,
-                            startDate = today,
-                            endDate = today
-                        ).filter { it.category.isIncome }
-                        val summaryValue =
-                            transactions.sumOf { it.amount.toDoubleOrNull() ?: 0.0 }.toString()
-                        dispatch(Message.Succeeded(transactions, "Всего", summaryValue))
-                    } catch (e: Exception) {
-                        dispatch(Message.Failed())
                     }
                 }
             }
-        }
 
-        private object ReducerImpl : Reducer<IncomeScreenState, Message> {
-            override fun IncomeScreenState.reduce(
-                msg: Message,
-            ) =
-                when (msg) {
-                    is Message.Loading -> IncomeScreenState.Loading
-                    is Message.Failed -> IncomeScreenState.Failed(msg.errorResId)
-                    is Message.Succeeded -> IncomeScreenState.Succeeded(
-                        transactions = msg.transactions,
-                        summaryText = msg.summaryText,
-                        summaryValue = msg.summaryValue,
-                    )
-                }
-        }
+            private object ReducerImpl : Reducer<IncomeScreenState, Message> {
+                override fun IncomeScreenState.reduce(msg: Message) =
+                    when (msg) {
+                        is Message.Loading -> IncomeScreenState.Loading
+                        is Message.Failed -> IncomeScreenState.Failed(msg.errorResId)
+                        is Message.Succeeded ->
+                            IncomeScreenState.Succeeded(
+                                transactions = msg.transactions,
+                                summaryText = msg.summaryText,
+                                summaryValue = msg.summaryValue,
+                            )
+                    }
+            }
 
-        sealed class Message {
-            data object Loading : Message()
-            data class Failed(@StringRes val errorResId: Int? = null) : Message()
-            data class Succeeded(
-                val transactions: List<Transaction>,
-                val summaryText: String,
-                val summaryValue: String,
-            ) : Message()
+            sealed class Message {
+                data object Loading : Message()
+
+                data class Failed(
+                    @StringRes val errorResId: Int? = null,
+                ) : Message()
+
+                data class Succeeded(
+                    val transactions: List<Transaction>,
+                    val summaryText: String,
+                    val summaryValue: String,
+                ) : Message()
+            }
         }
-    }
 }

@@ -49,6 +49,10 @@ android {
     }
 }
 
+ktlint {
+    disabledRules.set(setOf("fun-naming"))
+}
+
 dependencies {
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)

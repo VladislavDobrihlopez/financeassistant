@@ -1,22 +1,31 @@
 package com.dobrihlopez.financeassistant.feature.settings.domain.model
 
-@kotlinx.serialization.Serializable
+import kotlinx.serialization.Serializable
+
+@Serializable
 sealed class AppSettingItem(val id: String) {
-    @kotlinx.serialization.Serializable
+    @Serializable
     data object Theme : AppSettingItem("theme")
-    @kotlinx.serialization.Serializable
+
+    @Serializable
     data object PrimaryColor : AppSettingItem("primary_color")
-    @kotlinx.serialization.Serializable
+
+    @Serializable
     data object Sound : AppSettingItem("sound")
-    @kotlinx.serialization.Serializable
+
+    @Serializable
     data object Haptics : AppSettingItem("haptics")
-    @kotlinx.serialization.Serializable
+
+    @Serializable
     data object EnterPassword : AppSettingItem("enter_password")
-    @kotlinx.serialization.Serializable
+
+    @Serializable
     data object ServerSync : AppSettingItem("server_sync")
-    @kotlinx.serialization.Serializable
+
+    @Serializable
     data object Language : AppSettingItem("language")
-    @kotlinx.serialization.Serializable
+
+    @Serializable
     data object About : AppSettingItem("about")
 
     companion object {

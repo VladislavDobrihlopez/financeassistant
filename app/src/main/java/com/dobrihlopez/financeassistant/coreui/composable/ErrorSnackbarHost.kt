@@ -16,22 +16,24 @@ fun ErrorSnackbarHost(
     errorResId: Int?,
     errorMessage: String? = null,
     onRetry: () -> Unit = {},
-    snackbarHostState: SnackbarHostState = remember { SnackbarHostState() }
+    snackbarHostState: SnackbarHostState = remember { SnackbarHostState() },
 ) {
     val context = LocalContext.current
     LaunchedEffect(errorResId, errorMessage) {
-        val message = errorResId?.let { context.getString(it) }
-            ?: errorMessage
-            ?: context.getString(R.string.error_network_try_again)
-        val result = snackbarHostState.showSnackbar(
-            duration = SnackbarDuration.Short,
-            message = message,
+        val message =
+            errorResId?.let { context.getString(it) }
+                ?: errorMessage
+                ?: context.getString(R.string.error_network_try_again)
+        val result =
+            snackbarHostState.showSnackbar(
+                duration = SnackbarDuration.Short,
+                message = message,
 //            actionLabel = context.getString(R.string.retry)
-        )
+            )
         if (result == SnackbarResult.ActionPerformed) {
             onRetry()
             Toast.makeText(context, "To be added", Toast.LENGTH_SHORT).show()
         }
     }
     SnackbarHost(snackbarHostState)
-} 
+}

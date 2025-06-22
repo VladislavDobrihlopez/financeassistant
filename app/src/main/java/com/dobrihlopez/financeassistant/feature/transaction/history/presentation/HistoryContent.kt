@@ -44,18 +44,22 @@ fun HistoryContent(
 ) {
     var showStartDatePicker by rememberSaveable { mutableStateOf(false) }
     var showEndDatePicker by rememberSaveable { mutableStateOf(false) }
-    val startDatePickerState = rememberDatePickerState(
-        initialSelectedDateMillis = state.startDate
-            .atStartOfDay(ZoneId.systemDefault())
-            .toInstant()
-            .toEpochMilli()
-    )
-    val endDatePickerState = rememberDatePickerState(
-        initialSelectedDateMillis = state.endDate
-            .atStartOfDay(ZoneId.systemDefault())
-            .toInstant()
-            .toEpochMilli()
-    )
+    val startDatePickerState =
+        rememberDatePickerState(
+            initialSelectedDateMillis =
+                state.startDate
+                    .atStartOfDay(ZoneId.systemDefault())
+                    .toInstant()
+                    .toEpochMilli(),
+        )
+    val endDatePickerState =
+        rememberDatePickerState(
+            initialSelectedDateMillis =
+                state.endDate
+                    .atStartOfDay(ZoneId.systemDefault())
+                    .toInstant()
+                    .toEpochMilli(),
+        )
     Scaffold(
         snackbarHost = {
             if (state.errorResId != null) {
@@ -64,13 +68,14 @@ fun HistoryContent(
                     onRetry = onRetry,
                 )
             }
-        }
+        },
     ) { innerPadding ->
         Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(paddingValues)
-                .padding(innerPadding)
+            modifier =
+                Modifier
+                    .fillMaxSize()
+                    .padding(paddingValues)
+                    .padding(innerPadding),
         ) {
             when {
                 state.isLoading -> LoadingProgressBar()
@@ -128,7 +133,7 @@ fun HistoryContent(
                         }) {
                             Text(
                                 text = stringResource(android.R.string.ok),
-                                color = MaterialTheme.colorScheme.onPrimary
+                                color = MaterialTheme.colorScheme.onPrimary,
                             )
                         }
                     },
@@ -136,13 +141,14 @@ fun HistoryContent(
                         TextButton(onClick = { showStartDatePicker = false }) {
                             Text(
                                 text = stringResource(android.R.string.cancel),
-                                color = MaterialTheme.colorScheme.onPrimary
+                                color = MaterialTheme.colorScheme.onPrimary,
                             )
                         }
                     },
-                    colors = DatePickerDefaults.colors().copy(
-                        containerColor = MaterialTheme.colorScheme.primaryContainer,
-                    ),
+                    colors =
+                        DatePickerDefaults.colors().copy(
+                            containerColor = MaterialTheme.colorScheme.primaryContainer,
+                        ),
                 ) {
                     DatePicker(
                         colors =
@@ -177,7 +183,7 @@ fun HistoryContent(
                         }) {
                             Text(
                                 text = stringResource(android.R.string.ok),
-                                color = MaterialTheme.colorScheme.onPrimary
+                                color = MaterialTheme.colorScheme.onPrimary,
                             )
                         }
                     },
@@ -185,21 +191,23 @@ fun HistoryContent(
                         TextButton(onClick = { showEndDatePicker = false }) {
                             Text(
                                 text = stringResource(android.R.string.cancel),
-                                color = MaterialTheme.colorScheme.onPrimary
+                                color = MaterialTheme.colorScheme.onPrimary,
                             )
                         }
                     },
-                    colors = DatePickerDefaults.colors().copy(
-                        containerColor = MaterialTheme.colorScheme.primaryContainer,
-                    )
+                    colors =
+                        DatePickerDefaults.colors().copy(
+                            containerColor = MaterialTheme.colorScheme.primaryContainer,
+                        ),
                 ) {
                     DatePicker(
-                        colors = DatePickerDefaults.colors(
-                            containerColor = MaterialTheme.colorScheme.primaryContainer,
-                            selectedDayContainerColor = MaterialTheme.colorScheme.primary,
-                            selectedDayContentColor = MaterialTheme.colorScheme.onPrimary,
-                            todayContentColor = MaterialTheme.colorScheme.onPrimary,
-                        ),
+                        colors =
+                            DatePickerDefaults.colors(
+                                containerColor = MaterialTheme.colorScheme.primaryContainer,
+                                selectedDayContainerColor = MaterialTheme.colorScheme.primary,
+                                selectedDayContentColor = MaterialTheme.colorScheme.onPrimary,
+                                todayContentColor = MaterialTheme.colorScheme.onPrimary,
+                            ),
                         state = endDatePickerState,
                         title = null,
                         headline = null,

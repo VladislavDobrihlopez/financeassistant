@@ -45,16 +45,17 @@ fun CategoriesContent(
                     )
                 }
             },
-            colors = TopAppBarDefaults.topAppBarColors(
-                containerColor = MaterialTheme.colorScheme.primary,
-                titleContentColor = MaterialTheme.colorScheme.onSurface,
-            )
+            colors =
+                TopAppBarDefaults.topAppBarColors(
+                    containerColor = MaterialTheme.colorScheme.primary,
+                    titleContentColor = MaterialTheme.colorScheme.onSurface,
+                ),
         )
     }, snackbarHost = {
         if (state is CategoriesScreenState.Failed) {
             ErrorSnackbarHost(
                 errorResId = state.errorResId,
-                onRetry = onRetry
+                onRetry = onRetry,
             )
         }
     }) { values ->
@@ -85,17 +86,19 @@ fun CategoriesContent(
     name = "Light Theme - RU",
     group = "Russian",
     locale = "ru",
-    showBackground = true
+    showBackground = true,
 )
 @Composable
 private fun PreviewLightRussian() {
     FinanceAssistantTheme(darkTheme = false) {
         CategoriesContent(
-            state = CategoriesScreenState.Succeeded(
-                searchText = "Найти статью", categories = provideCategories()
-            ),
+            state =
+                CategoriesScreenState.Succeeded(
+                    searchText = "Найти статью",
+                    categories = provideCategories(),
+                ),
             onSearchClick = {},
-            onSearchBarTextChange = {}
+            onSearchBarTextChange = {},
         )
     }
 }
@@ -104,37 +107,40 @@ private fun PreviewLightRussian() {
     name = "Dark Theme - RU",
     group = "Russian",
     locale = "ru",
-    showBackground = true
+    showBackground = true,
 )
 @Composable
 private fun PreviewDarkRussian() {
     FinanceAssistantTheme(darkTheme = true) {
         CategoriesContent(
-            state = CategoriesScreenState.Succeeded(
-                searchText = "Найти статью", categories = provideCategories()
-            ),
+            state =
+                CategoriesScreenState.Succeeded(
+                    searchText = "Найти статью",
+                    categories = provideCategories(),
+                ),
             onSearchClick = {},
-            onSearchBarTextChange = {}
+            onSearchBarTextChange = {},
         )
     }
 }
-
 
 @Preview(
     name = "Light Theme - EN",
     group = "English",
     locale = "en",
-    showBackground = true
+    showBackground = true,
 )
 @Composable
 private fun PreviewLightEnglish() {
     FinanceAssistantTheme(darkTheme = false) {
         CategoriesContent(
-            state = CategoriesScreenState.Succeeded(
-                searchText = "Найти статью", categories = provideCategories()
-            ),
+            state =
+                CategoriesScreenState.Succeeded(
+                    searchText = "Найти статью",
+                    categories = provideCategories(),
+                ),
             onSearchClick = {},
-            onSearchBarTextChange = {}
+            onSearchBarTextChange = {},
         )
     }
 }
@@ -143,18 +149,19 @@ private fun PreviewLightEnglish() {
     name = "Dark Theme - EN",
     group = "English",
     locale = "en",
-    showBackground = true
+    showBackground = true,
 )
 @Composable
 private fun PreviewDarkEnglish() {
     FinanceAssistantTheme(darkTheme = true) {
         CategoriesContent(
-            state = CategoriesScreenState.Succeeded(
-                searchText = "Найти статью", categories = provideCategories()
-            ),
+            state =
+                CategoriesScreenState.Succeeded(
+                    searchText = "Найти статью",
+                    categories = provideCategories(),
+                ),
             onSearchClick = {},
-            onSearchBarTextChange = {}
+            onSearchBarTextChange = {},
         )
     }
 }
-

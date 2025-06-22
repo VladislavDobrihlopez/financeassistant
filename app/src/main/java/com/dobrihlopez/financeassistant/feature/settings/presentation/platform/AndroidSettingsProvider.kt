@@ -6,9 +6,8 @@ import com.dobrihlopez.financeassistant.feature.settings.domain.SettingsProvider
 import com.dobrihlopez.financeassistant.feature.settings.domain.model.AppSettingItem
 
 class AndroidSettingsProvider(
-    private val context: Context
-): SettingsProvider {
-
+    private val context: Context,
+) : SettingsProvider {
     override fun provide(item: AppSettingItem): String {
         return context.run {
             when (item) {

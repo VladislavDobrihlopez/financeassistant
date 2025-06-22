@@ -9,67 +9,76 @@ import com.dobrihlopez.financeassistant.feature.settings.domain.model.AppSetting
 import kotlinx.serialization.Serializable
 import javax.inject.Inject
 
-interface SettingsStore: Store<SettingsStore.Intent, SettingsStore.SettingsScreenState, Nothing> {
+interface SettingsStore : Store<SettingsStore.Intent, SettingsStore.SettingsScreenState, Nothing> {
     @Serializable
     sealed class SettingsScreenState {
         @Serializable
-        data object Loading: SettingsScreenState()
+        data object Loading : SettingsScreenState()
+
         @Serializable
-        data class Failed(@StringRes val errorResId: Int? = null): SettingsScreenState()
+        data class Failed(
+            @StringRes val errorResId: Int? = null,
+        ) : SettingsScreenState()
+
         @Serializable
         data class Succeeded(
-            val items: List<AppSettingItem>
-        ): SettingsScreenState()
+            val items: List<AppSettingItem>,
+        ) : SettingsScreenState()
     }
 
     sealed class Intent {
-        data object LoadSettings: Intent()
-        data class SettingClick(val setting: AppSettingItem): Intent()
+        data object LoadSettings : Intent()
+
+        data class SettingClick(val setting: AppSettingItem) : Intent()
     }
 
-    class SettingsStoreFactory @Inject constructor(
-        private val storeFactory: StoreFactory
-    ) {
-        fun create(initialState: SettingsScreenState): SettingsStore =
-            SettingsStoreImpl(storeFactory, initialState)
+    class SettingsStoreFactory
+        @Inject
+        constructor(
+            private val storeFactory: StoreFactory,
+        ) {
+            fun create(initialState: SettingsScreenState): SettingsStore = SettingsStoreImpl(storeFactory, initialState)
 
-        private class SettingsStoreImpl(
-            storeFactory: StoreFactory,
-            initialState: SettingsScreenState
-        ) : SettingsStore, Store<Intent, SettingsScreenState, Nothing> by storeFactory.create(
-            name = "SettingsStore",
-            initialState = initialState,
-            executorFactory = { ExecutorImpl() },
-            reducer = ReducerImpl
-        )
+            private class SettingsStoreImpl(
+                storeFactory: StoreFactory,
+                initialState: SettingsScreenState,
+            ) : SettingsStore,
+                Store<Intent, SettingsScreenState, Nothing> by storeFactory.create(
+                    name = "SettingsStore",
+                    initialState = initialState,
+                    executorFactory = { ExecutorImpl() },
+                    reducer = ReducerImpl,
+                )
 
-        private class ExecutorImpl: CoroutineExecutor<Intent, Nothing, SettingsScreenState, Message, Nothing>() {
-            override fun executeIntent(intent: Intent) {
-                when (intent) {
-                    Intent.LoadSettings -> {
-                        dispatch(Message.Succeeded(AppSettingItem.all))
+            private class ExecutorImpl : CoroutineExecutor<Intent, Nothing, SettingsScreenState, Message, Nothing>() {
+                override fun executeIntent(intent: Intent) {
+                    when (intent) {
+                        Intent.LoadSettings -> {
+                            dispatch(Message.Succeeded(AppSettingItem.all))
+                        }
+                        is Intent.SettingClick -> {}
                     }
-                    is Intent.SettingClick -> {}
                 }
             }
-        }
 
-        private object ReducerImpl: Reducer<SettingsScreenState, Message> {
-            override fun SettingsScreenState.reduce(
-                msg: Message,
-            ): SettingsScreenState {
-                return when (msg) {
-                    is Message.Loading -> SettingsScreenState.Loading
-                    is Message.Failed -> SettingsScreenState.Failed(msg.errorResId)
-                    is Message.Succeeded -> SettingsScreenState.Succeeded(msg.items)
+            private object ReducerImpl : Reducer<SettingsScreenState, Message> {
+                override fun SettingsScreenState.reduce(msg: Message): SettingsScreenState {
+                    return when (msg) {
+                        is Message.Loading -> SettingsScreenState.Loading
+                        is Message.Failed -> SettingsScreenState.Failed(msg.errorResId)
+                        is Message.Succeeded -> SettingsScreenState.Succeeded(msg.items)
+                    }
                 }
             }
-        }
 
-        private sealed class Message {
-            data object Loading: Message()
-            data class Failed(@StringRes val errorResId: Int? = null): Message()
-            data class Succeeded(val items: List<AppSettingItem>): Message()
+            private sealed class Message {
+                data object Loading : Message()
+
+                data class Failed(
+                    @StringRes val errorResId: Int? = null,
+                ) : Message()
+
+                data class Succeeded(val items: List<AppSettingItem>) : Message()
+            }
         }
-    }
-} 
+}

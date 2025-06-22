@@ -13,5 +13,5 @@ data class Transaction(
     val createdAt: String,
     val id: Int,
     val transactionDate: String,
-    val updatedAt: String
+    val updatedAt: String,
 )

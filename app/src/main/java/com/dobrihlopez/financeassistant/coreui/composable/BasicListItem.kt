@@ -40,12 +40,13 @@ fun BasicListItem(
     val spacing = MaterialTheme.spacing
 
     Row(
-        modifier = modifier
-            .fillMaxWidth()
-            .background(backgroundColor)
-            .clickable(enabled = onClick != null) { onClick?.invoke() }
-            .animateContentSize()
-            .padding(horizontal = spacing.medium),
+        modifier =
+            modifier
+                .fillMaxWidth()
+                .background(backgroundColor)
+                .clickable(enabled = onClick != null) { onClick?.invoke() }
+                .animateContentSize()
+                .padding(horizontal = spacing.medium),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         leadingContent?.let {
@@ -73,14 +74,14 @@ fun BasicListItem(
         if (value != null || valueSubtitle != null) {
             Column(
                 horizontalAlignment = Alignment.End,
-                modifier = Modifier.padding(end = if (trailingContent != null) 8.dp else 0.dp)
+                modifier = Modifier.padding(end = if (trailingContent != null) 8.dp else 0.dp),
             ) {
                 value?.let {
                     Text(
                         text = it,
                         style = MaterialTheme.typography.bodyMedium,
                         color = MaterialTheme.colorScheme.onBackground,
-                        textAlign = TextAlign.End
+                        textAlign = TextAlign.End,
                     )
                 }
                 valueSubtitle?.let {
@@ -88,7 +89,7 @@ fun BasicListItem(
                         text = it,
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
-                        textAlign = TextAlign.End
+                        textAlign = TextAlign.End,
                     )
                 }
             }
@@ -117,15 +118,15 @@ private fun BasicListItemPreview_WithIcons() {
                     imageVector = Icons.Default.Notifications,
                     contentDescription = null,
                     tint = MaterialTheme.colorScheme.onBackground,
-                    modifier = Modifier.padding(end = 16.dp)
+                    modifier = Modifier.padding(end = 16.dp),
                 )
             },
             trailingContent = {
                 Icon(
                     Icons.AutoMirrored.Default.KeyboardArrowRight,
-                    contentDescription = null
+                    contentDescription = null,
                 )
-            }
+            },
         )
     }
 }
@@ -136,7 +137,7 @@ private fun BasicListItemPreview_WithSubtitle() {
     FinanceAssistantTheme {
         BasicListItem(
             content = "С сабтайтлом",
-            subContent = "Подзаголовок для пояснения"
+            subContent = "Подзаголовок для пояснения",
         )
     }
 }
@@ -147,7 +148,7 @@ private fun BasicListItemPreview_WithValue() {
     FinanceAssistantTheme {
         BasicListItem(
             content = "С значением справа",
-            value = "Русский"
+            value = "Русский",
         )
     }
 }
@@ -164,9 +165,9 @@ private fun BasicListItemPreview_WithValueAndSubtitleAndTrailingIcon() {
             trailingContent = {
                 Icon(
                     Icons.AutoMirrored.Default.KeyboardArrowRight,
-                    contentDescription = null
+                    contentDescription = null,
                 )
-            }
+            },
         )
     }
 }

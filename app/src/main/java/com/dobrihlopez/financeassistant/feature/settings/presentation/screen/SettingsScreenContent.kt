@@ -24,15 +24,15 @@ import com.dobrihlopez.financeassistant.R
 import com.dobrihlopez.financeassistant.coreui.composable.LoadingProgressBar
 import com.dobrihlopez.financeassistant.coreui.ui.theme.FinanceAssistantTheme
 import com.dobrihlopez.financeassistant.feature.settings.domain.model.AppSettingItem
-import com.dobrihlopez.financeassistant.feature.settings.presentation.platform.AndroidSettingsProvider
 import com.dobrihlopez.financeassistant.feature.settings.presentation.SettingsStore.SettingsScreenState
 import com.dobrihlopez.financeassistant.feature.settings.presentation.composable.SettingItem
+import com.dobrihlopez.financeassistant.feature.settings.presentation.platform.AndroidSettingsProvider
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SettingScreenContent(
     state: SettingsScreenState,
-    onOptionClicked: (AppSettingItem) -> Unit
+    onOptionClicked: (AppSettingItem) -> Unit,
 ) {
     Scaffold(
         topBar = {
@@ -45,12 +45,13 @@ fun SettingScreenContent(
                         )
                     }
                 },
-                colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = MaterialTheme.colorScheme.primary,
-                    titleContentColor = MaterialTheme.colorScheme.onSurface,
-                )
+                colors =
+                    TopAppBarDefaults.topAppBarColors(
+                        containerColor = MaterialTheme.colorScheme.primary,
+                        titleContentColor = MaterialTheme.colorScheme.onSurface,
+                    ),
             )
-        }
+        },
     ) { paddingValues ->
         when (state) {
             is SettingsScreenState.Loading -> {
@@ -63,21 +64,22 @@ fun SettingScreenContent(
                     Text(
                         text = state.errorResId?.let { stringResource(it) } ?: "Error",
                         style = MaterialTheme.typography.bodyLarge,
-                        color = MaterialTheme.colorScheme.error
+                        color = MaterialTheme.colorScheme.error,
                     )
                 }
             }
             is SettingsScreenState.Succeeded -> {
                 val context = LocalContext.current
                 val provider = remember { AndroidSettingsProvider(context) }
-                val items = remember(provider) {
-                    state.items.map { it to provider.provide(it) }
-                }
+                val items =
+                    remember(provider) {
+                        state.items.map { it to provider.provide(it) }
+                    }
 
                 LazyColumn(modifier = Modifier.padding(paddingValues)) {
                     itemsIndexed(
                         items = items,
-                        key = { _, (section, _) -> section.id }
+                        key = { _, (section, _) -> section.id },
                     ) { idx, (section, name) ->
                         SettingItem(section = section, sectionName = name, onClick = onOptionClicked)
                         if (idx <= items.lastIndex) {
@@ -95,10 +97,11 @@ fun SettingScreenContent(
 private fun PreviewSettingScreenContent_Light() {
     FinanceAssistantTheme(darkTheme = false) {
         SettingScreenContent(
-            state = SettingsScreenState.Succeeded(
-                items = AppSettingItem.all
-            ),
-            onOptionClicked = {}
+            state =
+                SettingsScreenState.Succeeded(
+                    items = AppSettingItem.all,
+                ),
+            onOptionClicked = {},
         )
     }
 }
@@ -108,10 +111,11 @@ private fun PreviewSettingScreenContent_Light() {
 private fun PreviewSettingScreenContent_Dark() {
     FinanceAssistantTheme(darkTheme = true) {
         SettingScreenContent(
-            state = SettingsScreenState.Succeeded(
-                items = AppSettingItem.all
-            ),
-            onOptionClicked = {}
+            state =
+                SettingsScreenState.Succeeded(
+                    items = AppSettingItem.all,
+                ),
+            onOptionClicked = {},
         )
     }
 }
@@ -122,7 +126,7 @@ private fun PreviewSettingScreenContent_Loading() {
     FinanceAssistantTheme {
         SettingScreenContent(
             state = SettingsScreenState.Loading,
-            onOptionClicked = {}
+            onOptionClicked = {},
         )
     }
 }
@@ -133,7 +137,7 @@ private fun PreviewSettingScreenContent_Error() {
     FinanceAssistantTheme {
         SettingScreenContent(
             state = SettingsScreenState.Failed(null),
-            onOptionClicked = {}
+            onOptionClicked = {},
         )
     }
 }

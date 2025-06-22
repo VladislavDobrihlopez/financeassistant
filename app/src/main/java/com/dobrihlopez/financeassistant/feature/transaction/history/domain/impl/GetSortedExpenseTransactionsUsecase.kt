@@ -6,16 +6,18 @@ import com.dobrihlopez.financeassistant.feature.transaction.history.domain.GetSo
 import java.time.OffsetDateTime
 import javax.inject.Inject
 
-class GetSortedExpenseTransactionsUsecase @Inject constructor(
-    private val getTransactionsForPeriodUseCase: GetTransactionsForPeriodUseCase,
-) : GetSortedTransactionsUsecase {
-    override suspend operator fun invoke(
-        accountId: Int,
-        startDate: String?,
-        endDate: String?,
-    ): List<Transaction> {
-        return getTransactionsForPeriodUseCase(accountId, startDate, endDate)
-            .filter { !it.category.isIncome }
-            .sortedByDescending { OffsetDateTime.parse(it.updatedAt).toLocalDateTime() }
+class GetSortedExpenseTransactionsUsecase
+    @Inject
+    constructor(
+        private val getTransactionsForPeriodUseCase: GetTransactionsForPeriodUseCase,
+    ) : GetSortedTransactionsUsecase {
+        override suspend operator fun invoke(
+            accountId: Int,
+            startDate: String?,
+            endDate: String?,
+        ): List<Transaction> {
+            return getTransactionsForPeriodUseCase(accountId, startDate, endDate)
+                .filter { !it.category.isIncome }
+                .sortedByDescending { OffsetDateTime.parse(it.updatedAt).toLocalDateTime() }
+        }
     }
-}

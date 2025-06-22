@@ -12,10 +12,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.dobrihlopez.financeassistant.feature.transaction.core.model.Transaction
 import com.dobrihlopez.financeassistant.coreui.composable.ErrorSnackbarHost
 import com.dobrihlopez.financeassistant.coreui.composable.LoadingProgressBar
 import com.dobrihlopez.financeassistant.coreui.ui.theme.FinanceAssistantTheme
+import com.dobrihlopez.financeassistant.feature.transaction.core.model.Transaction
 import com.dobrihlopez.financeassistant.feature.transaction.core.previewTransactions
 import com.dobrihlopez.financeassistant.feature.transaction.core_ui.OverViewListItem
 import com.dobrihlopez.financeassistant.feature.transaction.core_ui.TransactionItem
@@ -33,20 +33,21 @@ fun ExpenseContent(
             if (state is ExpenseStore.ExpenseScreenState.Failed) {
                 ErrorSnackbarHost(
                     errorResId = state.errorResId,
-                    onRetry = onRetry
+                    onRetry = onRetry,
                 )
             }
-        }
+        },
     ) { innerPadding ->
         when (state) {
             is ExpenseStore.ExpenseScreenState.Loading -> LoadingProgressBar()
             is ExpenseStore.ExpenseScreenState.Failed -> {}
             is ExpenseStore.ExpenseScreenState.Succeeded -> {
                 LazyColumn(
-                    modifier = Modifier
-                        .padding(paddingValues)
-                        .padding(innerPadding)
-                        .fillMaxSize()
+                    modifier =
+                        Modifier
+                            .padding(paddingValues)
+                            .padding(innerPadding)
+                            .fillMaxSize(),
                 ) {
                     item {
                         OverViewListItem(content = state.summaryText, value = state.summaryValue)
@@ -67,12 +68,13 @@ fun ExpenseContent(
 private fun PreviewExpenseLight() {
     FinanceAssistantTheme(darkTheme = false) {
         ExpenseContent(
-            state = ExpenseStore.ExpenseScreenState.Succeeded(
-                transactions = previewTransactions(),
-                summaryText = "Всего",
-                summaryValue = "436 558 ₽"
-            ),
-            paddingValues = PaddingValues(0.dp)
+            state =
+                ExpenseStore.ExpenseScreenState.Succeeded(
+                    transactions = previewTransactions(),
+                    summaryText = "Всего",
+                    summaryValue = "436 558 ₽",
+                ),
+            paddingValues = PaddingValues(0.dp),
         )
     }
 }
@@ -82,12 +84,13 @@ private fun PreviewExpenseLight() {
 private fun PreviewExpenseDark() {
     FinanceAssistantTheme(darkTheme = true) {
         ExpenseContent(
-            state = ExpenseStore.ExpenseScreenState.Succeeded(
-                transactions = previewTransactions(),
-                summaryText = "Всего",
-                summaryValue = "436 558 ₽"
-            ),
-            paddingValues = PaddingValues(0.dp)
+            state =
+                ExpenseStore.ExpenseScreenState.Succeeded(
+                    transactions = previewTransactions(),
+                    summaryText = "Всего",
+                    summaryValue = "436 558 ₽",
+                ),
+            paddingValues = PaddingValues(0.dp),
         )
     }
 }

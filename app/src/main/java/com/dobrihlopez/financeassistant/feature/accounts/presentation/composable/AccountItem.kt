@@ -21,7 +21,10 @@ import com.dobrihlopez.financeassistant.coreui.composable.BasicListItem
 import com.dobrihlopez.financeassistant.feature.accounts.presentation.AccountActionItem
 
 @Composable
-fun AccountItem(accountActionItem: AccountActionItem, onClick: () -> Unit) {
+fun AccountItem(
+    accountActionItem: AccountActionItem,
+    onClick: () -> Unit,
+) {
     val context = LocalContext.current
     BasicListItem(
         modifier = Modifier.height(56.dp),
@@ -32,16 +35,16 @@ fun AccountItem(accountActionItem: AccountActionItem, onClick: () -> Unit) {
         leadingContent = {
             if (accountActionItem.emoji != null) {
                 Box(
-                    modifier = Modifier
-                        .size(28.dp)
-                        .clip(CircleShape)
-                        .background(MaterialTheme.colorScheme.surface)
-                    ,
-                    contentAlignment = Alignment.Center
+                    modifier =
+                        Modifier
+                            .size(28.dp)
+                            .clip(CircleShape)
+                            .background(MaterialTheme.colorScheme.surface),
+                    contentAlignment = Alignment.Center,
                 ) {
                     Text(
                         text = accountActionItem.emoji,
-                        style = MaterialTheme.typography.titleSmall
+                        style = MaterialTheme.typography.titleSmall,
                     )
                 }
             }
@@ -49,8 +52,8 @@ fun AccountItem(accountActionItem: AccountActionItem, onClick: () -> Unit) {
         trailingContent = {
             Icon(
                 imageVector = ImageVector.vectorResource(R.drawable.ic_arrow_head),
-                contentDescription = null
+                contentDescription = null,
             )
-        }
+        },
     )
 }

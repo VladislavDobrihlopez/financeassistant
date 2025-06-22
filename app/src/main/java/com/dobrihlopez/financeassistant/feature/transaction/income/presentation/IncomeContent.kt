@@ -34,17 +34,18 @@ fun IncomeContent(
                     onRetry = onRetry,
                 )
             }
-        }
+        },
     ) { innerPadding ->
         when (state) {
             is IncomeStore.IncomeScreenState.Loading -> LoadingProgressBar()
             is IncomeStore.IncomeScreenState.Failed -> {}
             is IncomeStore.IncomeScreenState.Succeeded -> {
                 LazyColumn(
-                    modifier = Modifier
-                        .padding(paddingValues)
-                        .padding(innerPadding)
-                        .fillMaxSize(),
+                    modifier =
+                        Modifier
+                            .padding(paddingValues)
+                            .padding(innerPadding)
+                            .fillMaxSize(),
                 ) {
                     item {
                         OverViewListItem(content = state.summaryText, value = state.summaryValue)
@@ -65,11 +66,12 @@ fun IncomeContent(
 private fun PreviewIncomeLight() {
     FinanceAssistantTheme(darkTheme = false) {
         IncomeContent(
-            state = IncomeStore.IncomeScreenState.Succeeded(
-                transactions = previewIncomeTransactions(),
-                summaryText = "Всего",
-                summaryValue = "600 000 ₽"
-            ),
+            state =
+                IncomeStore.IncomeScreenState.Succeeded(
+                    transactions = previewIncomeTransactions(),
+                    summaryText = "Всего",
+                    summaryValue = "600 000 ₽",
+                ),
             paddingValues = PaddingValues(0.dp),
         )
     }
@@ -80,14 +82,13 @@ private fun PreviewIncomeLight() {
 private fun PreviewIncomeDark() {
     FinanceAssistantTheme(darkTheme = true) {
         IncomeContent(
-            state = IncomeStore.IncomeScreenState.Succeeded(
-                transactions = previewIncomeTransactions(),
-                summaryText = "Всего",
-                summaryValue = "600 000 ₽",
-            ),
+            state =
+                IncomeStore.IncomeScreenState.Succeeded(
+                    transactions = previewIncomeTransactions(),
+                    summaryText = "Всего",
+                    summaryValue = "600 000 ₽",
+                ),
             paddingValues = PaddingValues(0.dp),
         )
     }
 }
-
-

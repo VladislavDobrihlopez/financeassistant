@@ -7,5 +7,5 @@ data class IncomeStatistics(
     val amount: String,
     val categoryId: Int,
     val categoryName: String,
-    val emoji: String
+    val emoji: String,
 )

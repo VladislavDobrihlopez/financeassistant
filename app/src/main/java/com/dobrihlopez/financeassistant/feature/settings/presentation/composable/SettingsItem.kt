@@ -14,22 +14,29 @@ import com.dobrihlopez.financeassistant.coreui.composable.BasicListItem
 import com.dobrihlopez.financeassistant.feature.settings.domain.model.AppSettingItem
 
 @Composable
-fun SettingItem(section: AppSettingItem, sectionName: String, onClick: (AppSettingItem) -> Unit) {
+fun SettingItem(
+    section: AppSettingItem,
+    sectionName: String,
+    onClick: (AppSettingItem) -> Unit,
+) {
     when (section) {
-        is AppSettingItem.Theme -> BasicListItem(
-            modifier = Modifier.height(56.dp),
-            content = sectionName,
-            trailingContent = {
-                Switch(checked = isSystemInDarkTheme(), onCheckedChange = { onClick(section) })
-            })
+        is AppSettingItem.Theme ->
+            BasicListItem(
+                modifier = Modifier.height(56.dp),
+                content = sectionName,
+                trailingContent = {
+                    Switch(checked = isSystemInDarkTheme(), onCheckedChange = { onClick(section) })
+                },
+            )
 
-        else -> BasicListItem(
-            modifier = Modifier.height(56.dp),
-            onClick = { onClick(section) },
-            content = sectionName,
-            trailingContent = {
-                Icon(imageVector = ImageVector.vectorResource(R.drawable.arrow_right), contentDescription = null)
-            }
-        )
+        else ->
+            BasicListItem(
+                modifier = Modifier.height(56.dp),
+                onClick = { onClick(section) },
+                content = sectionName,
+                trailingContent = {
+                    Icon(imageVector = ImageVector.vectorResource(R.drawable.arrow_right), contentDescription = null)
+                },
+            )
     }
 }
