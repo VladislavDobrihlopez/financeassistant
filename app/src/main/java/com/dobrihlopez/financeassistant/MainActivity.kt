@@ -5,21 +5,36 @@ import android.os.PersistableBundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.safeContentPadding
+import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.zIndex
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.arkivanov.decompose.defaultComponentContext
-import com.arkivanov.mvikotlin.main.store.DefaultStoreFactory
+import com.dobrihlopez.financeassistant.core.network.ConnectivityObserver
+import com.dobrihlopez.financeassistant.core_ui.composable.InternetConnectionStatus
 import com.dobrihlopez.financeassistant.core_ui.ui.theme.FinanceAssistantTheme
 import com.dobrihlopez.financeassistant.feature.RootComponent
 import com.dobrihlopez.financeassistant.feature.RootScreen
 import dagger.hilt.android.AndroidEntryPoint
-import javax.inject.Inject
 import kotlinx.coroutines.delay
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     @Inject
     lateinit var rootComponentFactory: RootComponent.DefaultRootComponent.Factory
+
+    @Inject
+    lateinit var connectivityObserver: ConnectivityObserver
+
     private var isSplashVisible = true
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -39,7 +54,11 @@ class MainActivity : ComponentActivity() {
                     delay(SPLASH_DURATION_IN_MS)
                     isSplashVisible = false
                 }
-                RootScreen(rootComponent)
+
+                val hasInternet =
+                    connectivityObserver.observe().collectAsStateWithLifecycle(false)
+
+                RootScreen(rootComponent, hasInternet)
             }
         }
     }
