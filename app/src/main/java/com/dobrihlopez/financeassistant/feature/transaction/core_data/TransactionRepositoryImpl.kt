@@ -3,6 +3,7 @@ package com.dobrihlopez.financeassistant.feature.transaction.core_data
 import com.dobrihlopez.financeassistant.core.CoroutineDispatchers
 import com.dobrihlopez.financeassistant.core.Transaction
 import com.dobrihlopez.financeassistant.core.network.TransactionApi
+import com.dobrihlopez.financeassistant.core.network.retryWithDelay
 import com.dobrihlopez.financeassistant.feature.transaction.core_data.transactions.toDomain
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
@@ -17,8 +18,9 @@ class TransactionRepositoryImpl @Inject constructor(
         endDate: String?
     ): List<Transaction> {
         return withContext(coroutineDispatchers.io) {
-            api.getTransactionsForPeriod(accountId, startDate, endDate)
-                .map { it.toDomain() }
+            retryWithDelay {
+                api.getTransactionsForPeriod(accountId, startDate, endDate)
+            }.map { it.toDomain() }
         }
     }
 }

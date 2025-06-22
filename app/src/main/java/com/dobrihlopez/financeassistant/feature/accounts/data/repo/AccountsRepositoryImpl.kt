@@ -1,6 +1,7 @@
 package com.dobrihlopez.financeassistant.feature.accounts.data.repo
 
 import com.dobrihlopez.financeassistant.core.CoroutineDispatchers
+import com.dobrihlopez.financeassistant.core.network.retryWithDelay
 import com.dobrihlopez.financeassistant.feature.accounts.data.network.AccountsApiService
 import com.dobrihlopez.financeassistant.feature.accounts.data.network.UpdateAccountRequest
 import com.dobrihlopez.financeassistant.feature.accounts.domain.AccountsRepository
@@ -15,7 +16,9 @@ class AccountsRepositoryImpl @Inject constructor(
 ) : AccountsRepository {
     override suspend fun getAccounts(): List<UserAccountDetailed> =
         withContext(coroutineDispatchers.io) {
-            api.getAccounts().map { it.toDomain() }
+            retryWithDelay {
+                api.getAccounts().map { it.toDomain() }
+            }
         }
 
     override suspend fun updateAccount(
@@ -25,6 +28,8 @@ class AccountsRepositoryImpl @Inject constructor(
         currency: String,
     ): UserAccountDetailed =
         withContext(coroutineDispatchers.io) {
-            api.updateAccount(id, UpdateAccountRequest(name, balance, currency)).toDomain()
+            retryWithDelay {
+                api.updateAccount(id, UpdateAccountRequest(name, balance, currency)).toDomain()
+            }
         }
 }

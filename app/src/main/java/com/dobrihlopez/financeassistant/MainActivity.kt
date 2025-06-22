@@ -7,19 +7,24 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.runtime.LaunchedEffect
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.arkivanov.decompose.defaultComponentContext
-import com.arkivanov.mvikotlin.main.store.DefaultStoreFactory
+import com.dobrihlopez.financeassistant.core.network.ConnectivityObserver
 import com.dobrihlopez.financeassistant.core_ui.ui.theme.FinanceAssistantTheme
 import com.dobrihlopez.financeassistant.feature.RootComponent
 import com.dobrihlopez.financeassistant.feature.RootScreen
 import dagger.hilt.android.AndroidEntryPoint
-import javax.inject.Inject
 import kotlinx.coroutines.delay
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     @Inject
     lateinit var rootComponentFactory: RootComponent.DefaultRootComponent.Factory
+
+    @Inject
+    lateinit var connectivityObserver: ConnectivityObserver
+
     private var isSplashVisible = true
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -39,7 +44,11 @@ class MainActivity : ComponentActivity() {
                     delay(SPLASH_DURATION_IN_MS)
                     isSplashVisible = false
                 }
-                RootScreen(rootComponent)
+
+                val hasInternet =
+                    connectivityObserver.observe().collectAsStateWithLifecycle(false)
+
+                RootScreen(rootComponent, hasInternet)
             }
         }
     }
