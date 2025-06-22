@@ -33,4 +33,5 @@
     <string name="error_validation">Validation error</string>
     <string name="retry">Retry</string>
     <string name="error_unknown">Unknown error</string>
+    <string name="error_internet_issues">Internet issues</string>
 </resources>
