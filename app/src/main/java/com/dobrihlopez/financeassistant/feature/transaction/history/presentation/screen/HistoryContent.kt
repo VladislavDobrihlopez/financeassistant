@@ -26,6 +26,7 @@ import androidx.compose.ui.res.stringResource
 import com.dobrihlopez.financeassistant.R
 import com.dobrihlopez.financeassistant.coreui.composable.ErrorSnackbarHost
 import com.dobrihlopez.financeassistant.coreui.composable.LoadingProgressBar
+import com.dobrihlopez.financeassistant.coreui.ui.theme.spacing
 import com.dobrihlopez.financeassistant.feature.transaction.core_ui.OverViewListItem
 import com.dobrihlopez.financeassistant.feature.transaction.core_ui.TransactionItem
 import com.dobrihlopez.financeassistant.feature.transaction.history.presentation.HistoryStore
@@ -43,6 +44,7 @@ fun HistoryContent(
     onRefresh: () -> Unit,
     paddingValues: PaddingValues,
 ) {
+    val spacing = MaterialTheme.spacing
     var showStartDatePicker by rememberSaveable { mutableStateOf(false) }
     var showEndDatePicker by rememberSaveable { mutableStateOf(false) }
     val startDatePickerState =
@@ -79,14 +81,13 @@ fun HistoryContent(
                     .padding(innerPadding),
         ) {
             when {
-                state.isLoading -> LoadingProgressBar()
                 state.errorResId != null -> {
                     Text(text = stringResource(id = state.errorResId))
                 }
 
                 else -> {
                     LazyColumn(modifier = Modifier.fillMaxSize()) {
-                        item {
+                        item(contentType = "option") {
                             OverViewListItem(
                                 content = stringResource(R.string.history_start),
                                 value = state.startText,
@@ -94,7 +95,7 @@ fun HistoryContent(
                             )
                             HorizontalDivider()
                         }
-                        item {
+                        item(contentType = "option") {
                             OverViewListItem(
                                 content = stringResource(R.string.history_end),
                                 value = state.endText,
@@ -102,20 +103,28 @@ fun HistoryContent(
                             )
                             HorizontalDivider()
                         }
-                        item {
+                        item(contentType = "option") {
                             OverViewListItem(
                                 content = stringResource(R.string.history_summary),
                                 value = state.summaryValue,
                             )
                             HorizontalDivider()
                         }
-                        items(state.transactions, key = { it.id }) { transaction ->
-                            TransactionItem(transaction, onClick = {}, showTime = true)
-                            HorizontalDivider()
+
+                        if (state.isLoading) {
+                            item {
+                                LoadingProgressBar(modifier = Modifier.padding(spacing.medium))
+                            }
+                        } else {
+                            items(state.transactions, key = { it.id }) { transaction ->
+                                TransactionItem(transaction, onClick = {}, showTime = true)
+                                HorizontalDivider()
+                            }
                         }
                     }
                 }
             }
+
             if (showStartDatePicker) {
                 DatePickerDialog(
                     onDismissRequest = { showStartDatePicker = false },
