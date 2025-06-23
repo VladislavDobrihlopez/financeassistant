@@ -31,27 +31,27 @@ interface ConnectivityObserver {
             return callbackFlow {
                 val callback = object : ConnectivityManager.NetworkCallback() {
                     init {
-                        launch { send(isNetworkAvailable()) }
+                        trySend(isNetworkAvailable())
                     }
 
                     override fun onAvailable(network: Network) {
                         super.onAvailable(network)
-                        launch { send(true) }
+                        trySend(true)
                     }
 
                     override fun onLosing(network: Network, maxMsToLive: Int) {
                         super.onLosing(network, maxMsToLive)
-                        launch { send(false) }
+                        trySend(false)
                     }
 
                     override fun onLost(network: Network) {
                         super.onLost(network)
-                        launch { send(false) }
+                        trySend(false)
                     }
 
                     override fun onUnavailable() {
                         super.onUnavailable()
-                        launch { send(false) }
+                        trySend(false)
                     }
                 }
                 connectivityManager.registerDefaultNetworkCallback(callback)
