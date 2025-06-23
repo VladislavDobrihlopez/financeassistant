@@ -7,11 +7,9 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.shrinkOut
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material3.Icon
@@ -31,15 +29,17 @@ import com.dobrihlopez.financeassistant.R
 import com.dobrihlopez.financeassistant.coreui.ui.theme.FinanceAssistantTheme
 import com.dobrihlopez.financeassistant.coreui.ui.theme.spacing
 
+private const val ENTER_TIME_IN_MILLIS = 700
+private const val DISAPPEAR_TIME_IN_MILLIS = 1400
+
 @Composable
 fun InternetConnectionStatus(hasInternet: Boolean, modifier: Modifier = Modifier) {
     val error = MaterialTheme.colorScheme.error
-    val spacing = MaterialTheme.spacing.medium
 
     AnimatedVisibility(
-        !hasInternet,
-        enter = fadeIn(tween()) + expandIn(),
-        exit = fadeOut(tween(700)) + shrinkOut(tween(700))
+        visible = !hasInternet,
+        enter = fadeIn(tween(ENTER_TIME_IN_MILLIS)) + expandIn(),
+        exit = fadeOut(tween(DISAPPEAR_TIME_IN_MILLIS)) + shrinkOut(tween(DISAPPEAR_TIME_IN_MILLIS))
     ) {
         Row(
             modifier = modifier
@@ -57,7 +57,6 @@ fun InternetConnectionStatus(hasInternet: Boolean, modifier: Modifier = Modifier
                 contentDescription = "no internet",
                 tint = MaterialTheme.colorScheme.onError
             )
-            Spacer(modifier = Modifier.width(spacing))
             Text(
                 modifier = Modifier.weight(1f),
                 text = stringResource(R.string.error_internet_issues),
