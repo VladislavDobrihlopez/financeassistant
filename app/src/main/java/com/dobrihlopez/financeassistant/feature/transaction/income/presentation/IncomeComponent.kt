@@ -1,6 +1,7 @@
 package com.dobrihlopez.financeassistant.feature.transaction.income.presentation
 
 import com.arkivanov.decompose.ComponentContext
+import com.arkivanov.decompose.childContext
 import com.arkivanov.decompose.router.stack.ChildStack
 import com.arkivanov.decompose.router.stack.StackNavigation
 import com.arkivanov.decompose.router.stack.childStack
@@ -68,7 +69,7 @@ interface IncomeComponent {
                             historyComponentFactory.create(
                                 componentContext,
                                 isIncome = true,
-                                getSortedTransactionsUsecase,
+                                getSortedTransactionsUsecase = getSortedTransactionsUsecase,
                             ),
                         )
                 }

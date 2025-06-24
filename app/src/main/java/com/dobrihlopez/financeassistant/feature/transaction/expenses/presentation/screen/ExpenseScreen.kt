@@ -6,23 +6,15 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.FloatingActionButton
-import androidx.compose.material3.FloatingActionButtonDefaults.bottomAppBarFabElevation
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -37,6 +29,8 @@ import com.arkivanov.decompose.extensions.compose.stack.Children
 import com.arkivanov.decompose.extensions.compose.stack.animation.slide
 import com.arkivanov.decompose.extensions.compose.stack.animation.stackAnimation
 import com.dobrihlopez.financeassistant.R
+import com.dobrihlopez.financeassistant.coreui.composable.Fab
+import com.dobrihlopez.financeassistant.feature.transaction.core_ui.TopBarDataProvider
 import com.dobrihlopez.financeassistant.feature.transaction.expenses.presentation.ExpenseComponent
 import com.dobrihlopez.financeassistant.feature.transaction.history.presentation.screen.HistoryScreen
 
@@ -45,47 +39,34 @@ import com.dobrihlopez.financeassistant.feature.transaction.history.presentation
 fun ExpenseScreen(component: ExpenseComponent) {
     val childStack = component.childStack
 
-    var onActionButtonClick by remember {
-        mutableStateOf({})
-    }
-
-    var onFabButtonClick by remember {
-        mutableStateOf({})
-    }
-
-    var topBarTitle by remember {
-        mutableStateOf("")
-    }
-
-    var actionButtonResId by remember {
-        mutableStateOf<Int?>(null)
-    }
-
-    var navButton by remember {
-        mutableStateOf<ImageVector?>(null)
+    var topBarState by remember {
+        mutableStateOf<TopBarDataProvider>(TopBarDataProvider.Default())
     }
 
     Scaffold(
         topBar = {
             CenterAlignedTopAppBar(
                 title = {
-                    Box(Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
-                        Text(text = topBarTitle, style = MaterialTheme.typography.titleLarge)
+                    AnimatedVisibility(topBarState.topBarResId != null, enter = fadeIn()) {
+                        Box(Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
+                            Text(
+                                text = stringResource(topBarState.topBarResId!!),
+                                style = MaterialTheme.typography.titleLarge
+                            )
+                        }
                     }
                 },
                 actions = {
                     AnimatedVisibility(
-                        actionButtonResId != null,
-                        enter =
-                            fadeIn() +
-                                    expandHorizontally(
-                                        clip = false,
-                                        expandFrom = Alignment.Start,
-                                    ),
+                        visible = topBarState.actionButtonResId != null && topBarState.onActionButtonClick != null,
+                        enter = fadeIn() + expandHorizontally(
+                            clip = false,
+                            expandFrom = Alignment.Start
+                        ),
                     ) {
-                        IconButton(onClick = onActionButtonClick) {
+                        IconButton(onClick = { topBarState.onActionButtonClick?.invoke() }) {
                             Icon(
-                                ImageVector.vectorResource(actionButtonResId!!),
+                                ImageVector.vectorResource(topBarState.actionButtonResId!!),
                                 contentDescription = null,
                             )
                         }
@@ -93,37 +74,28 @@ fun ExpenseScreen(component: ExpenseComponent) {
                 },
                 navigationIcon = {
                     AnimatedVisibility(
-                        visible = navButton != null,
+                        visible = topBarState.navigationActionButton != null &&
+                                topBarState.onNavigationButtonClick != null,
                         enter = fadeIn() + expandHorizontally(
                             clip = false,
                             expandFrom = Alignment.End
                         ),
                     ) {
-                        IconButton(onClick = component::onNavigateBack) {
-                            Icon(
-                                imageVector = Icons.AutoMirrored.Default.ArrowBack,
-                                contentDescription = null,
-                            )
+                        topBarState.navigationActionButton?.let {
+                            IconButton(onClick = { topBarState.onNavigationButtonClick?.invoke() }) {
+                                Icon(imageVector = it, contentDescription = null)
+                            }
                         }
                     }
                 },
-                colors =
-                    TopAppBarDefaults.topAppBarColors(
-                        containerColor = MaterialTheme.colorScheme.primary,
-                        titleContentColor = MaterialTheme.colorScheme.onSurface,
-                    ),
+                colors = TopAppBarDefaults.topAppBarColors(
+                    containerColor = MaterialTheme.colorScheme.primary,
+                    titleContentColor = MaterialTheme.colorScheme.onSurface,
+                ),
             )
         },
         floatingActionButton = {
-            FloatingActionButton(
-                elevation = bottomAppBarFabElevation(),
-                shape = CircleShape,
-                onClick = onFabButtonClick,
-                containerColor = MaterialTheme.colorScheme.primary,
-                contentColor = MaterialTheme.colorScheme.background,
-            ) {
-                Icon(Icons.Default.Add, contentDescription = null)
-            }
+            Fab(onClick = topBarState.onFabClick)
         },
     ) { paddingValues ->
         Children(
@@ -132,14 +104,11 @@ fun ExpenseScreen(component: ExpenseComponent) {
         ) { child ->
             when (val instance = child.instance) {
                 is ExpenseComponent.Child.Main -> {
-                    topBarTitle = stringResource(R.string.expenses_topbar_title)
-
-                    LaunchedEffect(Unit) {
-                        onFabButtonClick = component::onFabClick
-                        onActionButtonClick = component::onHistoryClick
-                        actionButtonResId = R.drawable.ic_history
-                        navButton = null
-                    }
+                    topBarState = TopBarDataProvider.MainScreen(
+                        topBarResId = R.string.expenses_topbar_title,
+                        onActionButtonClick = component::onHistoryClick,
+                        onFabClick = component::onFabClick
+                    )
 
                     ExpenseContent(
                         state = component.state.collectAsStateWithLifecycle().value,
@@ -149,14 +118,10 @@ fun ExpenseScreen(component: ExpenseComponent) {
                 }
 
                 is ExpenseComponent.Child.History -> {
-                    topBarTitle = stringResource(R.string.history_topbar_title)
-
-                    LaunchedEffect(Unit) {
-                        onFabButtonClick = { }
-                        onActionButtonClick = { }
-                        actionButtonResId = R.drawable.ic_history_rectangle
-                        navButton = Icons.AutoMirrored.Default.ArrowBack
-                    }
+                    topBarState = TopBarDataProvider.History(
+                        onActionButtonClick = {},
+                        onNavigationButtonClick = component::onNavigateBack
+                    )
 
                     HistoryScreen(instance.component, paddingValues)
                 }

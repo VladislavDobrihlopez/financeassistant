@@ -1,4 +1,4 @@
-package com.dobrihlopez.financeassistant.feature.transaction.core_ui
+package com.dobrihlopez.financeassistant.feature.transaction.core_ui.composable
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable

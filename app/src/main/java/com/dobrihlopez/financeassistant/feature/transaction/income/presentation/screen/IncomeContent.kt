@@ -18,8 +18,8 @@ import com.dobrihlopez.financeassistant.coreui.composable.ErrorSnackbarHost
 import com.dobrihlopez.financeassistant.coreui.composable.LoadingProgressBar
 import com.dobrihlopez.financeassistant.coreui.ui.theme.FinanceAssistantTheme
 import com.dobrihlopez.financeassistant.feature.transaction.core.previewIncomeTransactions
-import com.dobrihlopez.financeassistant.feature.transaction.core_ui.OverViewListItem
-import com.dobrihlopez.financeassistant.feature.transaction.core_ui.TransactionItem
+import com.dobrihlopez.financeassistant.feature.transaction.core_ui.composable.OverViewListItem
+import com.dobrihlopez.financeassistant.feature.transaction.core_ui.composable.TransactionItem
 import com.dobrihlopez.financeassistant.feature.transaction.income.presentation.IncomeStore
 
 @OptIn(ExperimentalMaterial3Api::class)
