@@ -40,7 +40,7 @@ interface CategoriesComponent {
                 get() = store.stateFlow
 
             init {
-                stateKeeper.register("categories_state", CategoriesScreenState.serializer()) {
+                stateKeeper.register(STATE_KEY, CategoriesScreenState.serializer()) {
                     state.value
                 }
 

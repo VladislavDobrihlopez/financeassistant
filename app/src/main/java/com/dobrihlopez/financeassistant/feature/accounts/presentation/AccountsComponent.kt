@@ -61,7 +61,7 @@ interface AccountsComponent {
                 get() = store.stateFlow
 
             init {
-                stateKeeper.register("accounts_state", AccountsStore.AccountScreenState.serializer()) {
+                stateKeeper.register(STATE_KEY, AccountsStore.AccountScreenState.serializer()) {
                     state.value
                 }
 
