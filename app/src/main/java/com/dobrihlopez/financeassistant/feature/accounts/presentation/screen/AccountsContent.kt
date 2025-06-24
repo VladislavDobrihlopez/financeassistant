@@ -1,8 +1,6 @@
 package com.dobrihlopez.financeassistant.feature.accounts.presentation.screen
 
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.expandHorizontally
-import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.shrinkHorizontally
 import androidx.compose.foundation.background
@@ -30,6 +28,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.dobrihlopez.financeassistant.R
+import com.dobrihlopez.financeassistant.coreui.animation.actionEnterTransition
 import com.dobrihlopez.financeassistant.coreui.composable.ErrorSnackbarHost
 import com.dobrihlopez.financeassistant.coreui.composable.Fab
 import com.dobrihlopez.financeassistant.coreui.composable.LoadingProgressBar
@@ -62,10 +61,7 @@ fun AccountContent(
                 actions = {
                     AnimatedVisibility(
                         visible = state is AccountScreenState.Succeeded,
-                        enter = fadeIn() + expandHorizontally(
-                            clip = false,
-                            expandFrom = Alignment.Start
-                        ),
+                        enter = actionEnterTransition,
                         exit = fadeOut() + shrinkHorizontally(clip = false)
                     ) {
                         IconButton(onClick = onEditClick) {

@@ -1,8 +1,9 @@
 package com.dobrihlopez.financeassistant.feature.transaction.expenses.presentation.screen
 
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.expandHorizontally
 import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.shrinkHorizontally
 import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -29,6 +30,9 @@ import com.arkivanov.decompose.extensions.compose.stack.Children
 import com.arkivanov.decompose.extensions.compose.stack.animation.slide
 import com.arkivanov.decompose.extensions.compose.stack.animation.stackAnimation
 import com.dobrihlopez.financeassistant.R
+import com.dobrihlopez.financeassistant.coreui.animation.actionEnterTransition
+import com.dobrihlopez.financeassistant.coreui.animation.navActionEnterTransition
+import com.dobrihlopez.financeassistant.coreui.animation.navActionExitTransition
 import com.dobrihlopez.financeassistant.coreui.composable.Fab
 import com.dobrihlopez.financeassistant.feature.transaction.core_ui.TopBarDataProvider
 import com.dobrihlopez.financeassistant.feature.transaction.expenses.presentation.ExpenseComponent
@@ -59,10 +63,7 @@ fun ExpenseScreen(component: ExpenseComponent) {
                 actions = {
                     AnimatedVisibility(
                         visible = topBarState.actionButtonResId != null && topBarState.onActionButtonClick != null,
-                        enter = fadeIn() + expandHorizontally(
-                            clip = false,
-                            expandFrom = Alignment.Start
-                        ),
+                        enter = actionEnterTransition,
                     ) {
                         IconButton(onClick = { topBarState.onActionButtonClick?.invoke() }) {
                             Icon(
@@ -76,10 +77,8 @@ fun ExpenseScreen(component: ExpenseComponent) {
                     AnimatedVisibility(
                         visible = topBarState.navigationActionButton != null &&
                                 topBarState.onNavigationButtonClick != null,
-                        enter = fadeIn() + expandHorizontally(
-                            clip = false,
-                            expandFrom = Alignment.End
-                        ),
+                        enter = navActionEnterTransition,
+                        exit = navActionExitTransition
                     ) {
                         topBarState.navigationActionButton?.let {
                             IconButton(onClick = { topBarState.onNavigationButtonClick?.invoke() }) {

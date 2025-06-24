@@ -1,21 +1,14 @@
 package com.dobrihlopez.financeassistant.feature.transaction.income.presentation.screen
 
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.expandHorizontally
-import androidx.compose.animation.expandIn
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.shrinkHorizontally
 import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.FloatingActionButton
-import androidx.compose.material3.FloatingActionButtonDefaults.bottomAppBarFabElevation
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -23,14 +16,12 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
@@ -39,6 +30,9 @@ import com.arkivanov.decompose.extensions.compose.stack.Children
 import com.arkivanov.decompose.extensions.compose.stack.animation.slide
 import com.arkivanov.decompose.extensions.compose.stack.animation.stackAnimation
 import com.dobrihlopez.financeassistant.R
+import com.dobrihlopez.financeassistant.coreui.animation.actionEnterTransition
+import com.dobrihlopez.financeassistant.coreui.animation.navActionEnterTransition
+import com.dobrihlopez.financeassistant.coreui.animation.navActionExitTransition
 import com.dobrihlopez.financeassistant.coreui.composable.Fab
 import com.dobrihlopez.financeassistant.feature.transaction.core_ui.TopBarDataProvider
 import com.dobrihlopez.financeassistant.feature.transaction.history.presentation.screen.HistoryScreen
@@ -69,10 +63,7 @@ fun IncomeScreen(component: IncomeComponent) {
                 actions = {
                     AnimatedVisibility(
                         visible = topBarState.actionButtonResId != null && topBarState.onActionButtonClick != null,
-                        enter = fadeIn() + expandHorizontally(
-                            clip = false,
-                            expandFrom = Alignment.Start
-                        ),
+                        enter = actionEnterTransition,
                     ) {
                         IconButton(onClick = { topBarState.onActionButtonClick?.invoke() }) {
                             Icon(
@@ -86,10 +77,8 @@ fun IncomeScreen(component: IncomeComponent) {
                     AnimatedVisibility(
                         visible = topBarState.navigationActionButton != null
                                 && topBarState.onNavigationButtonClick != null,
-                        enter = fadeIn() + expandHorizontally(
-                            clip = false, expandFrom = Alignment.End
-                        ),
-                        exit = fadeOut() + shrinkHorizontally(shrinkTowards = Alignment.Start, clip = false),
+                        enter = navActionEnterTransition,
+                        exit = navActionExitTransition,
                     ) {
                         topBarState.navigationActionButton?.let {
                             IconButton(onClick = { topBarState.onNavigationButtonClick?.invoke() }) {
