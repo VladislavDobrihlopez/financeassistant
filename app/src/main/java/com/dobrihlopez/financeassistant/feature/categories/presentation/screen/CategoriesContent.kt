@@ -1,11 +1,20 @@
 package com.dobrihlopez.financeassistant.feature.categories.presentation.screen
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.Spring
+import androidx.compose.animation.core.VisibilityThreshold
+import androidx.compose.animation.core.spring
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
@@ -14,10 +23,18 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.IntOffset
 import com.dobrihlopez.financeassistant.R
 import com.dobrihlopez.financeassistant.coreui.composable.ErrorSnackbarHost
 import com.dobrihlopez.financeassistant.coreui.composable.LoadingProgressBar
@@ -26,6 +43,8 @@ import com.dobrihlopez.financeassistant.feature.categories.domain.model.Category
 import com.dobrihlopez.financeassistant.feature.categories.presentation.CategoriesStore.CategoriesScreenState
 import com.dobrihlopez.financeassistant.feature.categories.presentation.composable.CategoriesItem
 import com.dobrihlopez.financeassistant.feature.categories.presentation.composable.SearchBar
+
+private const val FADE_IN_SEARCH_BAR_INTERVAL_IN_MILLIS = 250
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -63,14 +82,48 @@ fun CategoriesContent(
             is CategoriesScreenState.Failed -> {}
             CategoriesScreenState.Loading -> LoadingProgressBar()
             is CategoriesScreenState.Succeeded -> {
+                val lazyListState = rememberLazyListState()
+                var previousScrollOffset by remember { mutableIntStateOf(0) }
+                var previousIndex by remember { mutableIntStateOf(0) }
+                var isSearchBarVisible by remember { mutableStateOf(false) }
+
+                LaunchedEffect(lazyListState) {
+                    snapshotFlow { lazyListState.firstVisibleItemIndex to lazyListState.firstVisibleItemScrollOffset }
+                        .collect { (index, offset) ->
+                            val isScrollingUp = index < previousIndex ||
+                                    (index == previousIndex && offset < previousScrollOffset)
+
+                            isSearchBarVisible = isScrollingUp || index == 0
+
+                            previousIndex = index
+                            previousScrollOffset = offset
+                        }
+                }
+
                 Column(modifier = Modifier.padding(values)) {
-                    SearchBar(
-                        searchText = state.searchText,
-                        onTextChange = onSearchBarTextChange,
-                        onSearchClick = onSearchClick,
-                    )
-                    HorizontalDivider()
-                    LazyColumn {
+                    AnimatedVisibility(
+                        isSearchBarVisible,
+                        enter = fadeIn(tween(FADE_IN_SEARCH_BAR_INTERVAL_IN_MILLIS)) + slideInVertically(
+                            spring(
+                                stiffness = Spring.StiffnessHigh,
+                                visibilityThreshold = IntOffset.VisibilityThreshold
+                            )
+                        ),
+                        exit = slideOutVertically(
+                            spring(
+                                stiffness = Spring.StiffnessHigh,
+                                visibilityThreshold = IntOffset.VisibilityThreshold
+                            )
+                        )
+                    ) {
+                        SearchBar(
+                            searchText = state.searchText,
+                            onTextChange = onSearchBarTextChange,
+                            onSearchClick = onSearchClick,
+                        )
+                        HorizontalDivider()
+                    }
+                    LazyColumn(state = lazyListState) {
                         items(items = state.categories, key = { it.id }) { category ->
                             CategoriesItem(category = category)
                             HorizontalDivider()
