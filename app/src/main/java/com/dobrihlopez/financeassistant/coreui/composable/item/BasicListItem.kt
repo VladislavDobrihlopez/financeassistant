@@ -1,4 +1,4 @@
-package com.dobrihlopez.financeassistant.coreui.composable
+package com.dobrihlopez.financeassistant.coreui.composable.item
 
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.background

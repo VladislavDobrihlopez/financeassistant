@@ -23,21 +23,22 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import com.dobrihlopez.financeassistant.R
+import com.dobrihlopez.financeassistant.core.model.category.Category
 import com.dobrihlopez.financeassistant.core.toDateFormat
 import com.dobrihlopez.financeassistant.core.toTimeFormat
 import com.dobrihlopez.financeassistant.coreui.composable.ErrorSnackbarHost
 import com.dobrihlopez.financeassistant.coreui.composable.LoadingProgressBar
+import com.dobrihlopez.financeassistant.coreui.composable.dialog.BalanceEditDialog
+import com.dobrihlopez.financeassistant.coreui.composable.modalsheet.CategoriesItemListBottomSheet
+import com.dobrihlopez.financeassistant.coreui.composable.modalsheet.CommentaryInputBottomSheet
+import com.dobrihlopez.financeassistant.coreui.composable.picker.FinanceDatePickerDialog
+import com.dobrihlopez.financeassistant.coreui.composable.picker.FinanceTimePickerDialog
 import com.dobrihlopez.financeassistant.coreui.ui.theme.spacing
-import com.dobrihlopez.financeassistant.feature.accounts.presentation.composable.BalanceEditDialog
-import com.dobrihlopez.financeassistant.feature.transaction.core_ui.composable.modalsheet.CommentaryInputBottomSheet
-import com.dobrihlopez.financeassistant.feature.transaction.core_ui.composable.picker.FinanceDatePickerDialog
-import com.dobrihlopez.financeassistant.feature.transaction.core_ui.composable.picker.FinanceTimePickerDialog
 import com.dobrihlopez.financeassistant.feature.transaction.creation.presentation.TransactionCreationStore
 import com.dobrihlopez.financeassistant.feature.transaction.creation.presentation.composable.DeletionButton
 import com.dobrihlopez.financeassistant.feature.transaction.creation.presentation.composable.TransactionOptionItem
 import java.time.LocalDate
 import java.time.LocalTime
-import java.time.ZoneId
 import java.time.ZoneOffset
 
 private enum class Option(@StringRes val itemName: Int, val hasDropDownSelection: Boolean) {
@@ -67,6 +68,7 @@ fun CreationContent(
     state: TransactionCreationStore.State,
     paddingValues: PaddingValues,
     onDeleteTransaction: () -> Unit,
+    onCategoryChanged: (Category) -> Unit,
     onBalanceChanged: (String) -> Unit,
     onDateChanged: (LocalDate) -> Unit,
     onTimeChanged: (LocalTime) -> Unit,
@@ -89,9 +91,11 @@ fun CreationContent(
                     .padding(innerPadding)
                 ) {
                     var showBalanceSheet by rememberSaveable { mutableStateOf(false) }
+                    val categoriesBottomSheet = rememberModalBottomSheetState()
                     val balanceSheetState = rememberModalBottomSheetState()
                     val commentarySheetState = rememberModalBottomSheetState()
 
+                    var showCategoriesSheet by rememberSaveable { mutableStateOf(false) }
                     var showDatePicker by rememberSaveable { mutableStateOf(false) }
                     var showTimePicker by rememberSaveable { mutableStateOf(false) }
                     var showCommentarySheet by rememberSaveable { mutableStateOf(false) }
@@ -115,7 +119,7 @@ fun CreationContent(
                                 onClick = {
                                     when (option) {
                                         Option.ACCOUNT -> {}
-                                        Option.CATEGORY -> {}
+                                        Option.CATEGORY -> showCategoriesSheet = true
                                         Option.SUM -> showBalanceSheet = true
                                         Option.DATE -> showDatePicker = true
                                         Option.TIME -> showTimePicker = true
@@ -143,6 +147,21 @@ fun CreationContent(
                                 )
                             }
                         }
+                    }
+
+                    if (showCategoriesSheet) {
+                        CategoriesItemListBottomSheet(
+                            items = state.categories,
+                            initiallySelectedCategory = state.chosenCategory,
+                            sheetState = categoriesBottomSheet,
+                            onDismissRequest = {
+                                showCategoriesSheet = false
+                            },
+                            onItemSelected = { category ->
+                                showCategoriesSheet = false
+                                onCategoryChanged(category)
+                            },
+                        )
                     }
 
                     if (showBalanceSheet) {

@@ -41,7 +41,7 @@ import com.dobrihlopez.financeassistant.coreui.composable.LoadingProgressBar
 import com.dobrihlopez.financeassistant.coreui.ui.theme.FinanceAssistantTheme
 import com.dobrihlopez.financeassistant.core.model.category.Category
 import com.dobrihlopez.financeassistant.feature.categories.presentation.CategoriesStore.CategoriesScreenState
-import com.dobrihlopez.financeassistant.feature.categories.presentation.composable.CategoriesItem
+import com.dobrihlopez.financeassistant.coreui.composable.item.CategoriesItem
 import com.dobrihlopez.financeassistant.feature.categories.presentation.composable.SearchBar
 
 private const val FADE_IN_SEARCH_BAR_INTERVAL_IN_MILLIS = 250
@@ -125,7 +125,7 @@ fun CategoriesContent(
                     }
                     LazyColumn(state = lazyListState) {
                         items(items = state.categories, key = { it.id }) { category ->
-                            CategoriesItem(category = category)
+                            CategoriesItem(category = category, isSelected = false)
                             HorizontalDivider()
                         }
                     }

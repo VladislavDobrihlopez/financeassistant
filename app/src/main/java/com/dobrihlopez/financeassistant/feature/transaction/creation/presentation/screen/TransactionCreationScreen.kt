@@ -17,5 +17,6 @@ fun CreationScreen(component: TransactionCreationComponent, paddingValues: Paddi
         onDateChanged = component::updateDate,
         onTimeChanged = component::updateTime,
         onCommentaryChanged = component::updateComment,
+        onCategoryChanged = component::updateCategory,
     )
 }

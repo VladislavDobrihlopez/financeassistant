@@ -1,4 +1,4 @@
-package com.dobrihlopez.financeassistant.feature.transaction.core_ui.composable.picker
+package com.dobrihlopez.financeassistant.coreui.composable.picker
 
 import androidx.compose.material3.DatePicker
 import androidx.compose.material3.DatePickerDefaults

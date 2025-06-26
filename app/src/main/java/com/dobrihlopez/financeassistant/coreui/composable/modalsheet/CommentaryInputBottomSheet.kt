@@ -1,4 +1,4 @@
-package com.dobrihlopez.financeassistant.feature.transaction.core_ui.composable.modalsheet
+package com.dobrihlopez.financeassistant.coreui.composable.modalsheet
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row

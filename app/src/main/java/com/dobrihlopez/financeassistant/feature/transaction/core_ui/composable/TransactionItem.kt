@@ -18,10 +18,8 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import com.dobrihlopez.financeassistant.R
 import com.dobrihlopez.financeassistant.core.toFullDateAndTimeFormat
-import com.dobrihlopez.financeassistant.coreui.composable.BasicListItem
+import com.dobrihlopez.financeassistant.coreui.composable.item.BasicListItem
 import com.dobrihlopez.financeassistant.feature.transaction.core.model.Transaction
-import java.time.OffsetDateTime
-import java.time.format.DateTimeFormatter
 
 @Composable
 fun TransactionItem(
