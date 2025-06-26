@@ -50,4 +50,9 @@
     <string name="transaction_result_changes_applied">Changed applied</string>
     <string name="transaction_result_created">Transaction created</string>
     <string name="transaction_result_deleted">Transaction deleted</string>
+    <string name="navigation_item_expenses">Expense</string>
+    <string name="navigation_item_incomes">Income</string>
+    <string name="navigation_item_account">Account</string>
+    <string name="navigation_item_categories">Categories</string>
+    <string name="navigation_item_settings">Settings</string>
 </resources>

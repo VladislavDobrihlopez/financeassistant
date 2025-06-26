@@ -54,4 +54,9 @@
     <string name="transaction_result_changes_applied">Изменения внесены</string>
     <string name="transaction_result_created">Транзакция создана</string>
     <string name="transaction_result_deleted">Транзакция удалена</string>
+    <string name="navigation_item_expenses">Расходы</string>
+    <string name="navigation_item_incomes">Доходы</string>
+    <string name="navigation_item_account">Счёт</string>
+    <string name="navigation_item_categories">Статьи</string>
+    <string name="navigation_item_settings">Настройки</string>
 </resources>
