@@ -58,7 +58,7 @@ fun IncomeScreen(component: IncomeComponent) {
                         Box(Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
                             Text(
                                 text = stringResource(topBarState.topBarResId!!),
-                                style = MaterialTheme.typography.titleLarge
+                                style = MaterialTheme.typography.titleLarge,
                             )
                         }
                     }
@@ -78,8 +78,9 @@ fun IncomeScreen(component: IncomeComponent) {
                 },
                 navigationIcon = {
                     AnimatedVisibility(
-                        visible = topBarState.navigationActionButton != null
-                                && topBarState.onNavigationButtonClick != null,
+                        visible =
+                            topBarState.navigationActionButton != null &&
+                                topBarState.onNavigationButtonClick != null,
                         enter = navActionEnterTransition,
                         exit = navActionExitTransition,
                     ) {
@@ -106,20 +107,23 @@ fun IncomeScreen(component: IncomeComponent) {
     ) { paddingValues ->
         Children(
             stack = childStack,
-            animation = stackAnimation(selector = { destination ->
-                if (destination.instance is IncomeComponent.Child.TransactionCreator)
-                    slide(orientation = Orientation.Horizontal)
-                else
-                    slide(orientation = Orientation.Vertical)
-            }),
+            animation =
+                stackAnimation(selector = { destination ->
+                    if (destination.instance is IncomeComponent.Child.TransactionCreator) {
+                        slide(orientation = Orientation.Horizontal)
+                    } else {
+                        slide(orientation = Orientation.Vertical)
+                    }
+                }),
         ) { child ->
             when (val instance = child.instance) {
                 is IncomeComponent.Child.Main -> {
-                    topBarState = MainScreen(
-                        topBarResId = R.string.incomes_topbar_title,
-                        onActionButtonClick = component::onHistoryClick,
-                        onFabClick = component::onFabClick,
-                    )
+                    topBarState =
+                        MainScreen(
+                            topBarResId = R.string.incomes_topbar_title,
+                            onActionButtonClick = component::onHistoryClick,
+                            onFabClick = component::onFabClick,
+                        )
 
                     IncomeContent(
                         state = component.state.collectAsStateWithLifecycle().value,
@@ -129,20 +133,22 @@ fun IncomeScreen(component: IncomeComponent) {
                 }
 
                 is IncomeComponent.Child.History -> {
-                    topBarState = History(
-                        onActionButtonClick = {},
-                        onNavigationButtonClick = component::onNavigateBack
-                    )
+                    topBarState =
+                        History(
+                            onActionButtonClick = {},
+                            onNavigationButtonClick = component::onNavigateBack,
+                        )
 
                     HistoryScreen(instance.component, paddingValues)
                 }
 
                 is IncomeComponent.Child.TransactionCreator -> {
-                    topBarState = TransactionHandler(
-                        onActionButtonClick = instance.component::applyChanges,
-                        onNavigationButtonClick = component::onNavigateBack,
-                        topBarResId = R.string.operation_tranction_my_incomes,
-                    )
+                    topBarState =
+                        TransactionHandler(
+                            onActionButtonClick = instance.component::applyChanges,
+                            onNavigationButtonClick = component::onNavigateBack,
+                            topBarResId = R.string.operation_tranction_my_incomes,
+                        )
 
                     CreationScreen(instance.component, paddingValues)
                 }

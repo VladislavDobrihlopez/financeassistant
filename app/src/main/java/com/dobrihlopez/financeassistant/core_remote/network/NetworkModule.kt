@@ -25,7 +25,9 @@ object NetworkModule {
 
     @Provides
     @Singleton
-    fun provideConnectivityManager(@ApplicationContext context: Context): ConnectivityManager =
+    fun provideConnectivityManager(
+        @ApplicationContext context: Context,
+    ): ConnectivityManager =
         try {
             context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
         } catch (e: Exception) {

@@ -41,6 +41,6 @@ fun BalanceEditDialog(
             balance = it.replace(',', '.')
         },
         onDismissRequest = onDismiss,
-        onDone = onDone
+        onDone = onDone,
     )
 }

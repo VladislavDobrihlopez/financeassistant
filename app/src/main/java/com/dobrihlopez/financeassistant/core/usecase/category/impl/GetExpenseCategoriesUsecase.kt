@@ -5,10 +5,12 @@ import com.dobrihlopez.financeassistant.core.usecase.category.GetTypedCategories
 import com.dobrihlopez.financeassistant.feature.categories.domain.CategoriesRepository
 import javax.inject.Inject
 
-class GetExpenseCategoriesUsecase @Inject constructor(
-    private val repository: CategoriesRepository,
-) : GetTypedCategoriesUsecase {
-    override suspend operator fun invoke(): List<Category> {
-        return repository.getExpenseCategories()
+class GetExpenseCategoriesUsecase
+    @Inject
+    constructor(
+        private val repository: CategoriesRepository,
+    ) : GetTypedCategoriesUsecase {
+        override suspend operator fun invoke(): List<Category> {
+            return repository.getExpenseCategories()
+        }
     }
-}

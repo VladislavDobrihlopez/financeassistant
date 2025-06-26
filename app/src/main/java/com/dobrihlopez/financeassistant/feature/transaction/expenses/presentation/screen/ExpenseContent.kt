@@ -77,7 +77,7 @@ private fun PreviewExpenseLight() {
                     summaryValue = "436 558 ₽",
                 ),
             paddingValues = PaddingValues(0.dp),
-            onTransactionClicked = {}
+            onTransactionClicked = {},
         )
     }
 }
@@ -93,7 +93,7 @@ private fun PreviewExpenseDark() {
                     summaryValue = "436 558 ₽",
                 ),
             paddingValues = PaddingValues(0.dp),
-            onTransactionClicked = {}
+            onTransactionClicked = {},
         )
     }
 }

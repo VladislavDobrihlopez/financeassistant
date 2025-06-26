@@ -1,10 +1,10 @@
 package com.dobrihlopez.financeassistant.feature.accounts.di
 
 import com.arkivanov.mvikotlin.core.store.StoreFactory
+import com.dobrihlopez.financeassistant.core.usecase.account.GetFirstAccountUseCase
 import com.dobrihlopez.financeassistant.feature.accounts.data.network.AccountsApiService
 import com.dobrihlopez.financeassistant.feature.accounts.data.repository.AccountsRepositoryImpl
 import com.dobrihlopez.financeassistant.feature.accounts.domain.AccountsRepository
-import com.dobrihlopez.financeassistant.core.usecase.account.GetFirstAccountUseCase
 import com.dobrihlopez.financeassistant.feature.accounts.domain.usecase.UpdateAccountUseCase
 import com.dobrihlopez.financeassistant.feature.accounts.presentation.AccountsStore
 import dagger.Binds

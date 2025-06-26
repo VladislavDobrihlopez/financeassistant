@@ -68,139 +68,141 @@ interface ExpenseComponent {
     }
 
     class DefaultExpenseComponent
-    @AssistedInject
-    constructor(
-        @Assisted("componentContext") private val componentContext: ComponentContext,
-        private val expenseStoreFactory: ExpenseStoreFactory,
-        private val historyComponentFactory: HistoryComponent.Factory,
-        private val transactionComponentFactory: TransactionCreationComponent.Factory,
-        @Named("usecaseSortedExpense") private val getSortedExpenseTransactionsUsecase: GetSortedTransactionsUsecase,
-        @Named("usecaseCategoriesExpense") private val getExpenseCategoriesUsecase: GetTypedCategoriesUsecase
+        @AssistedInject
+        constructor(
+            @Assisted("componentContext") private val componentContext: ComponentContext,
+            private val expenseStoreFactory: ExpenseStoreFactory,
+            private val historyComponentFactory: HistoryComponent.Factory,
+            private val transactionComponentFactory: TransactionCreationComponent.Factory,
+            @Named("usecaseSortedExpense") private val getSortedExpenseTransactionsUsecase: GetSortedTransactionsUsecase,
+            @Named("usecaseCategoriesExpense") private val getExpenseCategoriesUsecase: GetTypedCategoriesUsecase,
         ) : ExpenseComponent, ComponentContext by componentContext {
-        private val stack = StackNavigation<Config>()
+            private val stack = StackNavigation<Config>()
 
-        override val childStack: Value<ChildStack<*, Child>> =
-            childStack(
-                source = stack,
-                initialConfiguration = Config.Main,
-                childFactory = ::child,
-                key = "expense_stack",
-                handleBackButton = true,
-                serializer = Config.serializer(),
-            )
+            override val childStack: Value<ChildStack<*, Child>> =
+                childStack(
+                    source = stack,
+                    initialConfiguration = Config.Main,
+                    childFactory = ::child,
+                    key = "expense_stack",
+                    handleBackButton = true,
+                    serializer = Config.serializer(),
+                )
 
-        private fun child(
-            config: Config,
-            componentContext: ComponentContext,
-        ): Child =
-            when (config) {
-                Config.Main -> Child.Main(this)
-                Config.History ->
-                    Child.History(
-                        historyComponentFactory.create(
-                            componentContext,
-                            isIncome = false,
-                            getSortedTransactionsUsecase = getSortedExpenseTransactionsUsecase,
-                            onTransactionSelected = { transaction ->
-                                onExpenseClick(transaction)
-                            }
-                        ),
-                    )
-
-                is Config.TransactionCreator -> {
-                    Child.TransactionCreator(
-                        component = transactionComponentFactory.create(
-                            componentContext = componentContext,
-                            launchMode = if (config.transaction == null) {
-                                TransactionCreationStore.LaunchMode.CREATING
-                            } else {
-                                TransactionCreationStore.LaunchMode.EDITING
-                            },
-                            transaction = config.transaction,
-                            onFinish = {
-                                onNavigateBack()
-                                store.accept(ExpenseStore.Intent.LoadExpenses)
-                            },
-                            getTypedCategories = getExpenseCategoriesUsecase,
+            private fun child(
+                config: Config,
+                componentContext: ComponentContext,
+            ): Child =
+                when (config) {
+                    Config.Main -> Child.Main(this)
+                    Config.History ->
+                        Child.History(
+                            historyComponentFactory.create(
+                                componentContext,
+                                isIncome = false,
+                                getSortedTransactionsUsecase = getSortedExpenseTransactionsUsecase,
+                                onTransactionSelected = { transaction ->
+                                    onExpenseClick(transaction)
+                                },
+                            ),
                         )
-                    )
+
+                    is Config.TransactionCreator -> {
+                        Child.TransactionCreator(
+                            component =
+                                transactionComponentFactory.create(
+                                    componentContext = componentContext,
+                                    launchMode =
+                                        if (config.transaction == null) {
+                                            TransactionCreationStore.LaunchMode.CREATING
+                                        } else {
+                                            TransactionCreationStore.LaunchMode.EDITING
+                                        },
+                                    transaction = config.transaction,
+                                    onFinish = {
+                                        onNavigateBack()
+                                        store.accept(ExpenseStore.Intent.LoadExpenses)
+                                    },
+                                    getTypedCategories = getExpenseCategoriesUsecase,
+                                ),
+                        )
+                    }
+                }
+
+            private val initState =
+                stateKeeper.consume(STATE_KEY, strategy = ExpenseStore.ExpenseScreenState.serializer())
+                    ?: ExpenseStore.ExpenseScreenState.Loading
+
+            private val store =
+                instanceKeeper.getStore {
+                    expenseStoreFactory.create(initState)
+                }
+
+            @OptIn(ExperimentalCoroutinesApi::class)
+            override val state: StateFlow<ExpenseStore.ExpenseScreenState>
+                get() = store.stateFlow
+
+            init {
+                stateKeeper.register(STATE_KEY, ExpenseStore.ExpenseScreenState.serializer()) {
+                    state.value
+                }
+
+                lifecycle.doOnStart {
+                    if (state.value is ExpenseStore.ExpenseScreenState.Failed) {
+                        onRefreshList()
+                    }
                 }
             }
 
-        private val initState =
-            stateKeeper.consume(STATE_KEY, strategy = ExpenseStore.ExpenseScreenState.serializer())
-                ?: ExpenseStore.ExpenseScreenState.Loading
-
-        private val store =
-            instanceKeeper.getStore {
-                expenseStoreFactory.create(initState)
+            override fun onRefreshList() {
+                store.accept(ExpenseStore.Intent.LoadExpenses)
             }
 
-        @OptIn(ExperimentalCoroutinesApi::class)
-        override val state: StateFlow<ExpenseStore.ExpenseScreenState>
-            get() = store.stateFlow
-
-        init {
-            stateKeeper.register(STATE_KEY, ExpenseStore.ExpenseScreenState.serializer()) {
-                state.value
+            override fun onNavigateBack() {
+                stack.pop()
             }
 
-            lifecycle.doOnStart {
-                if (state.value is ExpenseStore.ExpenseScreenState.Failed) {
-                    onRefreshList()
-                }
+            override fun onHistoryClick() {
+                stack.push(Config.History)
             }
-        }
 
-        override fun onRefreshList() {
-            store.accept(ExpenseStore.Intent.LoadExpenses)
-        }
-
-        override fun onNavigateBack() {
-            stack.pop()
-        }
-
-        override fun onHistoryClick() {
-            stack.push(Config.History)
-        }
-
-        override fun onFabClick() {
-            // store.accept(ExpenseStore.Intent.AddExpense)
-            stack.push(
-                Config.TransactionCreator(
-                    isFromIncome = false,
-                    transaction = null
+            override fun onFabClick() {
+                // store.accept(ExpenseStore.Intent.AddExpense)
+                stack.push(
+                    Config.TransactionCreator(
+                        isFromIncome = false,
+                        transaction = null,
+                    ),
                 )
-            )
-        }
+            }
 
-        override fun onExpenseClick(transaction: Transaction) {
-            // store.accept(ExpenseStore.Intent.OnExpenseClick(transaction))
-            stack.push(
-                Config.TransactionCreator(
-                    isFromIncome = false,
-                    transaction = transaction
+            override fun onExpenseClick(transaction: Transaction) {
+                // store.accept(ExpenseStore.Intent.OnExpenseClick(transaction))
+                stack.push(
+                    Config.TransactionCreator(
+                        isFromIncome = false,
+                        transaction = transaction,
+                    ),
                 )
-            )
-        }
+            }
 
-        private companion object {
-            const val STATE_KEY = "expense"
-        }
-
-        @Serializable
-        private sealed class Config {
-            @Serializable
-            object Main : Config()
+            private companion object {
+                const val STATE_KEY = "expense"
+            }
 
             @Serializable
-            object History : Config()
+            private sealed class Config {
+                @Serializable
+                object Main : Config()
 
-            @Serializable
-            data class TransactionCreator(
-                val isFromIncome: Boolean,
-                val transaction: Transaction? = null,
-            ) : Config()
+                @Serializable
+                object History : Config()
+
+                @Serializable
+                data class TransactionCreator(
+                    val isFromIncome: Boolean,
+                    val transaction: Transaction? = null,
+                ) : Config()
+            }
         }
-    }
 }

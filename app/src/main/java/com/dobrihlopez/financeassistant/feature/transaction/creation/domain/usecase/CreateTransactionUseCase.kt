@@ -4,22 +4,24 @@ import com.dobrihlopez.financeassistant.feature.transaction.creation.domain.Tran
 import java.time.LocalDateTime
 import javax.inject.Inject
 
-class CreateTransactionUseCase @Inject constructor(
-    private val repository: TransactionRepository,
-) {
-    suspend operator fun invoke(
-        accountId: Int,
-        categoryId: Int,
-        amount: String,
-        transactionDate: LocalDateTime,
-        comment: String,
+class CreateTransactionUseCase
+    @Inject
+    constructor(
+        private val repository: TransactionRepository,
     ) {
-        repository.createTransaction(
-            accountId = accountId,
-            categoryId = categoryId,
-            amount = amount,
-            transactionDate = transactionDate,
-            comment = comment,
-        )
+        suspend operator fun invoke(
+            accountId: Int,
+            categoryId: Int,
+            amount: String,
+            transactionDate: LocalDateTime,
+            comment: String,
+        ) {
+            repository.createTransaction(
+                accountId = accountId,
+                categoryId = categoryId,
+                amount = amount,
+                transactionDate = transactionDate,
+                comment = comment,
+            )
+        }
     }
-}

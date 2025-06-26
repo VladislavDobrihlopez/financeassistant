@@ -4,8 +4,6 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.expandIn
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
-import androidx.compose.animation.shrinkHorizontally
-import androidx.compose.animation.shrinkVertically
 import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
@@ -19,11 +17,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 
 @Composable
-fun Fab(modifier: Modifier = Modifier, onClick: (() -> Unit)? = null) {
+fun Fab(
+    modifier: Modifier = Modifier,
+    onClick: (() -> Unit)? = null,
+) {
     AnimatedVisibility(
         onClick != null,
         enter = fadeIn() + expandIn(expandFrom = Alignment.BottomCenter, clip = false),
-        exit = fadeOut() + slideOutHorizontally(targetOffsetX = { it / 2 })
+        exit = fadeOut() + slideOutHorizontally(targetOffsetX = { it / 2 }),
     ) {
         FloatingActionButton(
             modifier = modifier,

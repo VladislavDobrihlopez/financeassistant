@@ -25,14 +25,17 @@ fun CategoriesItem(
     modifier: Modifier = Modifier,
     onClick: (() -> Unit)? = null,
 ) {
-    val trailingContent = if (isSelected) {
-        @Composable {
-            Icon(
-                imageVector = ImageVector.vectorResource(R.drawable.ic_apply),
-                contentDescription = ""
-            )
+    val trailingContent =
+        if (isSelected) {
+            @Composable {
+                Icon(
+                    imageVector = ImageVector.vectorResource(R.drawable.ic_apply),
+                    contentDescription = "",
+                )
+            }
+        } else {
+            null
         }
-    } else null
 
     BasicListItem(
         modifier = modifier.height(70.dp),

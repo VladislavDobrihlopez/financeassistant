@@ -39,22 +39,24 @@ fun CommentaryInputBottomSheet(
 
     ModalBottomSheet(
         sheetState = sheetState,
-        onDismissRequest = onDismiss
+        onDismissRequest = onDismiss,
     ) {
         OutlinedTextField(
             value = text,
             onValueChange = { text = it },
             label = { Text(stringResource(R.string.transaction_input_field_commentary)) },
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(MaterialTheme.spacing.medium),
-            maxLines = 5
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .padding(MaterialTheme.spacing.medium),
+            maxLines = 5,
         )
         Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(MaterialTheme.spacing.medium),
-            horizontalArrangement = Arrangement.End
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .padding(MaterialTheme.spacing.medium),
+            horizontalArrangement = Arrangement.End,
         ) {
             TextButton(
                 onClick = onDismiss,
@@ -62,7 +64,7 @@ fun CommentaryInputBottomSheet(
                     ButtonDefaults.buttonColors().copy(
                         containerColor = MaterialTheme.colorScheme.errorContainer,
                         contentColor = errorColor,
-                    )
+                    ),
             ) {
                 Text(text = stringResource(R.string.cancel), color = errorColor)
             }

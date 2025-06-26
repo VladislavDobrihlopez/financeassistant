@@ -11,7 +11,10 @@ import com.dobrihlopez.financeassistant.feature.transaction.creation.presentatio
 import com.dobrihlopez.financeassistant.feature.transaction.creation.presentation.TransactionCreationStore
 
 @Composable
-fun CreationScreen(component: TransactionCreationComponent, paddingValues: PaddingValues) {
+fun CreationScreen(
+    component: TransactionCreationComponent,
+    paddingValues: PaddingValues,
+) {
     val state = component.state.collectAsStateWithLifecycle().value
 
     CreationContent(
@@ -30,16 +33,25 @@ fun CreationScreen(component: TransactionCreationComponent, paddingValues: Paddi
         component.labels.collect { label ->
             when (label) {
                 TransactionCreationStore.Label.ChangesSuccessfullyApplied -> {
-                    Toast.makeText(context,
-                        context.getString(R.string.transaction_result_changes_applied), Toast.LENGTH_SHORT).show()
+                    Toast.makeText(
+                        context,
+                        context.getString(R.string.transaction_result_changes_applied),
+                        Toast.LENGTH_SHORT,
+                    ).show()
                 }
                 TransactionCreationStore.Label.SuccessfullyCreated -> {
-                    Toast.makeText(context,
-                        context.getString(R.string.transaction_result_created), Toast.LENGTH_SHORT).show()
+                    Toast.makeText(
+                        context,
+                        context.getString(R.string.transaction_result_created),
+                        Toast.LENGTH_SHORT,
+                    ).show()
                 }
                 TransactionCreationStore.Label.SuccessfullyDeleted -> {
-                    Toast.makeText(context,
-                        context.getString(R.string.transaction_result_deleted), Toast.LENGTH_SHORT).show()
+                    Toast.makeText(
+                        context,
+                        context.getString(R.string.transaction_result_deleted),
+                        Toast.LENGTH_SHORT,
+                    ).show()
                 }
             }
         }

@@ -8,9 +8,9 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.dobrihlopez.financeassistant.coreui.composable.dialog.BalanceEditDialog
 import com.dobrihlopez.financeassistant.feature.accounts.presentation.AccountsComponent
 import com.dobrihlopez.financeassistant.feature.accounts.presentation.AccountsStore.AccountScreenState
-import com.dobrihlopez.financeassistant.coreui.composable.dialog.BalanceEditDialog
 import com.dobrihlopez.financeassistant.feature.accounts.presentation.composable.CurrencyChooser
 
 @OptIn(ExperimentalMaterial3Api::class)

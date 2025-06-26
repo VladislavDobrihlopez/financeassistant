@@ -1,7 +1,7 @@
 package com.dobrihlopez.financeassistant.feature.accounts.domain.usecase
 
-import com.dobrihlopez.financeassistant.feature.accounts.domain.AccountsRepository
 import com.dobrihlopez.financeassistant.core.model.account.UserAccountDetailed
+import com.dobrihlopez.financeassistant.feature.accounts.domain.AccountsRepository
 import javax.inject.Inject
 
 class UpdateAccountUseCase

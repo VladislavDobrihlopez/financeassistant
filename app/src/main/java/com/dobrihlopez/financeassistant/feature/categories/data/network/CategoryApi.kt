@@ -9,5 +9,7 @@ interface CategoryApi {
     suspend fun getAllCategories(): List<CategoryDto>
 
     @GET("v1/categories/type/{isIncome}")
-    suspend fun getFilteredCategories(@Path("isIncome") typeIsIncome: Boolean): List<CategoryDto>
+    suspend fun getFilteredCategories(
+        @Path("isIncome") typeIsIncome: Boolean,
+    ): List<CategoryDto>
 }

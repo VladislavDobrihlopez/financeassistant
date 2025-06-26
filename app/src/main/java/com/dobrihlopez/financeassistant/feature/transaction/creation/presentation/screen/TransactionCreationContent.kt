@@ -43,7 +43,10 @@ import java.time.LocalDate
 import java.time.LocalTime
 import java.time.ZoneOffset
 
-private enum class Option(@StringRes val itemName: Int, val hasDropDownSelection: Boolean) {
+private enum class Option(
+    @StringRes val itemName: Int,
+    val hasDropDownSelection: Boolean,
+) {
     ACCOUNT(R.string.transaction_account, true),
     CATEGORY(R.string.transaction_category, true),
     SUM(R.string.transaction_sum, false),
@@ -55,8 +58,9 @@ private enum class Option(@StringRes val itemName: Int, val hasDropDownSelection
 private fun Option.getValue(state: TransactionCreationStore.State.Success): String {
     return when (this) {
         Option.ACCOUNT -> state.originalTransaction?.account?.name ?: "Default"
-        Option.CATEGORY -> state.chosenCategory?.name ?: state.originalTransaction?.category?.name
-        ?: state.categories.firstOrNull()?.name ?: ""
+        Option.CATEGORY ->
+            state.chosenCategory?.name ?: state.originalTransaction?.category?.name
+                ?: state.categories.firstOrNull()?.name ?: ""
         Option.SUM -> state.sum
         Option.DATE -> (state.date?.toLocalDate() ?: LocalDate.now()).toDateFormat()
         Option.TIME -> (state.date?.toLocalTime() ?: LocalTime.now()).toTimeFormat()
@@ -87,10 +91,12 @@ fun CreationContent(
             TransactionCreationStore.State.Failed -> {}
             TransactionCreationStore.State.Loading -> LoadingProgressBar()
             is TransactionCreationStore.State.Success -> {
-                Box(modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(paddingValues)
-                    .padding(innerPadding)
+                Box(
+                    modifier =
+                        Modifier
+                            .fillMaxWidth()
+                            .padding(paddingValues)
+                            .padding(innerPadding),
                 ) {
                     var showBalanceSheet by rememberSaveable { mutableStateOf(false) }
                     val categoriesBottomSheet = rememberModalBottomSheetState()
@@ -102,17 +108,20 @@ fun CreationContent(
                     var showTimePicker by rememberSaveable { mutableStateOf(false) }
                     var showCommentarySheet by rememberSaveable { mutableStateOf(false) }
 
-                    val datePickerState = rememberDatePickerState(
-                        initialSelectedDateMillis = (state.date?.toLocalDate() ?: LocalDate.now())
-                            .atStartOfDay(ZoneOffset.UTC)
-                            .toInstant()
-                            .toEpochMilli()
-                    )
+                    val datePickerState =
+                        rememberDatePickerState(
+                            initialSelectedDateMillis =
+                                (state.date?.toLocalDate() ?: LocalDate.now())
+                                    .atStartOfDay(ZoneOffset.UTC)
+                                    .toInstant()
+                                    .toEpochMilli(),
+                        )
 
-                    val timePickerState = rememberTimePickerState(
-                        initialHour = (state.date?.toLocalTime() ?: LocalTime.now()).hour,
-                        initialMinute = (state.date?.toLocalTime() ?: LocalTime.now()).minute,
-                    )
+                    val timePickerState =
+                        rememberTimePickerState(
+                            initialHour = (state.date?.toLocalTime() ?: LocalTime.now()).hour,
+                            initialMinute = (state.date?.toLocalTime() ?: LocalTime.now()).minute,
+                        )
 
                     val context = LocalContext.current
 
@@ -126,7 +135,7 @@ fun CreationContent(
                                             Toast.makeText(
                                                 context,
                                                 context.getString(R.string.error_default_account),
-                                                Toast.LENGTH_SHORT
+                                                Toast.LENGTH_SHORT,
                                             ).show()
                                         }
                                         Option.CATEGORY -> showCategoriesSheet = true
@@ -137,23 +146,25 @@ fun CreationContent(
                                     }
                                 },
                                 value = option.getValue(state),
-                                hasChooseOption = option.hasDropDownSelection
+                                hasChooseOption = option.hasDropDownSelection,
                             )
                             HorizontalDivider()
                         }
                         item {
                             AnimatedVisibility(state.mode == TransactionCreationStore.LaunchMode.EDITING) {
                                 DeletionButton(
-                                    modifier = Modifier
-                                        .padding(
-                                            horizontal = MaterialTheme.spacing.medium,
-                                            vertical = MaterialTheme.spacing.extraLarge
-                                        )
-                                        .fillMaxWidth(),
+                                    modifier =
+                                        Modifier
+                                            .padding(
+                                                horizontal = MaterialTheme.spacing.medium,
+                                                vertical = MaterialTheme.spacing.extraLarge,
+                                            )
+                                            .fillMaxWidth(),
                                     onClick = onDeleteTransaction,
-                                    content = stringResource(
-                                        R.string.transaction_operation
-                                    )
+                                    content =
+                                        stringResource(
+                                            R.string.transaction_operation,
+                                        ),
                                 )
                             }
                         }
@@ -195,7 +206,7 @@ fun CreationContent(
                             onConfirm = { selectedDate ->
                                 showDatePicker = false
                                 onDateChanged(selectedDate)
-                            }
+                            },
                         )
                     }
 
@@ -206,10 +217,9 @@ fun CreationContent(
                             onConfirm = { selectedTime ->
                                 showTimePicker = false
                                 onTimeChanged(selectedTime)
-                            }
+                            },
                         )
                     }
-
 
                     if (showCommentarySheet) {
                         CommentaryInputBottomSheet(
@@ -219,7 +229,7 @@ fun CreationContent(
                             onDone = { comment ->
                                 showCommentarySheet = false
                                 onCommentaryChanged(comment)
-                            }
+                            },
                         )
                     }
                 }

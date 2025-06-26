@@ -4,6 +4,8 @@ import com.dobrihlopez.financeassistant.core.model.category.Category
 
 interface CategoriesRepository {
     suspend fun getAllCategories(): List<Category>
+
     suspend fun getIncomeCategories(): List<Category>
+
     suspend fun getExpenseCategories(): List<Category>
 }

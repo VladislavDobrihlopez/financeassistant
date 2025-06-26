@@ -5,11 +5,11 @@ import com.dobrihlopez.financeassistant.feature.categories.domain.CategoriesRepo
 import javax.inject.Inject
 
 class GetAllCategoriesUseCase
-@Inject
-constructor(
-    private val repository: CategoriesRepository,
-) {
-    suspend operator fun invoke(): List<Category> {
-        return repository.getAllCategories()
+    @Inject
+    constructor(
+        private val repository: CategoriesRepository,
+    ) {
+        suspend operator fun invoke(): List<Category> {
+            return repository.getAllCategories()
+        }
     }
-}

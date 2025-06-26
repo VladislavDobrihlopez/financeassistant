@@ -12,52 +12,59 @@ import javax.inject.Inject
 interface ConnectivityObserver {
     fun observe(): Flow<Boolean>
 
-    class DefaultConnectivityObserver @Inject constructor(
-        private val connectivityManager: ConnectivityManager,
-    ) : ConnectivityObserver {
-
-        private fun isNetworkAvailable(): Boolean {
-            val network = connectivityManager.activeNetwork ?: return false
-            val capabilities = connectivityManager.getNetworkCapabilities(network) ?: return false
-            return capabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET) &&
-                    (capabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) ||
+    class DefaultConnectivityObserver
+        @Inject
+        constructor(
+            private val connectivityManager: ConnectivityManager,
+        ) : ConnectivityObserver {
+            private fun isNetworkAvailable(): Boolean {
+                val network = connectivityManager.activeNetwork ?: return false
+                val capabilities = connectivityManager.getNetworkCapabilities(network) ?: return false
+                return capabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET) &&
+                    (
+                        capabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) ||
                             capabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) ||
                             capabilities.hasTransport(NetworkCapabilities.TRANSPORT_VPN) ||
-                            capabilities.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET))
+                            capabilities.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET)
+                    )
+            }
+
+            override fun observe(): Flow<Boolean> {
+                return callbackFlow {
+                    val callback =
+                        object : ConnectivityManager.NetworkCallback() {
+                            init {
+                                trySend(isNetworkAvailable())
+                            }
+
+                            override fun onAvailable(network: Network) {
+                                super.onAvailable(network)
+                                trySend(true)
+                            }
+
+                            override fun onLosing(
+                                network: Network,
+                                maxMsToLive: Int,
+                            ) {
+                                super.onLosing(network, maxMsToLive)
+                                trySend(false)
+                            }
+
+                            override fun onLost(network: Network) {
+                                super.onLost(network)
+                                trySend(false)
+                            }
+
+                            override fun onUnavailable() {
+                                super.onUnavailable()
+                                trySend(false)
+                            }
+                        }
+                    connectivityManager.registerDefaultNetworkCallback(callback)
+                    awaitClose {
+                        connectivityManager.unregisterNetworkCallback(callback)
+                    }
+                }.distinctUntilChanged()
+            }
         }
-
-        override fun observe(): Flow<Boolean> {
-            return callbackFlow {
-                val callback = object : ConnectivityManager.NetworkCallback() {
-                    init {
-                        trySend(isNetworkAvailable())
-                    }
-
-                    override fun onAvailable(network: Network) {
-                        super.onAvailable(network)
-                        trySend(true)
-                    }
-
-                    override fun onLosing(network: Network, maxMsToLive: Int) {
-                        super.onLosing(network, maxMsToLive)
-                        trySend(false)
-                    }
-
-                    override fun onLost(network: Network) {
-                        super.onLost(network)
-                        trySend(false)
-                    }
-
-                    override fun onUnavailable() {
-                        super.onUnavailable()
-                        trySend(false)
-                    }
-                }
-                connectivityManager.registerDefaultNetworkCallback(callback)
-                awaitClose {
-                    connectivityManager.unregisterNetworkCallback(callback)
-                }
-            }.distinctUntilChanged()
-        }
-    }
 }

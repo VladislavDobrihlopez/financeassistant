@@ -47,18 +47,19 @@ fun FinanceTimePickerDialog(
         text = {
             TimePicker(
                 state = timePickerState,
-                colors = TimePickerDefaults.colors(
-                    timeSelectorSelectedContainerColor = MaterialTheme.colorScheme.primary,
-                    timeSelectorUnselectedContainerColor = MaterialTheme.colorScheme.primaryContainer,
-                    timeSelectorSelectedContentColor = MaterialTheme.colorScheme.onPrimary,
-                    timeSelectorUnselectedContentColor = MaterialTheme.colorScheme.onPrimaryContainer,
-                    clockDialSelectedContentColor = MaterialTheme.colorScheme.onPrimary,
-                    clockDialUnselectedContentColor = MaterialTheme.colorScheme.onPrimaryContainer.copy(alpha = 0.75f),
-                    clockDialColor = MaterialTheme.colorScheme.primaryContainer,
-                    selectorColor = MaterialTheme.colorScheme.primary,
-                    periodSelectorBorderColor = MaterialTheme.colorScheme.onPrimary,
-                ),
+                colors =
+                    TimePickerDefaults.colors(
+                        timeSelectorSelectedContainerColor = MaterialTheme.colorScheme.primary,
+                        timeSelectorUnselectedContainerColor = MaterialTheme.colorScheme.primaryContainer,
+                        timeSelectorSelectedContentColor = MaterialTheme.colorScheme.onPrimary,
+                        timeSelectorUnselectedContentColor = MaterialTheme.colorScheme.onPrimaryContainer,
+                        clockDialSelectedContentColor = MaterialTheme.colorScheme.onPrimary,
+                        clockDialUnselectedContentColor = MaterialTheme.colorScheme.onPrimaryContainer.copy(alpha = 0.75f),
+                        clockDialColor = MaterialTheme.colorScheme.primaryContainer,
+                        selectorColor = MaterialTheme.colorScheme.primary,
+                        periodSelectorBorderColor = MaterialTheme.colorScheme.onPrimary,
+                    ),
             )
-        }
+        },
     )
 }

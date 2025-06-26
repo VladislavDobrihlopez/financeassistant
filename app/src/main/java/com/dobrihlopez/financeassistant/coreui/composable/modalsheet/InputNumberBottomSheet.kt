@@ -43,7 +43,7 @@ fun InputNumberBottomSheet(
     ModalBottomSheet(
         modifier = modifier,
         sheetState = sheetState,
-        onDismissRequest = onDismissRequest
+        onDismissRequest = onDismissRequest,
     ) {
         OutlinedTextField(
             value = inputValue,

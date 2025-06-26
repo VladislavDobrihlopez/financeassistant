@@ -34,12 +34,16 @@ import com.dobrihlopez.financeassistant.navigation.NavigationItem
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun RootScreen(rootComponent: RootComponent, hasInternetState: State<Boolean>) {
+fun RootScreen(
+    rootComponent: RootComponent,
+    hasInternetState: State<Boolean>,
+) {
     val childStack by rootComponent.state.subscribeAsState()
 
-    val snackBarHost = remember {
-        SnackbarHostState()
-    }
+    val snackBarHost =
+        remember {
+            SnackbarHostState()
+        }
 
     val spacing = MaterialTheme.spacing
 
@@ -49,7 +53,7 @@ fun RootScreen(rootComponent: RootComponent, hasInternetState: State<Boolean>) {
             snackBarHost.showSnackbar(
                 message = "internet issues",
                 duration = SnackbarDuration.Indefinite,
-                withDismissAction = false
+                withDismissAction = false,
             )
         } else {
             snackBarHost.currentSnackbarData?.dismiss()
@@ -83,9 +87,9 @@ fun RootScreen(rootComponent: RootComponent, hasInternetState: State<Boolean>) {
                 snackbar = { data ->
                     InternetConnectionStatus(
                         hasInternet = hasInternet,
-                        modifier = Modifier.padding(horizontal = spacing.medium)
+                        modifier = Modifier.padding(horizontal = spacing.medium),
                     )
-                }
+                },
             )
         },
     ) { paddingValues ->

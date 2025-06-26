@@ -9,6 +9,6 @@ fun Transaction.toRequest(): TransactionRequest {
         categoryId = category.id,
         amount = amount,
         comment = comment,
-        transactionDate = transactionDate
+        transactionDate = transactionDate,
     )
 }

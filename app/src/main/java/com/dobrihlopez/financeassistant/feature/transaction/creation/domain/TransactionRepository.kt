@@ -5,7 +5,9 @@ import java.time.LocalDateTime
 
 interface TransactionRepository {
     suspend fun deleteTransaction(transactionId: Int)
+
     suspend fun updateTransaction(transaction: Transaction)
+
     suspend fun createTransaction(
         accountId: Int,
         categoryId: Int,

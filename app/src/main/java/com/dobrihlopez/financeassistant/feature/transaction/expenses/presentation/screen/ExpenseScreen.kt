@@ -58,7 +58,7 @@ fun ExpenseScreen(component: ExpenseComponent) {
                         Box(Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
                             Text(
                                 text = stringResource(topBarState.topBarResId!!),
-                                style = MaterialTheme.typography.titleLarge
+                                style = MaterialTheme.typography.titleLarge,
                             )
                         }
                     }
@@ -78,10 +78,11 @@ fun ExpenseScreen(component: ExpenseComponent) {
                 },
                 navigationIcon = {
                     AnimatedVisibility(
-                        visible = topBarState.navigationActionButton != null &&
+                        visible =
+                            topBarState.navigationActionButton != null &&
                                 topBarState.onNavigationButtonClick != null,
                         enter = navActionEnterTransition,
-                        exit = navActionExitTransition
+                        exit = navActionExitTransition,
                     ) {
                         topBarState.navigationActionButton?.let {
                             IconButton(onClick = { topBarState.onNavigationButtonClick?.invoke() }) {
@@ -90,10 +91,11 @@ fun ExpenseScreen(component: ExpenseComponent) {
                         }
                     }
                 },
-                colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = MaterialTheme.colorScheme.primary,
-                    titleContentColor = MaterialTheme.colorScheme.onSurface,
-                ),
+                colors =
+                    TopAppBarDefaults.topAppBarColors(
+                        containerColor = MaterialTheme.colorScheme.primary,
+                        titleContentColor = MaterialTheme.colorScheme.onSurface,
+                    ),
             )
         },
         floatingActionButton = {
@@ -102,20 +104,23 @@ fun ExpenseScreen(component: ExpenseComponent) {
     ) { paddingValues ->
         Children(
             stack = childStack,
-            animation = stackAnimation(selector = { destination ->
-                if (destination.instance is ExpenseComponent.Child.TransactionCreator)
-                    slide(orientation = Orientation.Horizontal)
-                else
-                    slide(orientation = Orientation.Vertical)
-            }),
+            animation =
+                stackAnimation(selector = { destination ->
+                    if (destination.instance is ExpenseComponent.Child.TransactionCreator) {
+                        slide(orientation = Orientation.Horizontal)
+                    } else {
+                        slide(orientation = Orientation.Vertical)
+                    }
+                }),
         ) { child ->
             when (val instance = child.instance) {
                 is ExpenseComponent.Child.Main -> {
-                    topBarState = MainScreen(
-                        topBarResId = R.string.expenses_topbar_title,
-                        onActionButtonClick = component::onHistoryClick,
-                        onFabClick = component::onFabClick
-                    )
+                    topBarState =
+                        MainScreen(
+                            topBarResId = R.string.expenses_topbar_title,
+                            onActionButtonClick = component::onHistoryClick,
+                            onFabClick = component::onFabClick,
+                        )
 
                     ExpenseContent(
                         state = component.state.collectAsStateWithLifecycle().value,
@@ -125,20 +130,22 @@ fun ExpenseScreen(component: ExpenseComponent) {
                 }
 
                 is ExpenseComponent.Child.History -> {
-                    topBarState = History(
-                        onActionButtonClick = {},
-                        onNavigationButtonClick = component::onNavigateBack
-                    )
+                    topBarState =
+                        History(
+                            onActionButtonClick = {},
+                            onNavigationButtonClick = component::onNavigateBack,
+                        )
 
                     HistoryScreen(instance.component, paddingValues)
                 }
 
                 is ExpenseComponent.Child.TransactionCreator -> {
-                    topBarState = TransactionHandler(
-                        onActionButtonClick = instance.component::applyChanges,
-                        onNavigationButtonClick = component::onNavigateBack,
-                        topBarResId = R.string.operation_transaction_my_expenses,
-                    )
+                    topBarState =
+                        TransactionHandler(
+                            onActionButtonClick = instance.component::applyChanges,
+                            onNavigationButtonClick = component::onNavigateBack,
+                            topBarResId = R.string.operation_transaction_my_expenses,
+                        )
 
                     CreationScreen(instance.component, paddingValues)
                 }

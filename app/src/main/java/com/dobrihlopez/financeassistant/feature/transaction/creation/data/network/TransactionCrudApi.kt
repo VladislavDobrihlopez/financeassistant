@@ -16,8 +16,12 @@ interface TransactionCrudApi {
     ): TransactionDto
 
     @POST("v1/transactions")
-    suspend fun create(@Body request: TransactionRequest): TransactionDtoShorten
+    suspend fun create(
+        @Body request: TransactionRequest,
+    ): TransactionDtoShorten
 
     @DELETE("v1/transactions/{id}")
-    suspend fun delete(@Path("id") id: Int)
+    suspend fun delete(
+        @Path("id") id: Int,
+    )
 }

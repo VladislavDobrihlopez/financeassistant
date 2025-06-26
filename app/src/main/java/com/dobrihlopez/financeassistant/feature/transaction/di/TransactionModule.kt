@@ -19,11 +19,9 @@ abstract class TransactionModule {
 
     companion object {
         @Provides
-        fun provideTransactionCrudApi(retrofit: Retrofit): TransactionCrudApi =
-            retrofit.create(TransactionCrudApi::class.java)
+        fun provideTransactionCrudApi(retrofit: Retrofit): TransactionCrudApi = retrofit.create(TransactionCrudApi::class.java)
 
         @Provides
-        fun provideTransactionApi(retrofit: Retrofit): TransactionApi =
-            retrofit.create(TransactionApi::class.java)
+        fun provideTransactionApi(retrofit: Retrofit): TransactionApi = retrofit.create(TransactionApi::class.java)
     }
 }

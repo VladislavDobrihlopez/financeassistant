@@ -9,31 +9,33 @@ import com.dobrihlopez.financeassistant.feature.categories.domain.CategoriesRepo
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
-class CategoriesRepositoryImpl @Inject constructor(
-    private val api: CategoryApi,
-    private val coroutineDispatchers: CoroutineDispatchers,
-) : CategoriesRepository {
-    override suspend fun getAllCategories(): List<Category> {
-        return withContext(coroutineDispatchers.io) {
-            retryWithDelay {
-                api.getAllCategories().map { it.toDomain() }
+class CategoriesRepositoryImpl
+    @Inject
+    constructor(
+        private val api: CategoryApi,
+        private val coroutineDispatchers: CoroutineDispatchers,
+    ) : CategoriesRepository {
+        override suspend fun getAllCategories(): List<Category> {
+            return withContext(coroutineDispatchers.io) {
+                retryWithDelay {
+                    api.getAllCategories().map { it.toDomain() }
+                }
             }
         }
-    }
 
-    override suspend fun getIncomeCategories(): List<Category> {
-        return withContext(coroutineDispatchers.io) {
-            retryWithDelay {
-                api.getFilteredCategories(typeIsIncome = true).map { it.toDomain() }
+        override suspend fun getIncomeCategories(): List<Category> {
+            return withContext(coroutineDispatchers.io) {
+                retryWithDelay {
+                    api.getFilteredCategories(typeIsIncome = true).map { it.toDomain() }
+                }
             }
         }
-    }
 
-    override suspend fun getExpenseCategories(): List<Category> {
-        return withContext(coroutineDispatchers.io) {
-            retryWithDelay {
-                api.getFilteredCategories(typeIsIncome = false).map { it.toDomain() }
+        override suspend fun getExpenseCategories(): List<Category> {
+            return withContext(coroutineDispatchers.io) {
+                retryWithDelay {
+                    api.getFilteredCategories(typeIsIncome = false).map { it.toDomain() }
+                }
             }
         }
     }
-}

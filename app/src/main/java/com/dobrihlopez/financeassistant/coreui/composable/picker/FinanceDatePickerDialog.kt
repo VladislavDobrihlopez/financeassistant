@@ -13,7 +13,6 @@ import androidx.compose.ui.res.stringResource
 import com.dobrihlopez.financeassistant.R
 import java.time.Instant
 import java.time.LocalDate
-import java.time.ZoneId
 import java.time.ZoneOffset
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -48,21 +47,23 @@ fun FinanceDatePickerDialog(
                 )
             }
         },
-        colors = DatePickerDefaults.colors(
-            containerColor = MaterialTheme.colorScheme.primaryContainer,
-        ),
+        colors =
+            DatePickerDefaults.colors(
+                containerColor = MaterialTheme.colorScheme.primaryContainer,
+            ),
     ) {
         DatePicker(
             state = datePickerState,
             title = null,
             headline = null,
             showModeToggle = false,
-            colors = DatePickerDefaults.colors(
-                containerColor = MaterialTheme.colorScheme.primaryContainer,
-                selectedDayContainerColor = MaterialTheme.colorScheme.primary,
-                selectedDayContentColor = MaterialTheme.colorScheme.onPrimary,
-                todayContentColor = MaterialTheme.colorScheme.onPrimary,
-            ),
+            colors =
+                DatePickerDefaults.colors(
+                    containerColor = MaterialTheme.colorScheme.primaryContainer,
+                    selectedDayContainerColor = MaterialTheme.colorScheme.primary,
+                    selectedDayContentColor = MaterialTheme.colorScheme.onPrimary,
+                    todayContentColor = MaterialTheme.colorScheme.onPrimary,
+                ),
         )
     }
 }

@@ -36,9 +36,10 @@ class MainActivity : ComponentActivity() {
             isSplashVisible
         }
 
-        val rootComponent = rootComponentFactory.create(defaultComponentContext(), onExitApp = {
-            finishAffinity()
-        })
+        val rootComponent =
+            rootComponentFactory.create(defaultComponentContext(), onExitApp = {
+                finishAffinity()
+            })
 
         setContent {
             FinanceAssistantTheme {

@@ -28,12 +28,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.dobrihlopez.financeassistant.R
+import com.dobrihlopez.financeassistant.core.model.account.UserAccountDetailed
 import com.dobrihlopez.financeassistant.coreui.animation.actionEnterTransition
 import com.dobrihlopez.financeassistant.coreui.composable.ErrorSnackbarHost
 import com.dobrihlopez.financeassistant.coreui.composable.Fab
 import com.dobrihlopez.financeassistant.coreui.composable.LoadingProgressBar
 import com.dobrihlopez.financeassistant.coreui.ui.theme.FinanceAssistantTheme
-import com.dobrihlopez.financeassistant.core.model.account.UserAccountDetailed
 import com.dobrihlopez.financeassistant.feature.accounts.presentation.AccountsStore.AccountScreenState
 import com.dobrihlopez.financeassistant.feature.accounts.presentation.composable.AccountItem
 
@@ -62,7 +62,7 @@ fun AccountContent(
                     AnimatedVisibility(
                         visible = state is AccountScreenState.Succeeded,
                         enter = actionEnterTransition,
-                        exit = fadeOut() + shrinkHorizontally(clip = false)
+                        exit = fadeOut() + shrinkHorizontally(clip = false),
                     ) {
                         IconButton(onClick = onEditClick) {
                             Icon(imageVector = Icons.Default.Edit, contentDescription = null)
@@ -77,9 +77,10 @@ fun AccountContent(
             )
         },
         floatingActionButton = {
-            val onClick = remember(state) {
-                if (state is AccountScreenState.Succeeded) onFabClick else null
-            }
+            val onClick =
+                remember(state) {
+                    if (state is AccountScreenState.Succeeded) onFabClick else null
+                }
             Fab(onClick = onClick)
         },
         snackbarHost = {

@@ -33,36 +33,40 @@ private const val ENTER_TIME_IN_MILLIS = 700
 private const val DISAPPEAR_TIME_IN_MILLIS = 1400
 
 @Composable
-fun InternetConnectionStatus(hasInternet: Boolean, modifier: Modifier = Modifier) {
+fun InternetConnectionStatus(
+    hasInternet: Boolean,
+    modifier: Modifier = Modifier,
+) {
     val error = MaterialTheme.colorScheme.error
 
     AnimatedVisibility(
         visible = !hasInternet,
         enter = fadeIn(tween(ENTER_TIME_IN_MILLIS)) + expandIn(),
-        exit = fadeOut(tween(DISAPPEAR_TIME_IN_MILLIS)) + shrinkOut(tween(DISAPPEAR_TIME_IN_MILLIS))
+        exit = fadeOut(tween(DISAPPEAR_TIME_IN_MILLIS)) + shrinkOut(tween(DISAPPEAR_TIME_IN_MILLIS)),
     ) {
         Row(
-            modifier = modifier
-                .height(52.dp)
-                .fillMaxWidth()
-                .clip(MaterialTheme.shapes.medium)
-                .drawBehind {
-                    if (!hasInternet) drawRect(error) else drawRect(Color.Green)
-                }
-                .padding(MaterialTheme.spacing.small),
+            modifier =
+                modifier
+                    .height(52.dp)
+                    .fillMaxWidth()
+                    .clip(MaterialTheme.shapes.medium)
+                    .drawBehind {
+                        if (!hasInternet) drawRect(error) else drawRect(Color.Green)
+                    }
+                    .padding(MaterialTheme.spacing.small),
             verticalAlignment = Alignment.CenterVertically,
         ) {
             Icon(
                 Icons.Default.Warning,
                 contentDescription = "no internet",
-                tint = MaterialTheme.colorScheme.onError
+                tint = MaterialTheme.colorScheme.onError,
             )
             Text(
                 modifier = Modifier.weight(1f),
                 text = stringResource(R.string.error_internet_issues),
                 style = MaterialTheme.typography.bodyLarge,
                 textAlign = TextAlign.Center,
-                color = if (!hasInternet) MaterialTheme.colorScheme.onError else Color.Black
+                color = if (!hasInternet) MaterialTheme.colorScheme.onError else Color.Black,
             )
         }
     }
@@ -75,6 +79,3 @@ private fun PreviewInternetConnectionStatus_no_internet() {
         InternetConnectionStatus(hasInternet = false)
     }
 }
-
-
-

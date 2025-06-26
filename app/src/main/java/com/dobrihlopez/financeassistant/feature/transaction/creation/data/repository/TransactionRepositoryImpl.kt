@@ -11,40 +11,43 @@ import java.time.ZoneOffset
 import java.time.format.DateTimeFormatter
 import javax.inject.Inject
 
-class TransactionRepositoryImpl @Inject constructor(
-    private val apiService: TransactionCrudApi,
-): TransactionRepository {
-    override suspend fun deleteTransaction(transactionId: Int) {
-        retryWithDelay {
-            apiService.delete(transactionId)
+class TransactionRepositoryImpl
+    @Inject
+    constructor(
+        private val apiService: TransactionCrudApi,
+    ) : TransactionRepository {
+        override suspend fun deleteTransaction(transactionId: Int) {
+            retryWithDelay {
+                apiService.delete(transactionId)
+            }
         }
-    }
 
-    override suspend fun updateTransaction(transaction: Transaction) {
-        retryWithDelay {
-            apiService.update(transaction.id, transaction.toRequest())
+        override suspend fun updateTransaction(transaction: Transaction) {
+            retryWithDelay {
+                apiService.update(transaction.id, transaction.toRequest())
+            }
         }
-    }
 
-    override suspend fun createTransaction(
-        accountId: Int,
-        categoryId: Int,
-        amount: String,
-        transactionDate: LocalDateTime,
-        comment: String,
-    ) {
-        retryWithDelay {
-            apiService.create(
-                TransactionRequest(
-                    accountId = accountId,
-                    categoryId = categoryId,
-                    amount = amount,
-                    comment = comment,
-                    transactionDate = transactionDate
-                        .atOffset(ZoneOffset.UTC)
-                        .format(DateTimeFormatter.ISO_INSTANT),
+        override suspend fun createTransaction(
+            accountId: Int,
+            categoryId: Int,
+            amount: String,
+            transactionDate: LocalDateTime,
+            comment: String,
+        ) {
+            retryWithDelay {
+                apiService.create(
+                    TransactionRequest(
+                        accountId = accountId,
+                        categoryId = categoryId,
+                        amount = amount,
+                        comment = comment,
+                        transactionDate =
+                            transactionDate
+                                .atOffset(ZoneOffset.UTC)
+                                .format(DateTimeFormatter.ISO_INSTANT),
+                    ),
                 )
-            )
+            }
         }
     }
-}

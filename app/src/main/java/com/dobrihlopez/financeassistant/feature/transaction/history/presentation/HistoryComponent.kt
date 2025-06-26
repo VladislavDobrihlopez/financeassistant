@@ -33,8 +33,11 @@ interface HistoryComponent {
     val state: StateFlow<State>
 
     fun onStartDateClick(date: LocalDate)
+
     fun onEndDateClick(date: LocalDate)
+
     fun onTransactionClicked(transaction: Transaction)
+
     fun onRefresh()
 
     @AssistedFactory
@@ -48,43 +51,43 @@ interface HistoryComponent {
     }
 
     class DefaultHistoryComponent
-    @AssistedInject
-    constructor(
-        @Assisted("componentContext") private val componentContext: ComponentContext,
-        @Assisted("isIncome") private val isIncome: Boolean,
-        @Assisted("usecase") private val getSortedTransactionsUsecase: GetSortedTransactionsUsecase,
-        @Assisted("lambdaTransaction") private val onTransactionSelected: (Transaction) -> Unit,
-        private val storeFactory: HistoryStore.HistoryStoreFactory,
-    ) : HistoryComponent, ComponentContext by componentContext {
-        private val store =
-            instanceKeeper.getStore {
-                storeFactory.create(isIncome, getSortedTransactionsUsecase)
+        @AssistedInject
+        constructor(
+            @Assisted("componentContext") private val componentContext: ComponentContext,
+            @Assisted("isIncome") private val isIncome: Boolean,
+            @Assisted("usecase") private val getSortedTransactionsUsecase: GetSortedTransactionsUsecase,
+            @Assisted("lambdaTransaction") private val onTransactionSelected: (Transaction) -> Unit,
+            private val storeFactory: HistoryStore.HistoryStoreFactory,
+        ) : HistoryComponent, ComponentContext by componentContext {
+            private val store =
+                instanceKeeper.getStore {
+                    storeFactory.create(isIncome, getSortedTransactionsUsecase)
+                }
+
+            init {
+                lifecycle.doOnStart {
+                    onRefresh()
+                }
             }
 
-        init {
-            lifecycle.doOnStart {
-                onRefresh()
+            @OptIn(ExperimentalCoroutinesApi::class)
+            override val state: StateFlow<State>
+                get() = store.stateFlow
+
+            override fun onStartDateClick(date: LocalDate) {
+                store.accept(Intent.ChangeStartDate(date))
+            }
+
+            override fun onEndDateClick(date: LocalDate) {
+                store.accept(Intent.ChangeEndDate(date))
+            }
+
+            override fun onRefresh() {
+                store.accept(Intent.Refresh)
+            }
+
+            override fun onTransactionClicked(transaction: Transaction) {
+                onTransactionSelected(transaction)
             }
         }
-
-        @OptIn(ExperimentalCoroutinesApi::class)
-        override val state: StateFlow<State>
-            get() = store.stateFlow
-
-        override fun onStartDateClick(date: LocalDate) {
-            store.accept(Intent.ChangeStartDate(date))
-        }
-
-        override fun onEndDateClick(date: LocalDate) {
-            store.accept(Intent.ChangeEndDate(date))
-        }
-
-        override fun onRefresh() {
-            store.accept(Intent.Refresh)
-        }
-
-        override fun onTransactionClicked(transaction: Transaction) {
-            onTransactionSelected(transaction)
-        }
-    }
 }

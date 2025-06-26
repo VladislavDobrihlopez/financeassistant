@@ -12,23 +12,27 @@ sealed class NavigationItem(
         NavigationItem("expenses", R.drawable.ic_expenses, R.string.navigation_item_expenses)
 
     data object Incomes : NavigationItem(
-        "incomes", R.drawable.ic_incomes,
-        R.string.navigation_item_incomes
+        "incomes",
+        R.drawable.ic_incomes,
+        R.string.navigation_item_incomes,
     )
 
     data object Accounts : NavigationItem(
-        "accounts", R.drawable.ic_accounts,
-        R.string.navigation_item_account
+        "accounts",
+        R.drawable.ic_accounts,
+        R.string.navigation_item_account,
     )
 
     data object Categories : NavigationItem(
-        "categories", R.drawable.ic_articles,
-        R.string.navigation_item_categories
+        "categories",
+        R.drawable.ic_articles,
+        R.string.navigation_item_categories,
     )
 
     data object Settings : NavigationItem(
-        "settings", R.drawable.ic_settings,
-        R.string.navigation_item_settings
+        "settings",
+        R.drawable.ic_settings,
+        R.string.navigation_item_settings,
     )
 
     companion object {

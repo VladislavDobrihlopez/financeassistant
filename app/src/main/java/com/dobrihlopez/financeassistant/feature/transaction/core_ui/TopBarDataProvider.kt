@@ -21,7 +21,7 @@ interface TopBarDataProvider {
         override val onNavigationButtonClick: (() -> Unit)? = null,
         override val onActionButtonClick: (() -> Unit)? = null,
         override val onFabClick: (() -> Unit)? = null,
-    ): TopBarDataProvider
+    ) : TopBarDataProvider
 
     class MainScreen(
         override val topBarResId: Int,
@@ -47,8 +47,8 @@ interface TopBarDataProvider {
     class TransactionHandler(
         override val onActionButtonClick: () -> Unit,
         override val onNavigationButtonClick: () -> Unit,
-        override val topBarResId: Int
-    ): TopBarDataProvider {
+        override val topBarResId: Int,
+    ) : TopBarDataProvider {
         override val navigationActionButton: ImageVector = Icons.Default.Close
         override val onFabClick: (() -> Unit)? = null
         override val actionButtonResId: Int = R.drawable.ic_apply

@@ -8,19 +8,21 @@ import com.dobrihlopez.financeassistant.feature.transaction.core_data.network.Tr
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
-class TransactionRepositoryImpl @Inject constructor(
-    private val api: TransactionApi,
-    private val coroutineDispatchers: CoroutineDispatchers,
-) {
-    suspend fun getTransactionsForPeriod(
-        accountId: Int,
-        startDate: String?,
-        endDate: String?,
-    ): List<Transaction> {
-        return withContext(coroutineDispatchers.io) {
-            retryWithDelay {
-                api.getTransactionsForPeriod(accountId, startDate, endDate)
-            }.map { it.toDomain() }
+class TransactionRepositoryImpl
+    @Inject
+    constructor(
+        private val api: TransactionApi,
+        private val coroutineDispatchers: CoroutineDispatchers,
+    ) {
+        suspend fun getTransactionsForPeriod(
+            accountId: Int,
+            startDate: String?,
+            endDate: String?,
+        ): List<Transaction> {
+            return withContext(coroutineDispatchers.io) {
+                retryWithDelay {
+                    api.getTransactionsForPeriod(accountId, startDate, endDate)
+                }.map { it.toDomain() }
+            }
         }
     }
-}

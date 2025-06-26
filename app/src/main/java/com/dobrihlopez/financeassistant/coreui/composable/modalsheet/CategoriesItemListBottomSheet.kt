@@ -30,13 +30,14 @@ fun CategoriesItemListBottomSheet(
     ModalBottomSheet(
         sheetState = sheetState,
         modifier = modifier,
-        onDismissRequest = onDismissRequest
+        onDismissRequest = onDismissRequest,
     ) {
         LazyColumn(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(spacing.small)
-                .clip(MaterialTheme.shapes.medium)
+            modifier =
+                Modifier
+                    .fillMaxSize()
+                    .padding(spacing.small)
+                    .clip(MaterialTheme.shapes.medium),
         ) {
             items(items = items, key = { it.id }) { category ->
                 CategoriesItem(category = category, onClick = {

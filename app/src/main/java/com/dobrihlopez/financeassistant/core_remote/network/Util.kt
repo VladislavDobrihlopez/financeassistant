@@ -32,7 +32,6 @@ suspend fun <T> retryWithDelay(
         } catch (e: HttpException) {
             if (e.code() != 500) throw e
         } catch (_: IOException) {
-
         }
 
         delay(interval) // better to use exponential backoff in production: interval * pow(2, currentAttempt)

@@ -36,12 +36,12 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.IntOffset
 import com.dobrihlopez.financeassistant.R
+import com.dobrihlopez.financeassistant.core.model.category.Category
 import com.dobrihlopez.financeassistant.coreui.composable.ErrorSnackbarHost
 import com.dobrihlopez.financeassistant.coreui.composable.LoadingProgressBar
-import com.dobrihlopez.financeassistant.coreui.ui.theme.FinanceAssistantTheme
-import com.dobrihlopez.financeassistant.core.model.category.Category
-import com.dobrihlopez.financeassistant.feature.categories.presentation.CategoriesStore.CategoriesScreenState
 import com.dobrihlopez.financeassistant.coreui.composable.item.CategoriesItem
+import com.dobrihlopez.financeassistant.coreui.ui.theme.FinanceAssistantTheme
+import com.dobrihlopez.financeassistant.feature.categories.presentation.CategoriesStore.CategoriesScreenState
 import com.dobrihlopez.financeassistant.feature.categories.presentation.composable.SearchBar
 
 private const val FADE_IN_SEARCH_BAR_INTERVAL_IN_MILLIS = 250
@@ -90,7 +90,8 @@ fun CategoriesContent(
                 LaunchedEffect(lazyListState) {
                     snapshotFlow { lazyListState.firstVisibleItemIndex to lazyListState.firstVisibleItemScrollOffset }
                         .collect { (index, offset) ->
-                            val isScrollingUp = index < previousIndex ||
+                            val isScrollingUp =
+                                index < previousIndex ||
                                     (index == previousIndex && offset < previousScrollOffset)
 
                             isSearchBarVisible = isScrollingUp || index == 0
@@ -103,18 +104,21 @@ fun CategoriesContent(
                 Column(modifier = Modifier.padding(values)) {
                     AnimatedVisibility(
                         isSearchBarVisible,
-                        enter = fadeIn(tween(FADE_IN_SEARCH_BAR_INTERVAL_IN_MILLIS)) + slideInVertically(
-                            spring(
-                                stiffness = Spring.StiffnessHigh,
-                                visibilityThreshold = IntOffset.VisibilityThreshold
-                            )
-                        ),
-                        exit = slideOutVertically(
-                            spring(
-                                stiffness = Spring.StiffnessHigh,
-                                visibilityThreshold = IntOffset.VisibilityThreshold
-                            )
-                        )
+                        enter =
+                            fadeIn(tween(FADE_IN_SEARCH_BAR_INTERVAL_IN_MILLIS)) +
+                                slideInVertically(
+                                    spring(
+                                        stiffness = Spring.StiffnessHigh,
+                                        visibilityThreshold = IntOffset.VisibilityThreshold,
+                                    ),
+                                ),
+                        exit =
+                            slideOutVertically(
+                                spring(
+                                    stiffness = Spring.StiffnessHigh,
+                                    visibilityThreshold = IntOffset.VisibilityThreshold,
+                                ),
+                            ),
                     ) {
                         SearchBar(
                             searchText = state.searchText,

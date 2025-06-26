@@ -18,11 +18,12 @@ fun TransactionOptionItem(
     onClick: () -> Unit,
     hasChooseOption: Boolean = false,
 ) {
-    val (currentContent, currentValue) = if (content.trim().isEmpty()) {
-        value to String.default
-    } else {
-        content to value
-    }
+    val (currentContent, currentValue) =
+        if (content.trim().isEmpty()) {
+            value to String.default
+        } else {
+            content to value
+        }
 
     BasicListItem(
         modifier = Modifier.height(70.dp),
@@ -33,8 +34,9 @@ fun TransactionOptionItem(
             if (hasChooseOption) {
                 Icon(
                     imageVector = ImageVector.vectorResource(R.drawable.ic_arrow_head),
-                    contentDescription = null
+                    contentDescription = null,
                 )
             }
-        })
+        },
+    )
 }

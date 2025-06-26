@@ -9,11 +9,20 @@ import com.dobrihlopez.financeassistant.coreui.ui.theme.DestructiveActionColor
 import com.dobrihlopez.financeassistant.coreui.ui.theme.OnDestructiveActionColor
 
 @Composable
-fun DeletionButton(onClick: () -> Unit, content: String, modifier: Modifier = Modifier) {
-    Button(modifier = modifier, onClick = onClick, colors = ButtonDefaults.buttonColors().copy(
-        containerColor = DestructiveActionColor,
-        contentColor = OnDestructiveActionColor
-    )) {
+fun DeletionButton(
+    onClick: () -> Unit,
+    content: String,
+    modifier: Modifier = Modifier,
+) {
+    Button(
+        modifier = modifier,
+        onClick = onClick,
+        colors =
+            ButtonDefaults.buttonColors().copy(
+                containerColor = DestructiveActionColor,
+                contentColor = OnDestructiveActionColor,
+            ),
+    ) {
         Text(text = content)
     }
 }
