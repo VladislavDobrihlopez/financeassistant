@@ -15,6 +15,28 @@ import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import javax.inject.Inject
 
+/**
+ * Компонент ExpenseStore. Отвечает за обработку интентов, связанных с загрузкой расходов.
+ * Реализует MVI-подход: внешние события (Intent) инициализируют загрузку, результат передаётся во внутренние сообщения (Message),
+ * которые затем обрабатываются редюсером (Reducer) и обновляют состояние (State).
+ *
+ * Основная логика реализована в Executor:
+ * - Загружает сегодняшние транзакции пользователя (с учётом фильтрации по расходам).
+ * - Вычисляет сумму расходов.
+ *
+ * Использует usecase'ы:
+ * - [GetTransactionsForPeriodUseCase] — для получения транзакций по дате.
+ * - [GetFirstAccountUseCase] — для получения текущего аккаунта пользователя.
+ *
+ * Состояния:
+ * - Loading — в процессе загрузки данных.
+ * - Failed — ошибка при загрузке.
+ * - Succeeded — список транзакций и итоговая сумма.
+ *
+ * @see Store
+ * @see CoroutineExecutor
+ * @see CoroutineBootstrapper
+ */
 interface ExpenseStore : Store<ExpenseStore.Intent, ExpenseStore.ExpenseScreenState, Nothing> {
     @Serializable
     sealed class ExpenseScreenState {

@@ -18,6 +18,39 @@ import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import javax.inject.Inject
 
+/**
+ * Store-компонент для экрана истории транзакций — реализует MVI-подход.
+ *
+ * Основные обязанности:
+ * - обработка интентов:
+ *   - Init(isIncome): установка типа транзакций (доход/расход),
+ *   - ChangeStartDate / ChangeEndDate: изменение фильтра по дате,
+ *   - Refresh: обновление списка по текущим фильтрам;
+ * - загрузка данных через Executor:
+ *   - получает аккаунт пользователя через
+ *   @see GetFirstAccountUseCase,
+ *   - получает отсортированные транзакции за период через
+ *   @see GetSortedTransactionsUsecase,
+ *   - переключает состояния загрузки, успешного получения и ошибок;
+ * - обновление экрана через Reducer, с которым передаются даты, транзакции и флаг isIncome.
+ *
+ * Используются:
+ * - Bootstrapper для начальной инициализации state,
+ * - CoroutineExecutor + CoroutineBootstrapper для асинхронной работы,
+ * - Reducer для управления состоянием `State`.
+ *
+ * Состояние (`State`):
+ * - isLoading — флаг загрузки,
+ * - errorResId — ресурс ошибки,
+ * - transactions — список транзакций,
+ * - startDate / endDate — фильтруемый период,
+ * - isIncome — тип транзакций (доходы/расходы),
+ * - summaryValue, startText, endText — вычисляемые поля для UI.
+ *
+ * @see Store
+ * @see CoroutineBootstrapper
+ * @see CoroutineExecutor
+ */
 interface HistoryStore : Store<HistoryStore.Intent, HistoryStore.State, Nothing> {
     @Serializable
     data class State(

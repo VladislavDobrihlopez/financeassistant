@@ -12,6 +12,18 @@ import dagger.assisted.AssistedInject
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.StateFlow
 
+/**
+ * Компонент экрана категорий.
+ *
+ * Предоставляет текущее состояние экрана и обрабатывает пользовательские действия,
+ * такие как изменение текста в строке поиска и выполнение поиска.
+ *
+ * Отвечает за передачу пользовательских событий в хранилище (Categories store)
+ * и предоставляет состояние UI.
+ * Содержит работу с ЖЦ через LifecycleOwner, работа со store через InstanceKeeperOwner,
+ * работа со стейтом экрана через StateKeeperOwner
+ * @see ComponentContext
+ */
 interface CategoriesComponent {
     val state: StateFlow<CategoriesScreenState>
 

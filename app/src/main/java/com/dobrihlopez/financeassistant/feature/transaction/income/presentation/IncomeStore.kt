@@ -16,6 +16,19 @@ import java.time.OffsetDateTime
 import java.time.format.DateTimeFormatter
 import javax.inject.Inject
 
+/**
+ * Компонент IncomeStore. Ответственность: обработать события внешние (Intent), внутренние (Action) в Executor,
+ * и обновить состояние экрана через Message в Reducer.
+ * Взаимодействует с бизнес-логикой — получение текущего аккаунта и списка транзакций за выбранный период.
+ *
+ * Использует usecase'ы:
+ * @see GetTransactionsForPeriodUseCase
+ * @see GetFirstAccountUseCase
+ *
+ * Реализовано с использованием MVI-подхода (mvi store).
+ * Поддерживает загрузку и отображение списка транзакций доходов за текущую дату.
+ * @author Vladislav Voitov
+ */
 interface IncomeStore : Store<IncomeStore.Intent, IncomeStore.IncomeScreenState, Nothing> {
     @Serializable
     sealed class IncomeScreenState {

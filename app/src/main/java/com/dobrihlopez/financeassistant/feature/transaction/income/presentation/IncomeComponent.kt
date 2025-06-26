@@ -29,6 +29,25 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.serialization.Serializable
 import javax.inject.Named
 
+/**
+ * Компонент экрана доходов.
+ *
+ * Предоставляет текущее состояние экрана и обрабатывает пользовательские действия,
+ * такие как нажатие на FAB, выбор транзакции, обновление данных и навигация.
+ *
+ * Отвечает за передачу пользовательских событий в хранилище (IncomeStore)
+ * и предоставляет состояние UI.
+ *
+ * Содержит работу с ЖЦ через LifecycleOwner, работу со store через InstanceKeeperOwner,
+ * работу со стейтом экрана через StateKeeperOwner.
+ *
+ * Использует Decompose Navigation для управления дочерними экранами:
+ * - Основной экран доходов
+ * - История транзакций
+ * - Создание/редактирование транзакции
+ *
+ * @see ComponentContext
+ */
 interface IncomeComponent {
     val childStack: Value<ChildStack<*, Child>>
     val state: StateFlow<IncomeStore.IncomeScreenState>

@@ -9,6 +9,18 @@ import com.dobrihlopez.financeassistant.feature.settings.domain.model.AppSetting
 import kotlinx.serialization.Serializable
 import javax.inject.Inject
 
+/**
+ * Компонент SettingsStore.
+ *
+ * Ответственность: обрабатывать внешние события (Intent), внутренние события (Action)
+ * через Executor и обновлять состояние экрана с помощью сообщений (Message) в Reducer.
+ *
+ * Взаимодействует с бизнес-логикой для получения и отображения списка пользовательских настроек.
+ *
+ * Реализован по архитектуре MVI с использованием библиотеки MVIKotlin.
+ *
+ * Поддерживает обработку кликов и загрузку настроек.
+ */
 interface SettingsStore : Store<SettingsStore.Intent, SettingsStore.SettingsScreenState, Nothing> {
     @Serializable
     sealed class SettingsScreenState {

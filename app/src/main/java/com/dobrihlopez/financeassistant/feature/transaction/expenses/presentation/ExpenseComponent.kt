@@ -25,6 +25,19 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.serialization.Serializable
 import javax.inject.Named
 
+/**
+ * Компонент экрана расходов.
+ *
+ * Отвечает за управление навигацией между главным экраном расходов, экраном истории и экраном создания/редактирования транзакций.
+ * Предоставляет текущее состояние экрана расходов и обрабатывает пользовательские действия,
+ * такие как переход к истории, запуск создания транзакции, выбор существующей транзакции.
+ *
+ * Работает со store, реализующим MVI, и предоставляет state через StateFlow.
+ * Обеспечивает восстановление состояния через StateKeeper и управление жизненным циклом через LifecycleOwner.
+ * Использует InstanceKeeperOwner для хранения store.
+ *
+ * @see ComponentContext
+ */
 interface ExpenseComponent {
     val childStack: Value<ChildStack<*, Child>>
     val state: StateFlow<ExpenseStore.ExpenseScreenState>

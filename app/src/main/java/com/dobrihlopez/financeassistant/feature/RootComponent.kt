@@ -21,6 +21,34 @@ import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import kotlinx.serialization.Serializable
 
+/**
+ * RootComponent — главный навигационный компонент приложения.
+ *
+ * Использует Decompose StackNavigation для управления навигацией по основным экранам:
+ * - расходы (Expenses),
+ * - доходы (Income),
+ * - счета (Accounts),
+ * - категории (Categories),
+ * - настройки (Settings).
+ *
+ * Особенности:
+ * - Хранит `ChildStack<Config, Child>` в `state` для отображения текущего экрана;
+ * - Реализует FAB-навигацию между экранами через методы onXClick();
+ * - Обрабатывает системную кнопку "назад" — при активном экране `Expenses` вызывает `onExitApp()`,
+ *   иначе возвращается к начальному экрану;
+ * - Использует сериализуемые `Config` для восстановления после изменения конфигурации девайса;
+ * - Компоненты создаются лениво через assisted factory DI.
+ *
+ * Используемые технологии:
+ * - Decompose: навигация и жизненный цикл,
+ * - Dagger (AssistedInject): фабрики экранов,
+ * - Essenty: backHandler + lifecycle hooks - базовые компоненты для либ MviKotlin/Decompose.
+ *
+ * @see com.arkivanov.decompose.router.stack.StackNavigation
+ * - применяем diff к oldState, newState и выдаёт новый stack navigation
+ *
+ * @see com.arkivanov.decompose.ComponentContext
+ */
 interface RootComponent {
     val state: Value<ChildStack<*, Child>>
 

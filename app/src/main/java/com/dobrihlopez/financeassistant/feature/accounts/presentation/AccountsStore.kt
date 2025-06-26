@@ -13,6 +13,14 @@ import kotlinx.coroutines.launch
 import kotlinx.serialization.Serializable
 import javax.inject.Inject
 
+/**
+ * Компонент AccountStore. Ответственность: обработать события внешние (Intent), внутренние (Action) в Executor,
+ * и обновить состояние экрана через Message в Reducer.
+ * Взаимодействует с бизнес-логикой
+ *
+ * Реализовано с использованием MVI-подхода (mvi store).
+ * Поддерживает загрузку, редактирование и обновление аккаунтов.
+ */
 interface AccountsStore : Store<AccountsStore.Intent, AccountsStore.AccountScreenState, Nothing> {
     @Serializable
     sealed class AccountScreenState {

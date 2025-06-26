@@ -11,6 +11,22 @@ import dagger.assisted.AssistedInject
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.StateFlow
 
+/**
+ * Компонент экрана настроек.
+ *
+ * Предоставляет текущее состояние экрана и обрабатывает пользовательские действия,
+ * такие как нажатие на элемент списка настроек.
+ *
+ * Отвечает за передачу пользовательских событий в хранилище (SettingsStore)
+ * и предоставляет состояние UI.
+ *
+ * Содержит работу с ЖЦ через LifecycleOwner, работу со store через InstanceKeeperOwner,
+ * работу со стейтом экрана через StateKeeperOwner.
+ *
+ * Используется в архитектуре Decompose.
+ *
+ * @see ComponentContext
+ */
 interface SettingsComponent {
     val state: StateFlow<SettingsStore.SettingsScreenState>
 

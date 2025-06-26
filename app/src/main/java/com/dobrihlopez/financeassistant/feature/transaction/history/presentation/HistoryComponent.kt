@@ -15,6 +15,20 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.StateFlow
 import java.time.LocalDate
 
+/**
+ * Компонент экрана истории транзакций (доходы или расходы).
+ *
+ * Отвечает за:
+ * - предоставление состояния экрана (список транзакций, даты фильтра, загрузка/ошибка) через StateFlow,
+ * - реакцию на пользовательские действия: изменение начальной/конечной даты периода,
+ *   обновление списка, выбор транзакции,
+ * - запуск логики загрузки данных при старте (через doOnStart).
+ *
+ * Интегрируется с жизненным циклом экрана через LifecycleOwner,
+ * и реализован при помощи Decompose + MVIKotlin — делегирует хранение состояния и бизнес-логику в HistoryStore.
+ *
+ * @see ComponentContext
+ */
 interface HistoryComponent {
     val state: StateFlow<State>
 

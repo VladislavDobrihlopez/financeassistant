@@ -13,6 +13,11 @@ import dagger.assisted.AssistedInject
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.StateFlow
 
+/**
+ * Компонент пользовательского интерфейса для управления состоянием экрана аккаунтов.
+ *
+ * Отвечает за передачу пользовательских событий в хранилище (AccountsStore) и предоставляет состояние UI.
+ */
 interface AccountsComponent {
     val state: StateFlow<AccountsStore.AccountScreenState>
 
@@ -24,11 +29,23 @@ interface AccountsComponent {
 
     fun onCurrencyClick()
 
+    /**
+     * Обрабатывает выбор новой валюты для аккаунта.
+     *
+     * @param account Текущий аккаунт пользователя.
+     * @param currency Выбранная валюта.
+     */
     fun onCurrencySelected(
         account: UserAccountDetailed,
         currency: Currency,
     )
 
+    /**
+     * Обрабатывает изменение баланса аккаунта.
+     *
+     * @param account Текущий аккаунт.
+     * @param newBalance Новое значение баланса.
+     */
     fun onBalanceChanged(
         account: UserAccountDetailed,
         newBalance: String,
