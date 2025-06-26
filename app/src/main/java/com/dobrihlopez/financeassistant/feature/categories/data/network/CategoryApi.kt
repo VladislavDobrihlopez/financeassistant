@@ -1,6 +1,6 @@
 package com.dobrihlopez.financeassistant.feature.categories.data.network
 
-import com.dobrihlopez.financeassistant.core.model.CategoryDto
+import com.dobrihlopez.financeassistant.core_remote.network.dto.CategoryDto
 import retrofit2.http.GET
 
 interface CategoryApi {

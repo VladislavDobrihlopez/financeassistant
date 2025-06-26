@@ -4,7 +4,7 @@ import com.arkivanov.decompose.ComponentContext
 import com.arkivanov.essenty.lifecycle.doOnResume
 import com.arkivanov.mvikotlin.core.instancekeeper.getStore
 import com.arkivanov.mvikotlin.extensions.coroutines.stateFlow
-import com.dobrihlopez.financeassistant.feature.categories.domain.model.Category
+import com.dobrihlopez.financeassistant.core.model.category.Category
 import com.dobrihlopez.financeassistant.feature.categories.presentation.CategoriesStore.CategoriesScreenState
 import com.dobrihlopez.financeassistant.feature.categories.presentation.CategoriesStore.CategoriesStoreFactory
 import dagger.assisted.Assisted

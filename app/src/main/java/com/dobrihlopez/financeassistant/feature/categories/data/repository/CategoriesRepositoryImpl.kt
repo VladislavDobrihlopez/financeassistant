@@ -1,11 +1,11 @@
 package com.dobrihlopez.financeassistant.feature.categories.data.repository
 
 import com.dobrihlopez.financeassistant.core.CoroutineDispatchers
-import com.dobrihlopez.financeassistant.core.network.retryWithDelay
+import com.dobrihlopez.financeassistant.core_remote.network.retryWithDelay
 import com.dobrihlopez.financeassistant.feature.categories.data.mapper.toDomain
 import com.dobrihlopez.financeassistant.feature.categories.data.network.CategoryApi
 import com.dobrihlopez.financeassistant.feature.categories.domain.CategoriesRepository
-import com.dobrihlopez.financeassistant.feature.categories.domain.model.Category
+import com.dobrihlopez.financeassistant.core.model.category.Category
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 

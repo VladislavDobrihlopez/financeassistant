@@ -1,12 +1,12 @@
 package com.dobrihlopez.financeassistant.feature.accounts.data.repository
 
 import com.dobrihlopez.financeassistant.core.CoroutineDispatchers
-import com.dobrihlopez.financeassistant.core.network.retryWithDelay
+import com.dobrihlopez.financeassistant.core_remote.network.retryWithDelay
 import com.dobrihlopez.financeassistant.feature.accounts.data.mapper.toDomain
 import com.dobrihlopez.financeassistant.feature.accounts.data.network.AccountsApiService
 import com.dobrihlopez.financeassistant.feature.accounts.data.network.UpdateAccountRequest
 import com.dobrihlopez.financeassistant.feature.accounts.domain.AccountsRepository
-import com.dobrihlopez.financeassistant.feature.accounts.domain.model.UserAccountDetailed
+import com.dobrihlopez.financeassistant.core.model.account.UserAccountDetailed
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 

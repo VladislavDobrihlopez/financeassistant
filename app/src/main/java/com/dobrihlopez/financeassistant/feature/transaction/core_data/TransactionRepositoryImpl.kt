@@ -1,7 +1,7 @@
 package com.dobrihlopez.financeassistant.feature.transaction.core_data
 
 import com.dobrihlopez.financeassistant.core.CoroutineDispatchers
-import com.dobrihlopez.financeassistant.core.network.retryWithDelay
+import com.dobrihlopez.financeassistant.core_remote.network.retryWithDelay
 import com.dobrihlopez.financeassistant.feature.transaction.core.model.Transaction
 import com.dobrihlopez.financeassistant.feature.transaction.core_data.mapper.toDomain
 import com.dobrihlopez.financeassistant.feature.transaction.core_data.network.TransactionApi

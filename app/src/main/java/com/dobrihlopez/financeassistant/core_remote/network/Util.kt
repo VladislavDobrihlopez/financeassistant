@@ -1,4 +1,4 @@
-package com.dobrihlopez.financeassistant.core.network
+package com.dobrihlopez.financeassistant.core_remote.network
 
 import kotlinx.coroutines.delay
 import okio.IOException

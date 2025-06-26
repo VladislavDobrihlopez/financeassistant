@@ -39,7 +39,7 @@ import com.dobrihlopez.financeassistant.R
 import com.dobrihlopez.financeassistant.coreui.composable.ErrorSnackbarHost
 import com.dobrihlopez.financeassistant.coreui.composable.LoadingProgressBar
 import com.dobrihlopez.financeassistant.coreui.ui.theme.FinanceAssistantTheme
-import com.dobrihlopez.financeassistant.feature.categories.domain.model.Category
+import com.dobrihlopez.financeassistant.core.model.category.Category
 import com.dobrihlopez.financeassistant.feature.categories.presentation.CategoriesStore.CategoriesScreenState
 import com.dobrihlopez.financeassistant.feature.categories.presentation.composable.CategoriesItem
 import com.dobrihlopez.financeassistant.feature.categories.presentation.composable.SearchBar

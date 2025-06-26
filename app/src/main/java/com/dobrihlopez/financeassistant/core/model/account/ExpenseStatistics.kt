@@ -1,9 +1,9 @@
-package com.dobrihlopez.financeassistant.feature.accounts.domain.model
+package com.dobrihlopez.financeassistant.core.model.account
 
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class IncomeStatistics(
+data class ExpenseStatistics(
     val amount: String,
     val categoryId: Int,
     val categoryName: String,

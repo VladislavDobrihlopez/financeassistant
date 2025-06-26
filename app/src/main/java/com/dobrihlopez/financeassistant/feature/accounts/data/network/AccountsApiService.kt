@@ -1,6 +1,6 @@
 package com.dobrihlopez.financeassistant.feature.accounts.data.network
 
-import com.dobrihlopez.financeassistant.core.model.AccountDto
+import com.dobrihlopez.financeassistant.core_remote.network.dto.AccountDto
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.PUT

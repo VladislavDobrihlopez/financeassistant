@@ -1,4 +1,4 @@
-package com.dobrihlopez.financeassistant.core.network
+package com.dobrihlopez.financeassistant.core_remote.network
 
 import android.net.ConnectivityManager
 import android.net.Network
@@ -7,7 +7,6 @@ import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.distinctUntilChanged
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 interface ConnectivityObserver {

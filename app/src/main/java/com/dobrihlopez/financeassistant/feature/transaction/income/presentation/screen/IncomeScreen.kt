@@ -2,8 +2,6 @@ package com.dobrihlopez.financeassistant.feature.transaction.income.presentation
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
-import androidx.compose.animation.shrinkHorizontally
 import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -35,6 +33,11 @@ import com.dobrihlopez.financeassistant.coreui.animation.navActionEnterTransitio
 import com.dobrihlopez.financeassistant.coreui.animation.navActionExitTransition
 import com.dobrihlopez.financeassistant.coreui.composable.Fab
 import com.dobrihlopez.financeassistant.feature.transaction.core_ui.TopBarDataProvider
+import com.dobrihlopez.financeassistant.feature.transaction.core_ui.TopBarDataProvider.Default
+import com.dobrihlopez.financeassistant.feature.transaction.core_ui.TopBarDataProvider.History
+import com.dobrihlopez.financeassistant.feature.transaction.core_ui.TopBarDataProvider.MainScreen
+import com.dobrihlopez.financeassistant.feature.transaction.core_ui.TopBarDataProvider.TransactionHandler
+import com.dobrihlopez.financeassistant.feature.transaction.creation.presentation.screen.CreationScreen
 import com.dobrihlopez.financeassistant.feature.transaction.history.presentation.screen.HistoryScreen
 import com.dobrihlopez.financeassistant.feature.transaction.income.presentation.IncomeComponent
 
@@ -44,7 +47,7 @@ fun IncomeScreen(component: IncomeComponent) {
     val childStack = component.childStack
 
     var topBarState by remember {
-        mutableStateOf<TopBarDataProvider>(TopBarDataProvider.Default())
+        mutableStateOf<TopBarDataProvider>(Default())
     }
 
     Scaffold(
@@ -103,11 +106,16 @@ fun IncomeScreen(component: IncomeComponent) {
     ) { paddingValues ->
         Children(
             stack = childStack,
-            animation = stackAnimation(animator = slide(orientation = Orientation.Vertical)),
+            animation = stackAnimation(selector = { destination ->
+                if (destination.instance is IncomeComponent.Child.TransactionCreator)
+                    slide(orientation = Orientation.Horizontal)
+                else
+                    slide(orientation = Orientation.Vertical)
+            }),
         ) { child ->
             when (val instance = child.instance) {
                 is IncomeComponent.Child.Main -> {
-                    topBarState = TopBarDataProvider.MainScreen(
+                    topBarState = MainScreen(
                         topBarResId = R.string.incomes_topbar_title,
                         onActionButtonClick = component::onHistoryClick,
                         onFabClick = component::onFabClick,
@@ -120,12 +128,22 @@ fun IncomeScreen(component: IncomeComponent) {
                 }
 
                 is IncomeComponent.Child.History -> {
-                    topBarState = TopBarDataProvider.History(
+                    topBarState = History(
                         onActionButtonClick = {},
                         onNavigationButtonClick = component::onNavigateBack
                     )
 
                     HistoryScreen(instance.component, paddingValues)
+                }
+
+                is IncomeComponent.Child.TransactionCreator -> {
+                    topBarState = TransactionHandler(
+                        onActionButtonClick = {},
+                        onNavigationButtonClick = component::onNavigateBack,
+                        topBarResId = R.string.operation_tranction_my_incomes,
+                    )
+
+                    CreationScreen(instance.component, paddingValues)
                 }
             }
         }

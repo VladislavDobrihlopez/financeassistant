@@ -1,4 +1,4 @@
-package com.dobrihlopez.financeassistant.feature.categories.domain.model
+package com.dobrihlopez.financeassistant.core.model.category
 
 @kotlinx.serialization.Serializable
 data class Category(

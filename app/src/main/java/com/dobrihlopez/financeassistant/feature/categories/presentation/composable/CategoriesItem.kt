@@ -13,7 +13,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
 import com.dobrihlopez.financeassistant.coreui.composable.BasicListItem
-import com.dobrihlopez.financeassistant.feature.categories.domain.model.Category
+import com.dobrihlopez.financeassistant.core.model.category.Category
 
 @Composable
 fun CategoriesItem(category: Category) {

@@ -33,7 +33,7 @@ import com.dobrihlopez.financeassistant.coreui.composable.ErrorSnackbarHost
 import com.dobrihlopez.financeassistant.coreui.composable.Fab
 import com.dobrihlopez.financeassistant.coreui.composable.LoadingProgressBar
 import com.dobrihlopez.financeassistant.coreui.ui.theme.FinanceAssistantTheme
-import com.dobrihlopez.financeassistant.feature.accounts.domain.model.UserAccountDetailed
+import com.dobrihlopez.financeassistant.core.model.account.UserAccountDetailed
 import com.dobrihlopez.financeassistant.feature.accounts.presentation.AccountsStore.AccountScreenState
 import com.dobrihlopez.financeassistant.feature.accounts.presentation.composable.AccountItem
 

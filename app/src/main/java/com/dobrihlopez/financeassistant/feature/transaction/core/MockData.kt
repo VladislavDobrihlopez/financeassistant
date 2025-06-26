@@ -1,7 +1,7 @@
 package com.dobrihlopez.financeassistant.feature.transaction.core
 
-import com.dobrihlopez.financeassistant.feature.accounts.domain.model.UserAccountDetailed
-import com.dobrihlopez.financeassistant.feature.categories.domain.model.Category
+import com.dobrihlopez.financeassistant.core.model.account.UserAccountDetailed
+import com.dobrihlopez.financeassistant.core.model.category.Category
 import com.dobrihlopez.financeassistant.feature.transaction.core.model.Transaction
 
 fun previewTransactions(): List<Transaction> =

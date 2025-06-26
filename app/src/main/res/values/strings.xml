@@ -35,4 +35,16 @@
     <string name="error_unknown">Unknown error</string>
     <string name="error_internet_issues">Internet issues</string>
     <string name="in_total">Total</string>
+    <string name="transaction_operation">Delete transaction</string>
+    <string name="operation_income">income</string>
+    <string name="operation_expense">expense</string>
+    <string name="empty" >" "</string>
+    <string name="operation_tranction_my_incomes">My incomes</string>
+    <string name="transaction_account">Account</string>
+    <string name="transaction_category">Category</string>
+    <string name="transaction_sum">Sum</string>
+    <string name="transaction_date">Date</string>
+    <string name="transaction_time">Time</string>
+    <string name="transaction_input_field_commentary">Commentary</string>
+    <string name="operation_transaction_my_expenses">My expenses</string>
 </resources>

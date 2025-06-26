@@ -4,7 +4,7 @@ import com.arkivanov.decompose.ComponentContext
 import com.arkivanov.essenty.lifecycle.doOnResume
 import com.arkivanov.mvikotlin.core.instancekeeper.getStore
 import com.arkivanov.mvikotlin.extensions.coroutines.stateFlow
-import com.dobrihlopez.financeassistant.feature.accounts.domain.model.UserAccountDetailed
+import com.dobrihlopez.financeassistant.core.model.account.UserAccountDetailed
 import com.dobrihlopez.financeassistant.feature.accounts.presentation.AccountsStore.AccountsStoreFactory
 import com.dobrihlopez.financeassistant.feature.accounts.presentation.screen.Currency
 import dagger.assisted.Assisted

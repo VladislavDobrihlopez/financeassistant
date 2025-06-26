@@ -2,6 +2,7 @@ package com.dobrihlopez.financeassistant.feature.transaction.core_ui
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.Close
 import androidx.compose.ui.graphics.vector.ImageVector
 import com.dobrihlopez.financeassistant.R
 
@@ -41,5 +42,15 @@ interface TopBarDataProvider {
         override val navigationActionButton: ImageVector? =
             Icons.AutoMirrored.Default.ArrowBack
         override val onFabClick: (() -> Unit)? = null
+    }
+
+    class TransactionHandler(
+        override val onActionButtonClick: () -> Unit,
+        override val onNavigationButtonClick: () -> Unit,
+        override val topBarResId: Int
+    ): TopBarDataProvider {
+        override val navigationActionButton: ImageVector = Icons.Default.Close
+        override val onFabClick: (() -> Unit)? = null
+        override val actionButtonResId: Int = R.drawable.ic_apply
     }
 }

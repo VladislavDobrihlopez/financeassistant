@@ -27,12 +27,13 @@ import com.dobrihlopez.financeassistant.R
 import com.dobrihlopez.financeassistant.coreui.composable.ErrorSnackbarHost
 import com.dobrihlopez.financeassistant.coreui.composable.LoadingProgressBar
 import com.dobrihlopez.financeassistant.coreui.ui.theme.spacing
+import com.dobrihlopez.financeassistant.feature.transaction.core.model.Transaction
 import com.dobrihlopez.financeassistant.feature.transaction.core_ui.composable.OverViewListItem
 import com.dobrihlopez.financeassistant.feature.transaction.core_ui.composable.TransactionItem
 import com.dobrihlopez.financeassistant.feature.transaction.history.presentation.HistoryStore
 import java.time.Instant
 import java.time.LocalDate
-import java.time.ZoneId
+import java.time.ZoneOffset
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -40,6 +41,7 @@ fun HistoryContent(
     state: HistoryStore.State,
     onStartDateClick: (LocalDate) -> Unit,
     onEndDateClick: (LocalDate) -> Unit,
+    onTransactionClick: (Transaction) -> Unit,
     onRetry: () -> Unit = {},
     onRefresh: () -> Unit,
     paddingValues: PaddingValues,
@@ -51,7 +53,7 @@ fun HistoryContent(
         rememberDatePickerState(
             initialSelectedDateMillis =
                 state.startDate
-                    .atStartOfDay(ZoneId.systemDefault())
+                    .atStartOfDay(ZoneOffset.UTC)
                     .toInstant()
                     .toEpochMilli(),
         )
@@ -59,7 +61,7 @@ fun HistoryContent(
         rememberDatePickerState(
             initialSelectedDateMillis =
                 state.endDate
-                    .atStartOfDay(ZoneId.systemDefault())
+                    .atStartOfDay(ZoneOffset.UTC)
                     .toInstant()
                     .toEpochMilli(),
         )
@@ -117,7 +119,9 @@ fun HistoryContent(
                             }
                         } else {
                             items(state.transactions, key = { it.id }) { transaction ->
-                                TransactionItem(transaction, onClick = {}, showTime = true)
+                                TransactionItem(transaction, onClick = {
+                                    onTransactionClick(transaction)
+                                }, showTime = true)
                                 HorizontalDivider()
                             }
                         }
@@ -132,7 +136,7 @@ fun HistoryContent(
                         TextButton(onClick = {
                             startDatePickerState.selectedDateMillis?.let {
                                 val selectedDate =
-                                    Instant.ofEpochMilli(it).atZone(ZoneId.systemDefault())
+                                    Instant.ofEpochMilli(it).atZone(ZoneOffset.UTC)
                                         .toLocalDate()
                                 if (selectedDate > state.endDate) {
                                     onEndDateClick(selectedDate)
@@ -182,7 +186,7 @@ fun HistoryContent(
                         TextButton(onClick = {
                             endDatePickerState.selectedDateMillis?.let {
                                 val selectedDate =
-                                    Instant.ofEpochMilli(it).atZone(ZoneId.systemDefault())
+                                    Instant.ofEpochMilli(it).atZone(ZoneOffset.UTC)
                                         .toLocalDate()
                                 if (selectedDate < state.startDate) {
                                     onStartDateClick(selectedDate)
@@ -192,7 +196,7 @@ fun HistoryContent(
                             showEndDatePicker = false
                         }) {
                             Text(
-                                text = stringResource(android.R.string.ok),
+                                text = stringResource(R.string.okay),
                                 color = MaterialTheme.colorScheme.onPrimary,
                             )
                         }

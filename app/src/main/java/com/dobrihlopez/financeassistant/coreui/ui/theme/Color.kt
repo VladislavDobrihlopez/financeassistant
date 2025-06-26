@@ -11,3 +11,4 @@ val PurpleGrey40 = Color(0xFF625b71)
 val Pink40 = Color(0xFF7D5260)
 
 val DestructiveActionColor = Color(0xFFE46962)
+val OnDestructiveActionColor = Color(0xFFFEF7FF)

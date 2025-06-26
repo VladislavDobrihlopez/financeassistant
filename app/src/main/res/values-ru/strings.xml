@@ -39,4 +39,16 @@
     <string name="error_unknown">Неизвестная ошибка</string>
     <string name="error_internet_issues">Проблемы с инетом</string>
     <string name="in_total">Всего</string>
+    <string name="transaction_operation">Удалить</string>
+    <string name="operation_income">доход</string>
+    <string name="operation_expense">расход</string>
+    <string name="empty" >" "</string>
+    <string name="transaction_account">Счет</string>
+    <string name="transaction_category">Статья</string>
+    <string name="transaction_sum">Сумма</string>
+    <string name="transaction_date">Дата</string>
+    <string name="transaction_time">Время</string>
+    <string name="operation_tranction_my_incomes">Мои доходы</string>
+    <string name="transaction_input_field_commentary">Комментарий</string>
+    <string name="operation_transaction_my_expenses">Мои расходы</string>
 </resources>

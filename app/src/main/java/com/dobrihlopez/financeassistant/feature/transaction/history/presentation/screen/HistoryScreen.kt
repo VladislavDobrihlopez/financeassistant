@@ -16,6 +16,7 @@ fun HistoryScreen(
         onStartDateClick = component::onStartDateClick,
         onEndDateClick = component::onEndDateClick,
         onRefresh = component::onRefresh,
+        onTransactionClick = component::onTransactionClicked,
         paddingValues = paddingValues,
     )
 }

@@ -1,4 +1,4 @@
-package com.dobrihlopez.financeassistant.core.model
+package com.dobrihlopez.financeassistant.core_remote.network.dto
 
 import com.google.gson.annotations.SerializedName
 

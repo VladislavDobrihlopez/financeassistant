@@ -3,6 +3,7 @@ package com.dobrihlopez.financeassistant.feature.transaction.history.presentatio
 import com.arkivanov.decompose.ComponentContext
 import com.arkivanov.mvikotlin.core.instancekeeper.getStore
 import com.arkivanov.mvikotlin.extensions.coroutines.stateFlow
+import com.dobrihlopez.financeassistant.feature.transaction.core.model.Transaction
 import com.dobrihlopez.financeassistant.feature.transaction.history.domain.GetSortedTransactionsUsecase
 import com.dobrihlopez.financeassistant.feature.transaction.history.presentation.HistoryStore.Intent
 import com.dobrihlopez.financeassistant.feature.transaction.history.presentation.HistoryStore.State
@@ -17,9 +18,8 @@ interface HistoryComponent {
     val state: StateFlow<State>
 
     fun onStartDateClick(date: LocalDate)
-
     fun onEndDateClick(date: LocalDate)
-
+    fun onTransactionClicked(transaction: Transaction)
     fun onRefresh()
 
     @AssistedFactory
@@ -28,36 +28,42 @@ interface HistoryComponent {
             @Assisted("componentContext") componentContext: ComponentContext,
             @Assisted("isIncome") isIncome: Boolean,
             @Assisted("usecase") getSortedTransactionsUsecase: GetSortedTransactionsUsecase,
+            @Assisted("lambdaTransaction") onTransactionSelected: (Transaction) -> Unit,
         ): DefaultHistoryComponent
     }
 
     class DefaultHistoryComponent
-        @AssistedInject
-        constructor(
-            @Assisted("componentContext") private val componentContext: ComponentContext,
-            @Assisted("isIncome") private val isIncome: Boolean,
-            @Assisted("usecase") private val getSortedTransactionsUsecase: GetSortedTransactionsUsecase,
-            private val storeFactory: HistoryStore.HistoryStoreFactory,
-        ) : HistoryComponent, ComponentContext by componentContext {
-            private val store =
-                instanceKeeper.getStore {
-                    storeFactory.create(isIncome, getSortedTransactionsUsecase)
-                }
-
-            @OptIn(ExperimentalCoroutinesApi::class)
-            override val state: StateFlow<State>
-                get() = store.stateFlow
-
-            override fun onStartDateClick(date: LocalDate) {
-                store.accept(Intent.ChangeStartDate(date))
+    @AssistedInject
+    constructor(
+        @Assisted("componentContext") private val componentContext: ComponentContext,
+        @Assisted("isIncome") private val isIncome: Boolean,
+        @Assisted("usecase") private val getSortedTransactionsUsecase: GetSortedTransactionsUsecase,
+        @Assisted("lambdaTransaction") private val onTransactionSelected: (Transaction) -> Unit,
+        private val storeFactory: HistoryStore.HistoryStoreFactory,
+    ) : HistoryComponent, ComponentContext by componentContext {
+        private val store =
+            instanceKeeper.getStore {
+                storeFactory.create(isIncome, getSortedTransactionsUsecase)
             }
 
-            override fun onEndDateClick(date: LocalDate) {
-                store.accept(Intent.ChangeEndDate(date))
-            }
+        @OptIn(ExperimentalCoroutinesApi::class)
+        override val state: StateFlow<State>
+            get() = store.stateFlow
 
-            override fun onRefresh() {
-                store.accept(Intent.Refresh)
-            }
+        override fun onStartDateClick(date: LocalDate) {
+            store.accept(Intent.ChangeStartDate(date))
         }
+
+        override fun onEndDateClick(date: LocalDate) {
+            store.accept(Intent.ChangeEndDate(date))
+        }
+
+        override fun onRefresh() {
+            store.accept(Intent.Refresh)
+        }
+
+        override fun onTransactionClicked(transaction: Transaction) {
+            onTransactionSelected(transaction)
+        }
+    }
 }

@@ -56,7 +56,7 @@ fun AccountsScreen(component: AccountsComponent) {
             sheetState = balanceSheetState,
             initialBalance = (state as? AccountScreenState.Succeeded)?.account?.balance ?: "",
             onDismiss = { showBalanceSheet = false },
-            onBalanceChanged = { newBalance ->
+            onDone = { newBalance ->
                 val account = (state as? AccountScreenState.Succeeded)?.account ?: return@BalanceEditDialog
                 component.onBalanceChanged(account, newBalance)
                 showBalanceSheet = false

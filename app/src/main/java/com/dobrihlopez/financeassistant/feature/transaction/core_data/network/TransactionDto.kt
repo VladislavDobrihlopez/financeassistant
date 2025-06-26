@@ -1,7 +1,7 @@
 package com.dobrihlopez.financeassistant.feature.transaction.core_data.network
 
-import com.dobrihlopez.financeassistant.core.model.AccountDto
-import com.dobrihlopez.financeassistant.core.model.CategoryDto
+import com.dobrihlopez.financeassistant.core_remote.network.dto.AccountDto
+import com.dobrihlopez.financeassistant.core_remote.network.dto.CategoryDto
 import com.google.gson.annotations.SerializedName
 
 data class TransactionDto(

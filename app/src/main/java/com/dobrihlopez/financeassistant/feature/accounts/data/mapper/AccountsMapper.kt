@@ -1,7 +1,7 @@
 package com.dobrihlopez.financeassistant.feature.accounts.data.mapper
 
-import com.dobrihlopez.financeassistant.core.model.AccountDto
-import com.dobrihlopez.financeassistant.feature.accounts.domain.model.UserAccountDetailed
+import com.dobrihlopez.financeassistant.core_remote.network.dto.AccountDto
+import com.dobrihlopez.financeassistant.core.model.account.UserAccountDetailed
 
 fun AccountDto.toDomain(): UserAccountDetailed =
     UserAccountDetailed(

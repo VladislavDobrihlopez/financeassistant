@@ -1,6 +1,6 @@
 package com.dobrihlopez.financeassistant.feature.accounts.domain
 
-import com.dobrihlopez.financeassistant.feature.accounts.domain.model.UserAccountDetailed
+import com.dobrihlopez.financeassistant.core.model.account.UserAccountDetailed
 
 interface AccountsRepository {
     suspend fun getAccounts(): List<UserAccountDetailed>
