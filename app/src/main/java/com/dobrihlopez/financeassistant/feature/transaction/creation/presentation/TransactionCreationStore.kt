@@ -5,6 +5,7 @@ import com.arkivanov.mvikotlin.core.store.Store
 import com.arkivanov.mvikotlin.core.store.StoreFactory
 import com.arkivanov.mvikotlin.extensions.coroutines.CoroutineBootstrapper
 import com.arkivanov.mvikotlin.extensions.coroutines.CoroutineExecutor
+import com.dobrihlopez.financeassistant.core.LocalDateTimeSerializer
 import com.dobrihlopez.financeassistant.core.model.category.Category
 import com.dobrihlopez.financeassistant.core.usecase.account.GetFirstAccountUseCase
 import com.dobrihlopez.financeassistant.core.usecase.category.GetTypedCategoriesUsecase
@@ -19,12 +20,10 @@ import com.dobrihlopez.financeassistant.feature.transaction.creation.presentatio
 import com.dobrihlopez.financeassistant.feature.transaction.creation.presentation.TransactionCreationStore.TransactionStoreFactory.Message.UpdateComment
 import com.dobrihlopez.financeassistant.feature.transaction.creation.presentation.TransactionCreationStore.TransactionStoreFactory.Message.UpdateTransactionDate
 import kotlinx.coroutines.launch
-import kotlinx.serialization.Contextual
 import kotlinx.serialization.Serializable
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.LocalTime
-import java.time.OffsetDateTime
 import java.time.ZoneOffset
 import java.time.format.DateTimeFormatter
 import javax.inject.Inject
@@ -64,7 +63,7 @@ interface TransactionCreationStore : Store<TransactionCreationStore.Intent, Stat
             val categories: List<Category>,
             val chosenCategory: Category? = null,
             val sum: String,
-            @Contextual val date: LocalDateTime? = null,
+            @Serializable(with = LocalDateTimeSerializer::class) val date: LocalDateTime? = null,
             val comment: String,
             val originalTransaction: Transaction? = null, // can be null when creating a new one
         ) : State()
