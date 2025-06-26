@@ -17,6 +17,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import com.dobrihlopez.financeassistant.R
+import com.dobrihlopez.financeassistant.core.currencyToSymbol
 import com.dobrihlopez.financeassistant.core.toFullDateAndTimeFormat
 import com.dobrihlopez.financeassistant.coreui.composable.item.BasicListItem
 import com.dobrihlopez.financeassistant.feature.transaction.core.model.Transaction
@@ -31,7 +32,7 @@ fun TransactionItem(
         modifier = Modifier.height(70.dp),
         content = transaction.category.name,
         subContent = transaction.comment,
-        value = transaction.amount,
+        value = "${transaction.amount} ${transaction.account.currency.currencyToSymbol()}",
         valueSubtitle =
             if (showTime) {
                 transaction.transactionDate.toFullDateAndTimeFormat()

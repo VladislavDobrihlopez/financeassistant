@@ -59,4 +59,5 @@
     <string name="navigation_item_account">Счёт</string>
     <string name="navigation_item_categories">Статьи</string>
     <string name="navigation_item_settings">Настройки</string>
+    <string name="error_default_account">Поддерживается только базовый счёт</string>
 </resources>

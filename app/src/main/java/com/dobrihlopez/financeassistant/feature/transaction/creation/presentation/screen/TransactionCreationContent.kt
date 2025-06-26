@@ -1,5 +1,6 @@
 package com.dobrihlopez.financeassistant.feature.transaction.creation.presentation.screen
 
+import android.widget.Toast
 import androidx.annotation.StringRes
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.Box
@@ -21,6 +22,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import com.dobrihlopez.financeassistant.R
 import com.dobrihlopez.financeassistant.core.model.category.Category
@@ -112,13 +114,21 @@ fun CreationContent(
                         initialMinute = (state.date?.toLocalTime() ?: LocalTime.now()).minute,
                     )
 
+                    val context = LocalContext.current
+
                     LazyColumn {
                         items(items = Option.entries, key = { it.name }) { option ->
                             TransactionOptionItem(
                                 content = stringResource(option.itemName),
                                 onClick = {
                                     when (option) {
-                                        Option.ACCOUNT -> {}
+                                        Option.ACCOUNT -> {
+                                            Toast.makeText(
+                                                context,
+                                                context.getString(R.string.error_default_account),
+                                                Toast.LENGTH_SHORT
+                                            ).show()
+                                        }
                                         Option.CATEGORY -> showCategoriesSheet = true
                                         Option.SUM -> showBalanceSheet = true
                                         Option.DATE -> showDatePicker = true

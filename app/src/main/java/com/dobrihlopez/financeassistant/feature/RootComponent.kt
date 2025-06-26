@@ -7,6 +7,8 @@ import com.arkivanov.decompose.router.stack.bringToFront
 import com.arkivanov.decompose.router.stack.childStack
 import com.arkivanov.decompose.router.stack.pop
 import com.arkivanov.decompose.router.stack.popToFirst
+import com.arkivanov.decompose.router.stack.pushToFront
+import com.arkivanov.decompose.router.stack.replaceAll
 import com.arkivanov.decompose.value.Value
 import com.arkivanov.essenty.backhandler.BackCallback
 import com.arkivanov.essenty.lifecycle.doOnCreate
@@ -127,7 +129,7 @@ interface RootComponent {
                 if (state.value.active.instance is Child.Expenses) {
                     onExitApp()
                 } else {
-                    stack.popToFirst()
+                    stack.pushToFront(Config.Expenses)
                 }
             })
 
