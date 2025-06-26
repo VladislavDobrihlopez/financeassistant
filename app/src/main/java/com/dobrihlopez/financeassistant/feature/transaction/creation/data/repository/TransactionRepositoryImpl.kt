@@ -7,8 +7,8 @@ import com.dobrihlopez.financeassistant.feature.transaction.creation.data.networ
 import com.dobrihlopez.financeassistant.feature.transaction.creation.data.network.TransactionRequest
 import com.dobrihlopez.financeassistant.feature.transaction.creation.domain.TransactionRepository
 import java.time.LocalDateTime
-import java.time.OffsetDateTime
 import java.time.ZoneOffset
+import java.time.format.DateTimeFormatter
 import javax.inject.Inject
 
 class TransactionRepositoryImpl @Inject constructor(
@@ -40,7 +40,9 @@ class TransactionRepositoryImpl @Inject constructor(
                     categoryId = categoryId,
                     amount = amount,
                     comment = comment,
-                    transactionDate = OffsetDateTime.of(transactionDate, ZoneOffset.UTC).toString()
+                    transactionDate = transactionDate
+                        .atOffset(ZoneOffset.UTC)
+                        .format(DateTimeFormatter.ISO_INSTANT),
                 )
             )
         }

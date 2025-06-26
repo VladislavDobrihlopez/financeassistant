@@ -12,6 +12,7 @@ import com.dobrihlopez.financeassistant.feature.transaction.core.usecase.GetTran
 import kotlinx.coroutines.launch
 import kotlinx.serialization.Serializable
 import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 import javax.inject.Inject
 
 interface ExpenseStore : Store<ExpenseStore.Intent, ExpenseStore.ExpenseScreenState, Nothing> {
@@ -118,8 +119,8 @@ interface ExpenseStore : Store<ExpenseStore.Intent, ExpenseStore.ExpenseScreenSt
                             val transactions =
                                 getTransactionsForPeriodUseCase(
                                     accountId = account.id,
-                                    startDate = today,
-                                    endDate = today,
+                                    startDate = today.format(DateTimeFormatter.ISO_LOCAL_DATE),
+                                    endDate = today.format(DateTimeFormatter.ISO_LOCAL_DATE),
                                 ).filter { !it.category.isIncome }
                             val summaryValue =
                                 transactions.sumOf { it.amount.toDoubleOrNull() ?: 0.0 }.toString()

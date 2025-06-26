@@ -34,7 +34,7 @@ fun TransactionItem(
         value = transaction.amount,
         valueSubtitle =
             if (showTime) {
-                transaction.updatedAt.toFullDateAndTimeFormat()
+                transaction.transactionDate.toFullDateAndTimeFormat()
             } else {
                 null
             },

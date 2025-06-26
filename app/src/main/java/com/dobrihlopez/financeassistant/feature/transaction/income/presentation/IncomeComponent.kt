@@ -7,7 +7,7 @@ import com.arkivanov.decompose.router.stack.childStack
 import com.arkivanov.decompose.router.stack.pop
 import com.arkivanov.decompose.router.stack.push
 import com.arkivanov.decompose.value.Value
-import com.arkivanov.essenty.lifecycle.doOnResume
+import com.arkivanov.essenty.lifecycle.doOnStart
 import com.arkivanov.mvikotlin.core.instancekeeper.getStore
 import com.arkivanov.mvikotlin.extensions.coroutines.stateFlow
 import com.dobrihlopez.financeassistant.core.usecase.category.GetTypedCategoriesUsecase
@@ -20,6 +20,7 @@ import com.dobrihlopez.financeassistant.feature.transaction.income.presentation.
 import com.dobrihlopez.financeassistant.feature.transaction.income.presentation.IncomeComponent.Child.Main
 import com.dobrihlopez.financeassistant.feature.transaction.income.presentation.IncomeComponent.Child.TransactionCreator
 import com.dobrihlopez.financeassistant.feature.transaction.income.presentation.IncomeStore.IncomeStoreFactory
+import com.dobrihlopez.financeassistant.feature.transaction.income.presentation.IncomeStore.Intent
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
@@ -102,6 +103,7 @@ interface IncomeComponent {
                             transaction = config.transaction,
                             onFinish = {
                                 onNavigateBack()
+                                store.accept(Intent.LoadIncome)
                             },
                             getTypedCategories = getIncomeCategoriesUsecase,
                         )
@@ -127,7 +129,7 @@ interface IncomeComponent {
                 state.value
             }
 
-            lifecycle.doOnResume {
+            lifecycle.doOnStart {
                 if (state.value is IncomeStore.IncomeScreenState.Failed) {
                     onRefreshList()
                 }
@@ -135,7 +137,7 @@ interface IncomeComponent {
         }
 
         override fun onRefreshList() {
-            store.accept(IncomeStore.Intent.LoadIncome)
+            store.accept(Intent.LoadIncome)
         }
 
         override fun onNavigateBack() {

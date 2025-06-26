@@ -18,6 +18,6 @@ class GetSortedIncomeTransactionsUsecase
         ): List<Transaction> {
             return getTransactionsForPeriodUseCase(accountId, startDate, endDate)
                 .filter { it.category.isIncome }
-                .sortedByDescending { OffsetDateTime.parse(it.updatedAt).toLocalDateTime() }
+                .sortedByDescending { OffsetDateTime.parse(it.transactionDate).toLocalDateTime() }
         }
     }

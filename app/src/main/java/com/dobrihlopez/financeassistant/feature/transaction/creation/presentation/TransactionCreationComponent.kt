@@ -61,7 +61,7 @@ interface TransactionCreationComponent: ComponentContext {
                         categories = listOf(),
                         chosenCategory = transaction.category,
                         sum = transaction.amount,
-                        date = OffsetDateTime.parse(transaction.updatedAt).toLocalDateTime(),
+                        date = OffsetDateTime.parse(transaction.transactionDate).toLocalDateTime(),
                         comment = transaction.comment,
                         originalTransaction = transaction
 

@@ -7,7 +7,7 @@ import com.arkivanov.decompose.router.stack.childStack
 import com.arkivanov.decompose.router.stack.pop
 import com.arkivanov.decompose.router.stack.push
 import com.arkivanov.decompose.value.Value
-import com.arkivanov.essenty.lifecycle.doOnResume
+import com.arkivanov.essenty.lifecycle.doOnStart
 import com.arkivanov.mvikotlin.core.instancekeeper.getStore
 import com.arkivanov.mvikotlin.extensions.coroutines.stateFlow
 import com.dobrihlopez.financeassistant.core.usecase.category.GetTypedCategoriesUsecase
@@ -106,6 +106,7 @@ interface ExpenseComponent {
                             transaction = config.transaction,
                             onFinish = {
                                 onNavigateBack()
+                                store.accept(ExpenseStore.Intent.LoadExpenses)
                             },
                             getTypedCategories = getExpenseCategoriesUsecase,
                         )
@@ -131,7 +132,7 @@ interface ExpenseComponent {
                 state.value
             }
 
-            lifecycle.doOnResume {
+            lifecycle.doOnStart {
                 if (state.value is ExpenseStore.ExpenseScreenState.Failed) {
                     onRefreshList()
                 }

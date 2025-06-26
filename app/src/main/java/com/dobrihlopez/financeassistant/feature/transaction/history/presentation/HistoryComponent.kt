@@ -1,6 +1,7 @@
 package com.dobrihlopez.financeassistant.feature.transaction.history.presentation
 
 import com.arkivanov.decompose.ComponentContext
+import com.arkivanov.essenty.lifecycle.doOnStart
 import com.arkivanov.mvikotlin.core.instancekeeper.getStore
 import com.arkivanov.mvikotlin.extensions.coroutines.stateFlow
 import com.dobrihlopez.financeassistant.feature.transaction.core.model.Transaction
@@ -45,6 +46,12 @@ interface HistoryComponent {
             instanceKeeper.getStore {
                 storeFactory.create(isIncome, getSortedTransactionsUsecase)
             }
+
+        init {
+            lifecycle.doOnStart {
+                onRefresh()
+            }
+        }
 
         @OptIn(ExperimentalCoroutinesApi::class)
         override val state: StateFlow<State>

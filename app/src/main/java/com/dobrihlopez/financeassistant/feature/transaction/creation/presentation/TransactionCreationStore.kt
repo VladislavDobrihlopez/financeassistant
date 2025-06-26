@@ -24,6 +24,7 @@ import kotlinx.serialization.Serializable
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.LocalTime
+import java.time.OffsetDateTime
 import java.time.ZoneOffset
 import java.time.format.DateTimeFormatter
 import javax.inject.Inject
@@ -250,9 +251,7 @@ interface TransactionCreationStore : Store<TransactionCreationStore.Intent, Stat
                         amount = state.sum,
                         category = state.chosenCategory ?: original.category,
                         comment = state.comment,
-                        updatedAt = DateTimeFormatter.ISO_INSTANT.format(
-                            LocalDateTime.now().toInstant(ZoneOffset.UTC)
-                        ),
+                        transactionDate = state.date!!.atOffset(ZoneOffset.UTC).format(DateTimeFormatter.ISO_INSTANT),
                     )
                 )
             }

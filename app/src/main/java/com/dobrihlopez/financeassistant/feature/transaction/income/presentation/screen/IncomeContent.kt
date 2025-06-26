@@ -17,6 +17,7 @@ import com.dobrihlopez.financeassistant.R
 import com.dobrihlopez.financeassistant.coreui.composable.ErrorSnackbarHost
 import com.dobrihlopez.financeassistant.coreui.composable.LoadingProgressBar
 import com.dobrihlopez.financeassistant.coreui.ui.theme.FinanceAssistantTheme
+import com.dobrihlopez.financeassistant.feature.transaction.core.model.Transaction
 import com.dobrihlopez.financeassistant.feature.transaction.core.previewIncomeTransactions
 import com.dobrihlopez.financeassistant.feature.transaction.core_ui.composable.OverViewListItem
 import com.dobrihlopez.financeassistant.feature.transaction.core_ui.composable.TransactionItem
@@ -27,6 +28,7 @@ import com.dobrihlopez.financeassistant.feature.transaction.income.presentation.
 fun IncomeContent(
     state: IncomeStore.IncomeScreenState,
     paddingValues: PaddingValues,
+    onTransactionClicked: (Transaction) -> Unit,
     onRetry: () -> Unit = {},
 ) {
     Scaffold(
@@ -55,7 +57,9 @@ fun IncomeContent(
                         HorizontalDivider()
                     }
                     items(state.transactions, key = { it.id }) { transaction ->
-                        TransactionItem(transaction, onClick = { })
+                        TransactionItem(transaction, onClick = {
+                            onTransactionClicked(transaction)
+                        })
                         HorizontalDivider()
                     }
                 }
@@ -75,6 +79,7 @@ private fun PreviewIncomeLight() {
                     summaryValue = "600 000 ₽",
                 ),
             paddingValues = PaddingValues(0.dp),
+            onTransactionClicked = {},
         )
     }
 }
@@ -90,6 +95,7 @@ private fun PreviewIncomeDark() {
                     summaryValue = "600 000 ₽",
                 ),
             paddingValues = PaddingValues(0.dp),
+            onTransactionClicked = {},
         )
     }
 }

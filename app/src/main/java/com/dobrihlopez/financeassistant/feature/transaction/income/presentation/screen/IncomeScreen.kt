@@ -124,6 +124,7 @@ fun IncomeScreen(component: IncomeComponent) {
                     IncomeContent(
                         state = component.state.collectAsStateWithLifecycle().value,
                         paddingValues = paddingValues,
+                        onTransactionClicked = instance.component::onIncomeClick,
                     )
                 }
 

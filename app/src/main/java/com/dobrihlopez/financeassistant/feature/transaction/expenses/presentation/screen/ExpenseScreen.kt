@@ -120,7 +120,7 @@ fun ExpenseScreen(component: ExpenseComponent) {
                     ExpenseContent(
                         state = component.state.collectAsStateWithLifecycle().value,
                         paddingValues = paddingValues,
-                        onExpenseClick = component::onExpenseClick,
+                        onTransactionClicked = component::onExpenseClick,
                     )
                 }
 

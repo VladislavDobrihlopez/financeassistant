@@ -1,7 +1,7 @@
 package com.dobrihlopez.financeassistant.feature.accounts.presentation
 
 import com.arkivanov.decompose.ComponentContext
-import com.arkivanov.essenty.lifecycle.doOnResume
+import com.arkivanov.essenty.lifecycle.doOnStart
 import com.arkivanov.mvikotlin.core.instancekeeper.getStore
 import com.arkivanov.mvikotlin.extensions.coroutines.stateFlow
 import com.dobrihlopez.financeassistant.core.model.account.UserAccountDetailed
@@ -65,7 +65,7 @@ interface AccountsComponent {
                     state.value
                 }
 
-                lifecycle.doOnResume {
+                lifecycle.doOnStart {
                     if (state.value is AccountsStore.AccountScreenState.Failed) {
                         store.accept(AccountsStore.Intent.RefreshAccount)
                     }

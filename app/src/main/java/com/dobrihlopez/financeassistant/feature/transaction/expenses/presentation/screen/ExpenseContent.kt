@@ -29,7 +29,7 @@ fun ExpenseContent(
     state: ExpenseStore.ExpenseScreenState,
     paddingValues: PaddingValues,
     onRetry: () -> Unit = {},
-    onExpenseClick: (Transaction) -> Unit = {},
+    onTransactionClicked: (Transaction) -> Unit,
 ) {
     Scaffold(
         snackbarHost = {
@@ -57,7 +57,7 @@ fun ExpenseContent(
                         HorizontalDivider()
                     }
                     items(state.transactions, key = { it.id }) { transaction ->
-                        TransactionItem(transaction, onClick = { onExpenseClick(transaction) })
+                        TransactionItem(transaction, onClick = { onTransactionClicked(transaction) })
                         HorizontalDivider()
                     }
                 }
@@ -77,6 +77,7 @@ private fun PreviewExpenseLight() {
                     summaryValue = "436 558 ₽",
                 ),
             paddingValues = PaddingValues(0.dp),
+            onTransactionClicked = {}
         )
     }
 }
@@ -92,6 +93,7 @@ private fun PreviewExpenseDark() {
                     summaryValue = "436 558 ₽",
                 ),
             paddingValues = PaddingValues(0.dp),
+            onTransactionClicked = {}
         )
     }
 }

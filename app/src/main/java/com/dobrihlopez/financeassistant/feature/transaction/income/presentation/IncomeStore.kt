@@ -12,6 +12,8 @@ import com.dobrihlopez.financeassistant.feature.transaction.core.usecase.GetTran
 import kotlinx.coroutines.launch
 import kotlinx.serialization.Serializable
 import java.time.LocalDate
+import java.time.OffsetDateTime
+import java.time.format.DateTimeFormatter
 import javax.inject.Inject
 
 interface IncomeStore : Store<IncomeStore.Intent, IncomeStore.IncomeScreenState, Nothing> {
@@ -111,12 +113,12 @@ interface IncomeStore : Store<IncomeStore.Intent, IncomeStore.IncomeScreenState,
                                     dispatch(Message.Failed())
                                     return@launch
                                 }
-                            val today = LocalDate.now().toString()
+                            val today = LocalDate.now()
                             val transactions =
                                 getTransactionsForPeriodUseCase(
                                     accountId = account.id,
-                                    startDate = today,
-                                    endDate = today,
+                                    startDate = today.format(DateTimeFormatter.ISO_LOCAL_DATE),
+                                    endDate = today.format(DateTimeFormatter.ISO_LOCAL_DATE),
                                 ).filter { it.category.isIncome }
                             val summaryValue =
                                 transactions.sumOf { it.amount.toDoubleOrNull() ?: 0.0 }.toString()
