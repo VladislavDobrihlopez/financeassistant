@@ -135,7 +135,7 @@ fun ExpenseScreen(component: ExpenseComponent) {
 
                 is ExpenseComponent.Child.TransactionCreator -> {
                     topBarState = TransactionHandler(
-                        onActionButtonClick = {},
+                        onActionButtonClick = instance.component::applyChanges,
                         onNavigationButtonClick = component::onNavigateBack,
                         topBarResId = R.string.operation_transaction_my_expenses,
                     )

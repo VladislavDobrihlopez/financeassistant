@@ -138,7 +138,7 @@ fun IncomeScreen(component: IncomeComponent) {
 
                 is IncomeComponent.Child.TransactionCreator -> {
                     topBarState = TransactionHandler(
-                        onActionButtonClick = {},
+                        onActionButtonClick = instance.component::applyChanges,
                         onNavigationButtonClick = component::onNavigateBack,
                         topBarResId = R.string.operation_tranction_my_incomes,
                     )

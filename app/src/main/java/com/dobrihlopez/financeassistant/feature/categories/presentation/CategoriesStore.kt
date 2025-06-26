@@ -7,7 +7,7 @@ import com.arkivanov.mvikotlin.core.store.StoreFactory
 import com.arkivanov.mvikotlin.extensions.coroutines.CoroutineBootstrapper
 import com.arkivanov.mvikotlin.extensions.coroutines.CoroutineExecutor
 import com.dobrihlopez.financeassistant.core.model.category.Category
-import com.dobrihlopez.financeassistant.core.usecase.category.GetCategoriesUsecase
+import com.dobrihlopez.financeassistant.core.usecase.category.GetAllCategoriesUseCase
 import kotlinx.coroutines.launch
 import kotlinx.serialization.Serializable
 import javax.inject.Inject
@@ -42,31 +42,31 @@ interface CategoriesStore : Store<CategoriesStore.Intent, CategoriesStore.Catego
         @Inject
         constructor(
             private val storeFactory: StoreFactory,
-            private val getCategoriesUsecase: GetCategoriesUsecase,
+            private val getAllCategoriesUseCase: GetAllCategoriesUseCase,
         ) {
             fun create(initialState: CategoriesScreenState): CategoriesStore =
-                CategoriesStoreImpl(storeFactory, initialState, getCategoriesUsecase)
+                CategoriesStoreImpl(storeFactory, initialState, getAllCategoriesUseCase)
 
             private class CategoriesStoreImpl(
                 storeFactory: StoreFactory,
                 initialState: CategoriesScreenState,
-                getCategoriesUsecase: GetCategoriesUsecase,
+                getAllCategoriesUseCase: GetAllCategoriesUseCase,
             ) : CategoriesStore,
                 Store<Intent, CategoriesScreenState, Nothing> by storeFactory.create(
                     name = "CategoriesStore",
                     initialState = initialState,
-                    bootstrapper = BootstrapperImpl(getCategoriesUsecase),
-                    executorFactory = { ExecutorImpl(getCategoriesUsecase) },
+                    bootstrapper = BootstrapperImpl(getAllCategoriesUseCase),
+                    executorFactory = { ExecutorImpl(getAllCategoriesUseCase) },
                     reducer = ReducerImpl,
                 )
 
             private class BootstrapperImpl(
-                private val getCategoriesUsecase: GetCategoriesUsecase,
+                private val getAllCategoriesUseCase: GetAllCategoriesUseCase,
             ) : CoroutineBootstrapper<Action>() {
                 override fun invoke() {
                     scope.launch {
                         try {
-                            val items = getCategoriesUsecase()
+                            val items = getAllCategoriesUseCase()
                             dispatch(Action.LoadedCategoriesList(items))
                         } catch (_: Exception) {
                             dispatch(Action.LoadedCategoriesList(emptyList<Category>()))
@@ -76,7 +76,7 @@ interface CategoriesStore : Store<CategoriesStore.Intent, CategoriesStore.Catego
             }
 
             private class ExecutorImpl(
-                private val getCategoriesUsecase: GetCategoriesUsecase,
+                private val getAllCategoriesUseCase: GetAllCategoriesUseCase,
             ) : CoroutineExecutor<Intent, Action, CategoriesScreenState, Message, Nothing>() {
                 private var categories: List<Category> = emptyList()
 
@@ -110,7 +110,7 @@ interface CategoriesStore : Store<CategoriesStore.Intent, CategoriesStore.Catego
                         Intent.RefreshList -> {
                             scope.launch {
                                 try {
-                                    val items = getCategoriesUsecase()
+                                    val items = getAllCategoriesUseCase()
                                     executeAction(Action.LoadedCategoriesList(items))
                                 } catch (_: Exception) {
                                     dispatch(Message.Error)

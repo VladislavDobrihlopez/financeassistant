@@ -51,4 +51,7 @@
     <string name="operation_tranction_my_incomes">Мои доходы</string>
     <string name="transaction_input_field_commentary">Комментарий</string>
     <string name="operation_transaction_my_expenses">Мои расходы</string>
+    <string name="transaction_result_changes_applied">Изменения внесены</string>
+    <string name="transaction_result_created">Транзакция создана</string>
+    <string name="transaction_result_deleted">Транзакция удалена</string>
 </resources>

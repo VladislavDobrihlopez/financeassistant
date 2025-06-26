@@ -12,9 +12,9 @@ import javax.inject.Named
 @Module
 @InstallIn(SingletonComponent::class)
 abstract class DomainModule {
-    @[Binds Named("usecaseIncome")]
+    @[Binds Named("usecaseSortedIncome")]
     abstract fun bindGetSortedIncomeTransaction(impl: GetSortedIncomeTransactionsUsecase): GetSortedTransactionsUsecase
 
-    @[Binds Named("usecaseExpense")]
+    @[Binds Named("usecaseSortedExpense")]
     abstract fun bindGetSortedExpenseTransaction(impl: GetSortedExpenseTransactionsUsecase): GetSortedTransactionsUsecase
 }

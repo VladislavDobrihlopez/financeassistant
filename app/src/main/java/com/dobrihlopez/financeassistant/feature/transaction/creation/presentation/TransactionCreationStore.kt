@@ -7,12 +7,13 @@ import com.arkivanov.mvikotlin.extensions.coroutines.CoroutineBootstrapper
 import com.arkivanov.mvikotlin.extensions.coroutines.CoroutineExecutor
 import com.dobrihlopez.financeassistant.core.model.category.Category
 import com.dobrihlopez.financeassistant.core.usecase.account.GetFirstAccountUseCase
-import com.dobrihlopez.financeassistant.core.usecase.category.GetCategoriesUsecase
+import com.dobrihlopez.financeassistant.core.usecase.category.GetTypedCategoriesUsecase
 import com.dobrihlopez.financeassistant.feature.transaction.core.model.Transaction
 import com.dobrihlopez.financeassistant.feature.transaction.creation.domain.usecase.CreateTransactionUseCase
 import com.dobrihlopez.financeassistant.feature.transaction.creation.domain.usecase.DeleteTransactionUseCase
 import com.dobrihlopez.financeassistant.feature.transaction.creation.domain.usecase.UpdateTransactionUseCase
 import com.dobrihlopez.financeassistant.feature.transaction.creation.presentation.TransactionCreationStore.State
+import com.dobrihlopez.financeassistant.feature.transaction.creation.presentation.TransactionCreationStore.TransactionStoreFactory.Action.LoadCategories
 import com.dobrihlopez.financeassistant.feature.transaction.creation.presentation.TransactionCreationStore.TransactionStoreFactory.Message.UpdateAmount
 import com.dobrihlopez.financeassistant.feature.transaction.creation.presentation.TransactionCreationStore.TransactionStoreFactory.Message.UpdateChosenCategory
 import com.dobrihlopez.financeassistant.feature.transaction.creation.presentation.TransactionCreationStore.TransactionStoreFactory.Message.UpdateComment
@@ -27,11 +28,17 @@ import java.time.ZoneOffset
 import java.time.format.DateTimeFormatter
 import javax.inject.Inject
 
-interface TransactionCreationStore : Store<TransactionCreationStore.Intent, State, Nothing> {
+interface TransactionCreationStore : Store<TransactionCreationStore.Intent, State, TransactionCreationStore.Label> {
 
     enum class LaunchMode {
         EDITING,
         CREATING,
+    }
+
+    sealed interface Label {
+        data object ChangesSuccessfullyApplied: Label
+        data object SuccessfullyCreated: Label
+        data object SuccessfullyDeleted: Label
     }
 
     sealed interface Intent {
@@ -68,16 +75,15 @@ interface TransactionCreationStore : Store<TransactionCreationStore.Intent, Stat
         private val updateTransactionUseCase: UpdateTransactionUseCase,
         private val deleteTransactionUseCase: DeleteTransactionUseCase,
         private val getFirstAccountUseCase: GetFirstAccountUseCase,
-        private val getCategoriesUseCase: GetCategoriesUsecase,
     ) {
-        fun create(initState: State): TransactionCreationStore {
+        fun create(initState: State, getTypedCategories: GetTypedCategoriesUsecase): TransactionCreationStore {
             return TransactionStoreFactoryImpl(
                 storeFactory, createTransactionUseCase,
                 updateTransactionUseCase,
                 deleteTransactionUseCase,
                 getFirstAccountUseCase,
-                getCategoriesUseCase,
-                initState
+                getTypedCategories,
+                initState,
             )
         }
 
@@ -87,13 +93,13 @@ interface TransactionCreationStore : Store<TransactionCreationStore.Intent, Stat
             private val updateTransactionUseCase: UpdateTransactionUseCase,
             private val deleteTransactionUseCase: DeleteTransactionUseCase,
             private val getFirstAccountUseCase: GetFirstAccountUseCase,
-            private val getCategoriesUseCase: GetCategoriesUsecase,
+            private val getTypedCategories: GetTypedCategoriesUsecase,
             private val initState: State,
         ) : TransactionCreationStore,
-            Store<Intent, State, Nothing> by storeFactory.create(
+            Store<Intent, State, Label> by storeFactory.create(
                 name = "TransactionStore",
                 initialState = initState,
-                bootstrapper = BootstrapperImpl(getCategoriesUseCase),
+                bootstrapper = BootstrapperImpl(getTypedCategories),
                 executorFactory = {
                     ExecutorImpl(
                         createTransactionUseCase,
@@ -106,12 +112,12 @@ interface TransactionCreationStore : Store<TransactionCreationStore.Intent, Stat
             )
 
         private class BootstrapperImpl(
-            private val getCategoriesUsecase: GetCategoriesUsecase,
+            private val getTypedCategories: GetTypedCategoriesUsecase,
         ): CoroutineBootstrapper<Action>() {
             override fun invoke() {
                 scope.launch {
-                    val items = getCategoriesUsecase()
-                    dispatch(Action.LoadCategories(items))
+                    val items = getTypedCategories()
+                    dispatch(LoadCategories(items))
                 }
             }
         }
@@ -121,7 +127,7 @@ interface TransactionCreationStore : Store<TransactionCreationStore.Intent, Stat
             private val updateTransactionUseCase: UpdateTransactionUseCase,
             private val deleteTransactionUseCase: DeleteTransactionUseCase,
             private val getFirstAccountUseCase: GetFirstAccountUseCase,
-        ) : CoroutineExecutor<Intent, Action, State, Message, Nothing>() {
+        ) : CoroutineExecutor<Intent, Action, State, Message, Label>() {
             override fun executeAction(action: Action) {
                 super.executeAction(action)
 
@@ -151,14 +157,25 @@ interface TransactionCreationStore : Store<TransactionCreationStore.Intent, Stat
                             }
                             scope.launch {
                                 deleteTransactionUseCase(state.originalTransaction.id)
+                                publish(Label.SuccessfullyDeleted)
                             }
                         }
 
                         Intent.Apply -> {
                             if (state !is State.Success) return
                             when (state.mode) {
-                                LaunchMode.EDITING -> editTransaction(state)
-                                LaunchMode.CREATING -> createNewTransaction(state)
+                                LaunchMode.EDITING -> {
+                                    scope.launch {
+                                        editTransaction(state)
+                                        publish(Label.ChangesSuccessfullyApplied)
+                                    }
+                                }
+                                LaunchMode.CREATING -> {
+                                    scope.launch {
+                                        createNewTransaction(state)
+                                        publish(Label.SuccessfullyCreated)
+                                    }
+                                }
                             }
                         }
 
@@ -201,47 +218,43 @@ interface TransactionCreationStore : Store<TransactionCreationStore.Intent, Stat
                 }
             }
 
-            private fun createNewTransaction(state: State) {
+            private suspend fun createNewTransaction(state: State) {
                 require(state is State.Success)
 
-                scope.launch {
-                    val account = getFirstAccountUseCase()
-                    requireNotNull(account) {
-                        "Account is not found"
-                    }
-                    requireNotNull(state.chosenCategory) {
-                        "Category is not chosen"
-                    }
-
-                    createTransactionUseCase(
-                        accountId = account.id,
-                        categoryId = state.chosenCategory.id,
-                        amount = state.sum,
-                        transactionDate = state.date ?: LocalDateTime.now(),
-                        comment = state.comment
-                    )
+                val account = getFirstAccountUseCase()
+                requireNotNull(account) {
+                    "Account is not found"
                 }
+                requireNotNull(state.chosenCategory) {
+                    "Category is not chosen"
+                }
+
+                createTransactionUseCase(
+                    accountId = account.id,
+                    categoryId = state.chosenCategory.id,
+                    amount = state.sum,
+                    transactionDate = state.date ?: LocalDateTime.now(),
+                    comment = state.comment
+                )
             }
 
-            private fun editTransaction(state: State) {
+            private suspend fun editTransaction(state: State) {
                 require(state is State.Success)
                 val original = state.originalTransaction
                 requireNotNull(original) {
                     "Original transaction is not found"
                 }
 
-                scope.launch {
-                    updateTransactionUseCase(
-                        original.copy(
-                            amount = state.sum,
-                            category = state.chosenCategory ?: original.category,
-                            comment = state.comment,
-                            updatedAt = DateTimeFormatter.ISO_INSTANT.format(
-                                LocalDateTime.now().toInstant(ZoneOffset.UTC)
-                            ),
-                        )
+                updateTransactionUseCase(
+                    original.copy(
+                        amount = state.sum,
+                        category = state.chosenCategory ?: original.category,
+                        comment = state.comment,
+                        updatedAt = DateTimeFormatter.ISO_INSTANT.format(
+                            LocalDateTime.now().toInstant(ZoneOffset.UTC)
+                        ),
                     )
-                }
+                )
             }
         }
 

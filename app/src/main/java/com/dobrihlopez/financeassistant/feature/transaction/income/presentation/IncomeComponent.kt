@@ -10,6 +10,7 @@ import com.arkivanov.decompose.value.Value
 import com.arkivanov.essenty.lifecycle.doOnResume
 import com.arkivanov.mvikotlin.core.instancekeeper.getStore
 import com.arkivanov.mvikotlin.extensions.coroutines.stateFlow
+import com.dobrihlopez.financeassistant.core.usecase.category.GetTypedCategoriesUsecase
 import com.dobrihlopez.financeassistant.feature.transaction.core.model.Transaction
 import com.dobrihlopez.financeassistant.feature.transaction.creation.presentation.TransactionCreationComponent
 import com.dobrihlopez.financeassistant.feature.transaction.creation.presentation.TransactionCreationStore
@@ -39,6 +40,8 @@ interface IncomeComponent {
 
     fun onNavigateBack()
 
+    fun onRefreshList()
+
     sealed interface Child {
         data class Main(val component: IncomeComponent) : Child
 
@@ -54,7 +57,8 @@ interface IncomeComponent {
         private val incomeStoreFactory: IncomeStoreFactory,
         private val historyComponentFactory: HistoryComponent.Factory,
         private val transactionComponentFactory: TransactionCreationComponent.Factory,
-        @Named("usecaseIncome") private val getSortedTransactionsUsecase: GetSortedTransactionsUsecase,
+        @Named("usecaseSortedIncome") private val getSortedTransactionsUsecase: GetSortedTransactionsUsecase,
+        @Named("usecaseCategoriesIncome") private val getIncomeCategoriesUsecase: GetTypedCategoriesUsecase,
     ) : IncomeComponent, ComponentContext by componentContext {
         private val stack = StackNavigation<Config>()
 
@@ -95,7 +99,11 @@ interface IncomeComponent {
                             } else {
                                 TransactionCreationStore.LaunchMode.EDITING
                             },
-                            transaction = config.transaction
+                            transaction = config.transaction,
+                            onFinish = {
+                                onNavigateBack()
+                            },
+                            getTypedCategories = getIncomeCategoriesUsecase,
                         )
                     )
                 }
@@ -121,9 +129,13 @@ interface IncomeComponent {
 
             lifecycle.doOnResume {
                 if (state.value is IncomeStore.IncomeScreenState.Failed) {
-                    store.accept(IncomeStore.Intent.LoadIncome)
+                    onRefreshList()
                 }
             }
+        }
+
+        override fun onRefreshList() {
+            store.accept(IncomeStore.Intent.LoadIncome)
         }
 
         override fun onNavigateBack() {

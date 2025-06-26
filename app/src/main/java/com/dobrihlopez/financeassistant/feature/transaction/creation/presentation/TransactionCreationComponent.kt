@@ -2,14 +2,19 @@ package com.dobrihlopez.financeassistant.feature.transaction.creation.presentati
 
 import com.arkivanov.decompose.ComponentContext
 import com.arkivanov.mvikotlin.core.instancekeeper.getStore
+import com.arkivanov.mvikotlin.extensions.coroutines.labels
 import com.arkivanov.mvikotlin.extensions.coroutines.stateFlow
+import com.dobrihlopez.financeassistant.core.componentScope
 import com.dobrihlopez.financeassistant.core.model.category.Category
+import com.dobrihlopez.financeassistant.core.usecase.category.GetTypedCategoriesUsecase
 import com.dobrihlopez.financeassistant.feature.transaction.core.model.Transaction
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.launch
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.LocalTime
@@ -17,6 +22,7 @@ import java.time.OffsetDateTime
 
 interface TransactionCreationComponent: ComponentContext {
     val state: StateFlow<TransactionCreationStore.State>
+    val labels: Flow<TransactionCreationStore.Label>
 
     fun updateCategory(category: Category)
     fun updateSum(newSum: String)
@@ -32,6 +38,8 @@ interface TransactionCreationComponent: ComponentContext {
             @Assisted("componentContext") componentContext: ComponentContext,
             @Assisted("launchMode") launchMode: TransactionCreationStore.LaunchMode,
             @Assisted("transaction") transaction: Transaction?,
+            @Assisted("lambdaFinish") onFinish: () -> Unit,
+            @Assisted("usecaseCategories") getTypedCategories: GetTypedCategoriesUsecase,
         ): DefaultTransactionCreationComponent
     }
 
@@ -39,6 +47,8 @@ interface TransactionCreationComponent: ComponentContext {
         @Assisted("componentContext") private val componentContext: ComponentContext,
         @Assisted("launchMode") private val launchMode: TransactionCreationStore.LaunchMode,
         @Assisted("transaction") private val transaction: Transaction?,
+        @Assisted("lambdaFinish") onFinish: () -> Unit,
+        @Assisted("usecaseCategories") getTypedCategories: GetTypedCategoriesUsecase,
         private val transactionStoreFactory: TransactionCreationStore.TransactionStoreFactory,
     ): TransactionCreationComponent, ComponentContext by componentContext {
 
@@ -78,18 +88,27 @@ interface TransactionCreationComponent: ComponentContext {
 
 
         private val store = instanceKeeper.getStore {
-            transactionStoreFactory.create(initState = restoredState)
+            transactionStoreFactory.create(initState = restoredState, getTypedCategories = getTypedCategories)
         }
 
         init {
             stateKeeper.register(STATE_KEY, strategy = TransactionCreationStore.State.serializer()) {
                 state.value
             }
+
+            componentScope().launch {
+                labels.collect {
+                    onFinish()
+                }
+            }
         }
 
         @OptIn(ExperimentalCoroutinesApi::class)
         override val state: StateFlow<TransactionCreationStore.State>
             get() = store.stateFlow
+
+        override val labels: Flow<TransactionCreationStore.Label>
+            get() = store.labels
 
         override fun updateCategory(category: Category) {
             store.accept(TransactionCreationStore.Intent.UpdateCategory(category))

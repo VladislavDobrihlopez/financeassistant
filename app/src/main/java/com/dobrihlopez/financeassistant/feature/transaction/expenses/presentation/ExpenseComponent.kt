@@ -10,6 +10,7 @@ import com.arkivanov.decompose.value.Value
 import com.arkivanov.essenty.lifecycle.doOnResume
 import com.arkivanov.mvikotlin.core.instancekeeper.getStore
 import com.arkivanov.mvikotlin.extensions.coroutines.stateFlow
+import com.dobrihlopez.financeassistant.core.usecase.category.GetTypedCategoriesUsecase
 import com.dobrihlopez.financeassistant.feature.transaction.core.model.Transaction
 import com.dobrihlopez.financeassistant.feature.transaction.creation.presentation.TransactionCreationComponent
 import com.dobrihlopez.financeassistant.feature.transaction.creation.presentation.TransactionCreationStore
@@ -36,6 +37,8 @@ interface ExpenseComponent {
 
     fun onNavigateBack()
 
+    fun onRefreshList()
+
     sealed interface Child {
         data class Main(val component: ExpenseComponent) : Child
 
@@ -58,8 +61,9 @@ interface ExpenseComponent {
         private val expenseStoreFactory: ExpenseStoreFactory,
         private val historyComponentFactory: HistoryComponent.Factory,
         private val transactionComponentFactory: TransactionCreationComponent.Factory,
-        @Named("usecaseExpense") private val getSortedExpenseTransactionsUsecase: GetSortedTransactionsUsecase,
-    ) : ExpenseComponent, ComponentContext by componentContext {
+        @Named("usecaseSortedExpense") private val getSortedExpenseTransactionsUsecase: GetSortedTransactionsUsecase,
+        @Named("usecaseCategoriesExpense") private val getExpenseCategoriesUsecase: GetTypedCategoriesUsecase
+        ) : ExpenseComponent, ComponentContext by componentContext {
         private val stack = StackNavigation<Config>()
 
         override val childStack: Value<ChildStack<*, Child>> =
@@ -99,7 +103,11 @@ interface ExpenseComponent {
                             } else {
                                 TransactionCreationStore.LaunchMode.EDITING
                             },
-                            transaction = config.transaction
+                            transaction = config.transaction,
+                            onFinish = {
+                                onNavigateBack()
+                            },
+                            getTypedCategories = getExpenseCategoriesUsecase,
                         )
                     )
                 }
@@ -125,9 +133,13 @@ interface ExpenseComponent {
 
             lifecycle.doOnResume {
                 if (state.value is ExpenseStore.ExpenseScreenState.Failed) {
-                    store.accept(ExpenseStore.Intent.LoadExpenses)
+                    onRefreshList()
                 }
             }
+        }
+
+        override fun onRefreshList() {
+            store.accept(ExpenseStore.Intent.LoadExpenses)
         }
 
         override fun onNavigateBack() {

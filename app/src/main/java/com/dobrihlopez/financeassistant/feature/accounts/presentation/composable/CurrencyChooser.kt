@@ -36,7 +36,7 @@ fun CurrencyChooser(
     val currencies = listOf(Currency.Ruble, Currency.Usd, Currency.Euro)
     val spacing = MaterialTheme.spacing
 
-    ModalBottomSheet(sheetState = sheetState, onDismissRequest = onDismiss) {
+    ModalBottomSheet(modifier = modifier, sheetState = sheetState, onDismissRequest = onDismiss) {
         currencies.forEach { currency ->
             CurrencyItem(
                 modifier =
