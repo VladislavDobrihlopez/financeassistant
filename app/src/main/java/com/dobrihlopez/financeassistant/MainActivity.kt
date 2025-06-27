@@ -66,6 +66,6 @@ class MainActivity : ComponentActivity() {
 
     private companion object {
         const val EXTRA_SPLASH_VISIBILITY = "extra_splash"
-        const val SPLASH_DURATION_IN_MS = 1500L
+        const val SPLASH_DURATION_IN_MS = 1000L
     }
 }
