@@ -1,4 +1,4 @@
-package com.dobrihlopez.financeassistant.coreui.composable
+package com.dobrihlopez.financeassistant.core_ui.composable
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -10,7 +10,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.dobrihlopez.financeassistant.coreui.ui.theme.FinanceAssistantTheme
+import com.dobrihlopez.financeassistant.core_ui.ui.theme.FinanceAssistantTheme
 
 @Composable
 fun LoadingProgressBar(modifier: Modifier = Modifier) {

@@ -1,4 +1,4 @@
-package com.dobrihlopez.financeassistant.coreui.composable.modalsheet
+package com.dobrihlopez.financeassistant.core_ui.composable.modalsheet
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
@@ -23,7 +23,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import com.dobrihlopez.financeassistant.R
-import com.dobrihlopez.financeassistant.coreui.ui.theme.spacing
+import com.dobrihlopez.financeassistant.core_ui.ui.theme.spacing
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

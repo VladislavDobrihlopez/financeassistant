@@ -5,7 +5,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.dobrihlopez.financeassistant.coreui.composable.item.BasicListItem
+import com.dobrihlopez.financeassistant.core_ui.composable.item.BasicListItem
 
 @Composable
 fun OverViewListItem(

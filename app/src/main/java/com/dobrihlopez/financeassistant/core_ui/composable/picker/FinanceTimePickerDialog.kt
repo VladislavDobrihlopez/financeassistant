@@ -1,4 +1,4 @@
-package com.dobrihlopez.financeassistant.coreui.composable.picker
+package com.dobrihlopez.financeassistant.core_ui.composable.picker
 
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.ExperimentalMaterial3Api

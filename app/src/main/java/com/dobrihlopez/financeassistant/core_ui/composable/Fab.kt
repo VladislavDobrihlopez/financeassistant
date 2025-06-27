@@ -1,4 +1,4 @@
-package com.dobrihlopez.financeassistant.coreui.composable
+package com.dobrihlopez.financeassistant.core_ui.composable
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.expandIn

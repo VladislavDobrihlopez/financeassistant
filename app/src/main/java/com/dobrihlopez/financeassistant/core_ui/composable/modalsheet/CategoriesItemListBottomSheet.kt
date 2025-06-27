@@ -1,4 +1,4 @@
-package com.dobrihlopez.financeassistant.coreui.composable.modalsheet
+package com.dobrihlopez.financeassistant.core_ui.composable.modalsheet
 
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -12,8 +12,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import com.dobrihlopez.financeassistant.core.model.category.Category
-import com.dobrihlopez.financeassistant.coreui.composable.item.CategoriesItem
-import com.dobrihlopez.financeassistant.coreui.ui.theme.spacing
+import com.dobrihlopez.financeassistant.core_ui.composable.item.CategoriesItem
+import com.dobrihlopez.financeassistant.core_ui.ui.theme.spacing
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

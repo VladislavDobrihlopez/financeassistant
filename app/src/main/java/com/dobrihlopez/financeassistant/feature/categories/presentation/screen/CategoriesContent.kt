@@ -37,10 +37,10 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.IntOffset
 import com.dobrihlopez.financeassistant.R
 import com.dobrihlopez.financeassistant.core.model.category.Category
-import com.dobrihlopez.financeassistant.coreui.composable.ErrorSnackbarHost
-import com.dobrihlopez.financeassistant.coreui.composable.LoadingProgressBar
-import com.dobrihlopez.financeassistant.coreui.composable.item.CategoriesItem
-import com.dobrihlopez.financeassistant.coreui.ui.theme.FinanceAssistantTheme
+import com.dobrihlopez.financeassistant.core_ui.composable.ErrorSnackbarHost
+import com.dobrihlopez.financeassistant.core_ui.composable.LoadingProgressBar
+import com.dobrihlopez.financeassistant.core_ui.composable.item.CategoriesItem
+import com.dobrihlopez.financeassistant.core_ui.ui.theme.FinanceAssistantTheme
 import com.dobrihlopez.financeassistant.feature.categories.presentation.CategoriesStore.CategoriesScreenState
 import com.dobrihlopez.financeassistant.feature.categories.presentation.composable.SearchBar
 

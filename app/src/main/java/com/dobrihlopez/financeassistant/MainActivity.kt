@@ -10,7 +10,7 @@ import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.arkivanov.decompose.defaultComponentContext
 import com.dobrihlopez.financeassistant.core_remote.network.ConnectivityObserver
-import com.dobrihlopez.financeassistant.coreui.ui.theme.FinanceAssistantTheme
+import com.dobrihlopez.financeassistant.core_ui.ui.theme.FinanceAssistantTheme
 import com.dobrihlopez.financeassistant.feature.RootComponent
 import com.dobrihlopez.financeassistant.feature.RootScreen
 import dagger.hilt.android.AndroidEntryPoint

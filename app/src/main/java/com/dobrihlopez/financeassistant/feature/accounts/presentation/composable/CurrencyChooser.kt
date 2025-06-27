@@ -22,7 +22,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import com.dobrihlopez.financeassistant.R
-import com.dobrihlopez.financeassistant.coreui.ui.theme.spacing
+import com.dobrihlopez.financeassistant.core_ui.ui.theme.spacing
 import com.dobrihlopez.financeassistant.feature.accounts.presentation.screen.Currency
 
 @OptIn(ExperimentalMaterial3Api::class)

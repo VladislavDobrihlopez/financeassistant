@@ -21,8 +21,8 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.dobrihlopez.financeassistant.R
-import com.dobrihlopez.financeassistant.coreui.composable.LoadingProgressBar
-import com.dobrihlopez.financeassistant.coreui.ui.theme.FinanceAssistantTheme
+import com.dobrihlopez.financeassistant.core_ui.composable.LoadingProgressBar
+import com.dobrihlopez.financeassistant.core_ui.ui.theme.FinanceAssistantTheme
 import com.dobrihlopez.financeassistant.feature.settings.domain.model.AppSettingItem
 import com.dobrihlopez.financeassistant.feature.settings.presentation.SettingsStore.SettingsScreenState
 import com.dobrihlopez.financeassistant.feature.settings.presentation.composable.SettingItem

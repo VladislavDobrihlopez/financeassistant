@@ -28,10 +28,10 @@ import com.arkivanov.decompose.extensions.compose.stack.Children
 import com.arkivanov.decompose.extensions.compose.stack.animation.slide
 import com.arkivanov.decompose.extensions.compose.stack.animation.stackAnimation
 import com.dobrihlopez.financeassistant.R
-import com.dobrihlopez.financeassistant.coreui.animation.actionEnterTransition
-import com.dobrihlopez.financeassistant.coreui.animation.navActionEnterTransition
-import com.dobrihlopez.financeassistant.coreui.animation.navActionExitTransition
-import com.dobrihlopez.financeassistant.coreui.composable.Fab
+import com.dobrihlopez.financeassistant.core_ui.animation.actionEnterTransition
+import com.dobrihlopez.financeassistant.core_ui.animation.navActionEnterTransition
+import com.dobrihlopez.financeassistant.core_ui.animation.navActionExitTransition
+import com.dobrihlopez.financeassistant.core_ui.composable.Fab
 import com.dobrihlopez.financeassistant.feature.transaction.core_ui.TopBarDataProvider
 import com.dobrihlopez.financeassistant.feature.transaction.core_ui.TopBarDataProvider.Default
 import com.dobrihlopez.financeassistant.feature.transaction.core_ui.TopBarDataProvider.History

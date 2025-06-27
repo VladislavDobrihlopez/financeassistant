@@ -24,7 +24,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import com.dobrihlopez.financeassistant.R
-import com.dobrihlopez.financeassistant.coreui.ui.theme.spacing
+import com.dobrihlopez.financeassistant.core_ui.ui.theme.spacing
 
 @Composable
 fun SearchBar(

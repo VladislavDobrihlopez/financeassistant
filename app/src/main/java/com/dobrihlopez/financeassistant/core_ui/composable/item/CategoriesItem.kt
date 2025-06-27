@@ -1,4 +1,4 @@
-package com.dobrihlopez.financeassistant.coreui.composable.item
+package com.dobrihlopez.financeassistant.core_ui.composable.item
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box

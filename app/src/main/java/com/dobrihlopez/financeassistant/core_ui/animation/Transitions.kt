@@ -1,4 +1,4 @@
-package com.dobrihlopez.financeassistant.coreui.animation
+package com.dobrihlopez.financeassistant.core_ui.animation
 
 import androidx.compose.animation.expandHorizontally
 import androidx.compose.animation.fadeIn

@@ -23,7 +23,7 @@ import androidx.compose.ui.Modifier
 import com.arkivanov.decompose.extensions.compose.stack.Children
 import com.arkivanov.decompose.extensions.compose.subscribeAsState
 import com.dobrihlopez.financeassistant.core_ui.composable.InternetConnectionStatus
-import com.dobrihlopez.financeassistant.coreui.ui.theme.spacing
+import com.dobrihlopez.financeassistant.core_ui.ui.theme.spacing
 import com.dobrihlopez.financeassistant.feature.accounts.presentation.screen.AccountsScreen
 import com.dobrihlopez.financeassistant.feature.categories.presentation.screen.CategoriesScreen
 import com.dobrihlopez.financeassistant.feature.settings.presentation.screen.SettingScreen

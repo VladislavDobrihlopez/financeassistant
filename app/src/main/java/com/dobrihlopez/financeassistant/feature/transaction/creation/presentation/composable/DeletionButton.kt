@@ -5,8 +5,8 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import com.dobrihlopez.financeassistant.coreui.ui.theme.DestructiveActionColor
-import com.dobrihlopez.financeassistant.coreui.ui.theme.OnDestructiveActionColor
+import com.dobrihlopez.financeassistant.core_ui.ui.theme.DestructiveActionColor
+import com.dobrihlopez.financeassistant.core_ui.ui.theme.OnDestructiveActionColor
 
 @Composable
 fun DeletionButton(

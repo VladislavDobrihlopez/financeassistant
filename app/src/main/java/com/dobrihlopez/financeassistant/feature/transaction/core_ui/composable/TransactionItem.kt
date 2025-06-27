@@ -19,7 +19,7 @@ import androidx.compose.ui.unit.dp
 import com.dobrihlopez.financeassistant.R
 import com.dobrihlopez.financeassistant.core.currencyToSymbol
 import com.dobrihlopez.financeassistant.core.toFullDateAndTimeFormat
-import com.dobrihlopez.financeassistant.coreui.composable.item.BasicListItem
+import com.dobrihlopez.financeassistant.core_ui.composable.item.BasicListItem
 import com.dobrihlopez.financeassistant.feature.transaction.core.model.Transaction
 
 @Composable

@@ -9,7 +9,7 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import com.dobrihlopez.financeassistant.R
 import com.dobrihlopez.financeassistant.core.default
-import com.dobrihlopez.financeassistant.coreui.composable.item.BasicListItem
+import com.dobrihlopez.financeassistant.core_ui.composable.item.BasicListItem
 
 @Composable
 fun TransactionOptionItem(

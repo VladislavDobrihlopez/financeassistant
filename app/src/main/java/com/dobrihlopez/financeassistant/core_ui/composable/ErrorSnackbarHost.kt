@@ -1,4 +1,4 @@
-package com.dobrihlopez.financeassistant.coreui.composable
+package com.dobrihlopez.financeassistant.core_ui.composable
 
 import android.widget.Toast
 import androidx.compose.material3.SnackbarDuration

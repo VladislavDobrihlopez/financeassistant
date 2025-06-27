@@ -1,4 +1,4 @@
-package com.dobrihlopez.financeassistant.coreui.composable.dialog
+package com.dobrihlopez.financeassistant.core_ui.composable.dialog
 
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.SheetState
@@ -13,7 +13,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import com.dobrihlopez.financeassistant.R
 import com.dobrihlopez.financeassistant.core.validation.BalanceValidator
-import com.dobrihlopez.financeassistant.coreui.composable.modalsheet.InputNumberBottomSheet
+import com.dobrihlopez.financeassistant.core_ui.composable.modalsheet.InputNumberBottomSheet
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
