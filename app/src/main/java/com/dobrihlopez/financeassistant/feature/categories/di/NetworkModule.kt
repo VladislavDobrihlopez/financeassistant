@@ -1,7 +1,7 @@
 package com.dobrihlopez.financeassistant.feature.categories.di
 
 import com.dobrihlopez.financeassistant.feature.categories.data.network.CategoryApi
-import com.dobrihlopez.financeassistant.feature.categories.data.repo.CategoriesRepositoryImpl
+import com.dobrihlopez.financeassistant.feature.categories.data.repository.CategoriesRepositoryImpl
 import com.dobrihlopez.financeassistant.feature.categories.domain.CategoriesRepository
 import dagger.Binds
 import dagger.Module
@@ -21,6 +21,6 @@ abstract class NetworkModule {
     companion object {
         @Provides
         @Singleton
-        fun provideCategoriesApi(retrofit: Retrofit) = retrofit.create(CategoryApi::class.java)
+        fun provideCategoriesApi(retrofit: Retrofit): CategoryApi = retrofit.create(CategoryApi::class.java)
     }
 }

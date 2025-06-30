@@ -14,34 +14,36 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
-import androidx.compose.material3.SnackbarVisuals
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.State
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
 import com.arkivanov.decompose.extensions.compose.stack.Children
 import com.arkivanov.decompose.extensions.compose.subscribeAsState
-import com.dobrihlopez.financeassistant.core_ui.composable.BottomNavigationBar
 import com.dobrihlopez.financeassistant.core_ui.composable.InternetConnectionStatus
-import com.dobrihlopez.financeassistant.core_ui.composable.NavigationItem
 import com.dobrihlopez.financeassistant.core_ui.ui.theme.spacing
-import com.dobrihlopez.financeassistant.feature.accounts.presentation.AccountsScreen
-import com.dobrihlopez.financeassistant.feature.categories.presentation.CategoriesScreen
-import com.dobrihlopez.financeassistant.feature.settings.presentation.SettingScreen
-import com.dobrihlopez.financeassistant.feature.transaction.expenses.presentation.ExpenseScreen
-import com.dobrihlopez.financeassistant.feature.transaction.income.presentation.IncomeScreen
+import com.dobrihlopez.financeassistant.feature.accounts.presentation.screen.AccountsScreen
+import com.dobrihlopez.financeassistant.feature.categories.presentation.screen.CategoriesScreen
+import com.dobrihlopez.financeassistant.feature.settings.presentation.screen.SettingScreen
+import com.dobrihlopez.financeassistant.feature.transaction.expenses.presentation.screen.ExpenseScreen
+import com.dobrihlopez.financeassistant.feature.transaction.income.presentation.screen.IncomeScreen
+import com.dobrihlopez.financeassistant.navigation.BottomNavigationBar
+import com.dobrihlopez.financeassistant.navigation.NavigationItem
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun RootScreen(rootComponent: RootComponent, hasInternetState: State<Boolean>) {
+fun RootScreen(
+    rootComponent: RootComponent,
+    hasInternetState: State<Boolean>,
+) {
     val childStack by rootComponent.state.subscribeAsState()
 
-    val snackBarHost = remember {
-        SnackbarHostState()
-    }
+    val snackBarHost =
+        remember {
+            SnackbarHostState()
+        }
 
     val spacing = MaterialTheme.spacing
 
@@ -51,7 +53,7 @@ fun RootScreen(rootComponent: RootComponent, hasInternetState: State<Boolean>) {
             snackBarHost.showSnackbar(
                 message = "internet issues",
                 duration = SnackbarDuration.Indefinite,
-                withDismissAction = false
+                withDismissAction = false,
             )
         } else {
             snackBarHost.currentSnackbarData?.dismiss()
@@ -59,12 +61,12 @@ fun RootScreen(rootComponent: RootComponent, hasInternetState: State<Boolean>) {
     }
 
     Scaffold(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(MaterialTheme.colorScheme.primary)
-            .windowInsetsPadding(WindowInsets.statusBars)
-            .background(MaterialTheme.colorScheme.background)
-            .windowInsetsPadding(WindowInsets.navigationBars),
+        modifier =
+            Modifier.fillMaxSize()
+                .background(MaterialTheme.colorScheme.primary)
+                .windowInsetsPadding(WindowInsets.statusBars)
+                .background(MaterialTheme.colorScheme.background)
+                .windowInsetsPadding(WindowInsets.navigationBars),
         bottomBar = {
             BottomNavigationBar(
                 currentRoute = childStack.active.instance,
@@ -76,7 +78,7 @@ fun RootScreen(rootComponent: RootComponent, hasInternetState: State<Boolean>) {
                         is NavigationItem.Categories -> rootComponent.onCategoriesClick()
                         is NavigationItem.Settings -> rootComponent.onSettingsClick()
                     }
-                }
+                },
             )
         },
         snackbarHost = {
@@ -85,16 +87,17 @@ fun RootScreen(rootComponent: RootComponent, hasInternetState: State<Boolean>) {
                 snackbar = { data ->
                     InternetConnectionStatus(
                         hasInternet = hasInternet,
-                        modifier = Modifier.padding(horizontal = spacing.medium)
+                        modifier = Modifier.padding(horizontal = spacing.medium),
                     )
-                }
+                },
             )
         },
     ) { paddingValues ->
         Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(paddingValues)
+            modifier =
+                Modifier
+                    .fillMaxSize()
+                    .padding(paddingValues),
         ) {
             Children(stack = rootComponent.state) { screen ->
                 when (val config = screen.instance) {

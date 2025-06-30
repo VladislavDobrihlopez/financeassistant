@@ -1,13 +1,11 @@
 package com.dobrihlopez.financeassistant.feature.accounts.presentation.composable
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -19,11 +17,14 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import com.dobrihlopez.financeassistant.R
-import com.dobrihlopez.financeassistant.core_ui.composable.BasicListItem
-import com.dobrihlopez.financeassistant.feature.accounts.presentation.AccountActionItem
+import com.dobrihlopez.financeassistant.core_ui.composable.item.BasicListItem
+import com.dobrihlopez.financeassistant.feature.accounts.presentation.screen.AccountActionItem
 
 @Composable
-fun AccountItem(accountActionItem: AccountActionItem, onClick: () -> Unit) {
+fun AccountItem(
+    accountActionItem: AccountActionItem,
+    onClick: () -> Unit,
+) {
     val context = LocalContext.current
     BasicListItem(
         modifier = Modifier.height(56.dp),
@@ -34,16 +35,16 @@ fun AccountItem(accountActionItem: AccountActionItem, onClick: () -> Unit) {
         leadingContent = {
             if (accountActionItem.emoji != null) {
                 Box(
-                    modifier = Modifier
-                        .size(28.dp)
-                        .clip(CircleShape)
-                        .background(MaterialTheme.colorScheme.surface)
-                    ,
-                    contentAlignment = Alignment.Center
+                    modifier =
+                        Modifier
+                            .size(28.dp)
+                            .clip(CircleShape)
+                            .background(MaterialTheme.colorScheme.surface),
+                    contentAlignment = Alignment.Center,
                 ) {
                     Text(
                         text = accountActionItem.emoji,
-                        style = MaterialTheme.typography.titleSmall
+                        style = MaterialTheme.typography.titleSmall,
                     )
                 }
             }
@@ -51,8 +52,8 @@ fun AccountItem(accountActionItem: AccountActionItem, onClick: () -> Unit) {
         trailingContent = {
             Icon(
                 imageVector = ImageVector.vectorResource(R.drawable.ic_arrow_head),
-                contentDescription = null
+                contentDescription = null,
             )
-        }
+        },
     )
 }

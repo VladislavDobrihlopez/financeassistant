@@ -13,11 +13,11 @@ import androidx.compose.ui.unit.dp
 import com.dobrihlopez.financeassistant.core_ui.ui.theme.FinanceAssistantTheme
 
 @Composable
-fun LoadingProgressBar() {
-    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+fun LoadingProgressBar(modifier: Modifier = Modifier) {
+    Box(modifier = modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
         CircularProgressIndicator(
             modifier = Modifier.size(56.dp),
-            color = MaterialTheme.colorScheme.primary
+            color = MaterialTheme.colorScheme.primary,
         )
     }
 }

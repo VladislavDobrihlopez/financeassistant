@@ -5,21 +5,11 @@ import android.os.PersistableBundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.safeContentPadding
-import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.zIndex
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.arkivanov.decompose.defaultComponentContext
-import com.dobrihlopez.financeassistant.core.network.ConnectivityObserver
-import com.dobrihlopez.financeassistant.core_ui.composable.InternetConnectionStatus
+import com.dobrihlopez.financeassistant.core_remote.network.ConnectivityObserver
 import com.dobrihlopez.financeassistant.core_ui.ui.theme.FinanceAssistantTheme
 import com.dobrihlopez.financeassistant.feature.RootComponent
 import com.dobrihlopez.financeassistant.feature.RootScreen
@@ -30,7 +20,7 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     @Inject
-    lateinit var rootComponentFactory: RootComponent.DefaultRootComponent.Factory
+    lateinit var rootComponentFactory: RootComponent.Factory
 
     @Inject
     lateinit var connectivityObserver: ConnectivityObserver
@@ -46,7 +36,10 @@ class MainActivity : ComponentActivity() {
             isSplashVisible
         }
 
-        val rootComponent = rootComponentFactory.create(defaultComponentContext())
+        val rootComponent =
+            rootComponentFactory.create(defaultComponentContext(), onExitApp = {
+                finishAffinity()
+            })
 
         setContent {
             FinanceAssistantTheme {
@@ -73,6 +66,6 @@ class MainActivity : ComponentActivity() {
 
     private companion object {
         const val EXTRA_SPLASH_VISIBILITY = "extra_splash"
-        const val SPLASH_DURATION_IN_MS = 1500L
+        const val SPLASH_DURATION_IN_MS = 1000L
     }
 }

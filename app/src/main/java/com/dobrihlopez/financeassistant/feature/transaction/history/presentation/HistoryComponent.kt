@@ -1,55 +1,93 @@
 package com.dobrihlopez.financeassistant.feature.transaction.history.presentation
 
 import com.arkivanov.decompose.ComponentContext
+import com.arkivanov.essenty.lifecycle.doOnStart
 import com.arkivanov.mvikotlin.core.instancekeeper.getStore
 import com.arkivanov.mvikotlin.extensions.coroutines.stateFlow
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.StateFlow
-import com.dobrihlopez.financeassistant.feature.transaction.history.presentation.HistoryStore.State
+import com.dobrihlopez.financeassistant.feature.transaction.core.model.Transaction
+import com.dobrihlopez.financeassistant.feature.transaction.history.domain.GetSortedTransactionsUsecase
 import com.dobrihlopez.financeassistant.feature.transaction.history.presentation.HistoryStore.Intent
+import com.dobrihlopez.financeassistant.feature.transaction.history.presentation.HistoryStore.State
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.StateFlow
 import java.time.LocalDate
 
+/**
+ * Компонент экрана истории транзакций (доходы или расходы).
+ *
+ * Отвечает за:
+ * - предоставление состояния экрана (список транзакций, даты фильтра, загрузка/ошибка) через StateFlow,
+ * - реакцию на пользовательские действия: изменение начальной/конечной даты периода,
+ *   обновление списка, выбор транзакции,
+ * - запуск логики загрузки данных при старте (через doOnStart).
+ *
+ * Интегрируется с жизненным циклом экрана через LifecycleOwner,
+ * и реализован при помощи Decompose + MVIKotlin — делегирует хранение состояния и бизнес-логику в HistoryStore.
+ *
+ * @see ComponentContext
+ */
 interface HistoryComponent {
     val state: StateFlow<State>
+
     fun onStartDateClick(date: LocalDate)
+
     fun onEndDateClick(date: LocalDate)
+
+    fun onTransactionClicked(transaction: Transaction)
+
     fun onRefresh()
 
-    class DefaultHistoryComponent @AssistedInject constructor(
-        @Assisted("componentContext") private val componentContext: ComponentContext,
-        @Assisted("isIncome") private val isIncome: Boolean,
-        private val storeFactory: HistoryStore.HistoryStoreFactory
-    ) : HistoryComponent, ComponentContext by componentContext {
-
-        private val store = instanceKeeper.getStore {
-            storeFactory.create(isIncome)
-        }
-
-        @OptIn(ExperimentalCoroutinesApi::class)
-        override val state: StateFlow<State>
-            get() = store.stateFlow
-
-        override fun onStartDateClick(date: LocalDate) {
-            store.accept(Intent.ChangeStartDate(date))
-        }
-
-        override fun onEndDateClick(date: LocalDate) {
-            store.accept(Intent.ChangeEndDate(date))
-        }
-
-        override fun onRefresh() {
-            store.accept(Intent.Refresh)
-        }
-
-        @AssistedFactory
-        interface Factory {
-            fun create(
-                @Assisted("componentContext") componentContext: ComponentContext,
-                @Assisted("isIncome") isIncome: Boolean
-            ): DefaultHistoryComponent
-        }
+    @AssistedFactory
+    interface Factory {
+        fun create(
+            @Assisted("componentContext") componentContext: ComponentContext,
+            @Assisted("isIncome") isIncome: Boolean,
+            @Assisted("usecase") getSortedTransactionsUsecase: GetSortedTransactionsUsecase,
+            @Assisted("lambdaTransaction") onTransactionSelected: (Transaction) -> Unit,
+        ): DefaultHistoryComponent
     }
-} 
+
+    class DefaultHistoryComponent
+        @AssistedInject
+        constructor(
+            @Assisted("componentContext") private val componentContext: ComponentContext,
+            @Assisted("isIncome") private val isIncome: Boolean,
+            @Assisted("usecase") private val getSortedTransactionsUsecase: GetSortedTransactionsUsecase,
+            @Assisted("lambdaTransaction") private val onTransactionSelected: (Transaction) -> Unit,
+            private val storeFactory: HistoryStore.HistoryStoreFactory,
+        ) : HistoryComponent, ComponentContext by componentContext {
+            private val store =
+                instanceKeeper.getStore {
+                    storeFactory.create(isIncome, getSortedTransactionsUsecase)
+                }
+
+            init {
+                lifecycle.doOnStart {
+                    onRefresh()
+                }
+            }
+
+            @OptIn(ExperimentalCoroutinesApi::class)
+            override val state: StateFlow<State>
+                get() = store.stateFlow
+
+            override fun onStartDateClick(date: LocalDate) {
+                store.accept(Intent.ChangeStartDate(date))
+            }
+
+            override fun onEndDateClick(date: LocalDate) {
+                store.accept(Intent.ChangeEndDate(date))
+            }
+
+            override fun onRefresh() {
+                store.accept(Intent.Refresh)
+            }
+
+            override fun onTransactionClicked(transaction: Transaction) {
+                onTransactionSelected(transaction)
+            }
+        }
+}

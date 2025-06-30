@@ -4,102 +4,208 @@ import com.arkivanov.decompose.ComponentContext
 import com.arkivanov.decompose.router.stack.ChildStack
 import com.arkivanov.decompose.router.stack.StackNavigation
 import com.arkivanov.decompose.router.stack.childStack
+import com.arkivanov.decompose.router.stack.pop
 import com.arkivanov.decompose.router.stack.push
 import com.arkivanov.decompose.value.Value
-import com.arkivanov.essenty.lifecycle.doOnResume
 import com.arkivanov.essenty.lifecycle.doOnStart
 import com.arkivanov.mvikotlin.core.instancekeeper.getStore
 import com.arkivanov.mvikotlin.extensions.coroutines.stateFlow
-import com.dobrihlopez.financeassistant.feature.categories.presentation.CategoriesStore
+import com.dobrihlopez.financeassistant.core.usecase.category.GetTypedCategoriesUsecase
+import com.dobrihlopez.financeassistant.feature.transaction.core.model.Transaction
+import com.dobrihlopez.financeassistant.feature.transaction.creation.presentation.TransactionCreationComponent
+import com.dobrihlopez.financeassistant.feature.transaction.creation.presentation.TransactionCreationStore
+import com.dobrihlopez.financeassistant.feature.transaction.history.domain.GetSortedTransactionsUsecase
 import com.dobrihlopez.financeassistant.feature.transaction.history.presentation.HistoryComponent
+import com.dobrihlopez.financeassistant.feature.transaction.income.presentation.IncomeComponent.Child.History
+import com.dobrihlopez.financeassistant.feature.transaction.income.presentation.IncomeComponent.Child.Main
+import com.dobrihlopez.financeassistant.feature.transaction.income.presentation.IncomeComponent.Child.TransactionCreator
 import com.dobrihlopez.financeassistant.feature.transaction.income.presentation.IncomeStore.IncomeStoreFactory
+import com.dobrihlopez.financeassistant.feature.transaction.income.presentation.IncomeStore.Intent
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.serialization.Serializable
+import javax.inject.Named
 
+/**
+ * Компонент экрана доходов.
+ *
+ * Предоставляет текущее состояние экрана и обрабатывает пользовательские действия,
+ * такие как нажатие на FAB, выбор транзакции, обновление данных и навигация.
+ *
+ * Отвечает за передачу пользовательских событий в хранилище (IncomeStore)
+ * и предоставляет состояние UI.
+ *
+ * Содержит работу с ЖЦ через LifecycleOwner, работу со store через InstanceKeeperOwner,
+ * работу со стейтом экрана через StateKeeperOwner.
+ *
+ * Использует Decompose Navigation для управления дочерними экранами:
+ * - Основной экран доходов
+ * - История транзакций
+ * - Создание/редактирование транзакции
+ *
+ * @see ComponentContext
+ */
 interface IncomeComponent {
     val childStack: Value<ChildStack<*, Child>>
     val state: StateFlow<IncomeStore.IncomeScreenState>
+
     fun onHistoryClick()
+
     fun onFabClick()
+
+    fun onIncomeClick(transaction: Transaction)
+
+    fun onNavigateBack()
+
+    fun onRefreshList()
 
     sealed interface Child {
         data class Main(val component: IncomeComponent) : Child
+
         data class History(val component: HistoryComponent) : Child
+
+        data class TransactionCreator(val component: TransactionCreationComponent) : Child
     }
 
-    class DefaultIncomeComponent @AssistedInject constructor(
-        @Assisted("componentContext") private val componentContext: ComponentContext,
-        private val incomeStoreFactory: IncomeStoreFactory,
-        private val historyComponentFactory: HistoryComponent.DefaultHistoryComponent.Factory
-    ) : IncomeComponent, ComponentContext by componentContext {
+    class DefaultIncomeComponent
+        @AssistedInject
+        constructor(
+            @Assisted("componentContext") private val componentContext: ComponentContext,
+            private val incomeStoreFactory: IncomeStoreFactory,
+            private val historyComponentFactory: HistoryComponent.Factory,
+            private val transactionComponentFactory: TransactionCreationComponent.Factory,
+            @Named("usecaseSortedIncome") private val getSortedTransactionsUsecase: GetSortedTransactionsUsecase,
+            @Named("usecaseCategoriesIncome") private val getIncomeCategoriesUsecase: GetTypedCategoriesUsecase,
+        ) : IncomeComponent, ComponentContext by componentContext {
+            private val stack = StackNavigation<Config>()
 
-        private val stack = StackNavigation<Config>()
+            override val childStack: Value<ChildStack<Config, Child>> =
+                childStack(
+                    source = stack,
+                    initialConfiguration = Config.Main,
+                    childFactory = ::child,
+                    key = "income_stack",
+                    handleBackButton = true,
+                    serializer = Config.serializer(),
+                )
 
-        override val childStack: Value<ChildStack<Config, Child>> = childStack(
-            source = stack,
-            initialConfiguration = Config.Main,
-            childFactory = ::child,
-            key = "income_stack",
-            handleBackButton = true,
-            serializer = Config.serializer()
-        )
+            private fun child(
+                config: Config,
+                componentContext: ComponentContext,
+            ): Child =
+                when (config) {
+                    Config.Main -> Main(this)
+                    Config.History ->
+                        History(
+                            historyComponentFactory.create(
+                                componentContext = componentContext,
+                                isIncome = true,
+                                getSortedTransactionsUsecase = getSortedTransactionsUsecase,
+                                onTransactionSelected = { transaction ->
+                                    onIncomeClick(transaction)
+                                },
+                            ),
+                        )
 
-        private fun child(config: Config, componentContext: ComponentContext): Child =
-            when (config) {
-                Config.Main -> Child.Main(this)
-                Config.History -> Child.History(historyComponentFactory.create(componentContext, isIncome = true))
-            }
+                    is Config.TransactionCreator -> {
+                        TransactionCreator(
+                            transactionComponentFactory.create(
+                                componentContext = componentContext,
+                                launchMode =
+                                    if (config.transaction == null) {
+                                        TransactionCreationStore.LaunchMode.CREATING
+                                    } else {
+                                        TransactionCreationStore.LaunchMode.EDITING
+                                    },
+                                transaction = config.transaction,
+                                onFinish = {
+                                    onNavigateBack()
+                                    store.accept(Intent.LoadIncome)
+                                },
+                                getTypedCategories = getIncomeCategoriesUsecase,
+                            ),
+                        )
+                    }
+                }
 
-        private val initState = stateKeeper.consume(STATE_KEY, strategy = IncomeStore.IncomeScreenState.serializer())
-            ?: IncomeStore.IncomeScreenState.Loading
+            private val initState =
+                stateKeeper.consume(STATE_KEY, strategy = IncomeStore.IncomeScreenState.serializer())
+                    ?: IncomeStore.IncomeScreenState.Loading
 
-        private val store = instanceKeeper.getStore {
-            incomeStoreFactory.create(initState)
-        }
+            private val store =
+                instanceKeeper.getStore {
+                    incomeStoreFactory.create(initState)
+                }
 
-        @OptIn(ExperimentalCoroutinesApi::class)
-        override val state: StateFlow<IncomeStore.IncomeScreenState>
-            get() = store.stateFlow
+            @OptIn(ExperimentalCoroutinesApi::class)
+            override val state: StateFlow<IncomeStore.IncomeScreenState>
+                get() = store.stateFlow
 
-        init {
-            stateKeeper.register("income_state", IncomeStore.IncomeScreenState.serializer()) {
-                state.value
-            }
+            init {
+                stateKeeper.register(STATE_KEY, IncomeStore.IncomeScreenState.serializer()) {
+                    state.value
+                }
 
-            lifecycle.doOnResume {
-                if (state.value is IncomeStore.IncomeScreenState.Failed) {
-                    store.accept(IncomeStore.Intent.LoadIncome)
+                lifecycle.doOnStart {
+                    if (state.value is IncomeStore.IncomeScreenState.Failed) {
+                        onRefreshList()
+                    }
                 }
             }
-        }
 
-        override fun onHistoryClick() {
-            stack.push(Config.History)
-        }
+            override fun onRefreshList() {
+                store.accept(Intent.LoadIncome)
+            }
 
-        override fun onFabClick() {
-            store.accept(IncomeStore.Intent.AddIncome)
-        }
+            override fun onNavigateBack() {
+                stack.pop()
+            }
 
-        private companion object {
-            const val STATE_KEY = "income"
-        }
+            override fun onHistoryClick() {
+                stack.push(Config.History)
+            }
 
-        @Serializable
-        sealed class Config {
+            override fun onIncomeClick(transaction: Transaction) {
+                stack.push(
+                    Config.TransactionCreator(
+                        isFromIncome = true,
+                        transaction,
+                    ),
+                )
+            }
+
+            override fun onFabClick() {
+                stack.push(Config.TransactionCreator(isFromIncome = true, transaction = null))
+//                store.accept(IncomeStore.Intent.AddIncome)
+            }
+
+            private companion object {
+                const val STATE_KEY = "income"
+            }
+
             @Serializable
-            object Main : Config()
-            @Serializable
-            object History : Config()
+            sealed class Config {
+                @Serializable
+                object Main : Config()
+
+                @Serializable
+                object History : Config()
+
+                @Serializable
+                data class TransactionCreator(
+                    val isFromIncome: Boolean,
+                    val transaction: Transaction? = null,
+                ) : Config()
+            }
         }
-    }
 
     @AssistedFactory
     interface Factory {
-        fun create(@Assisted("componentContext") componentContext: ComponentContext): DefaultIncomeComponent
+        fun create(
+            @Assisted("componentContext") componentContext: ComponentContext,
+        ): DefaultIncomeComponent
     }
 }

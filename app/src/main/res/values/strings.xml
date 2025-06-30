@@ -34,4 +34,26 @@
     <string name="retry">Retry</string>
     <string name="error_unknown">Unknown error</string>
     <string name="error_internet_issues">Internet issues</string>
+    <string name="in_total">Total</string>
+    <string name="transaction_operation">Delete transaction</string>
+    <string name="operation_income">income</string>
+    <string name="operation_expense">expense</string>
+    <string name="empty" >" "</string>
+    <string name="operation_tranction_my_incomes">My incomes</string>
+    <string name="transaction_account">Account</string>
+    <string name="transaction_category">Category</string>
+    <string name="transaction_sum">Sum</string>
+    <string name="transaction_date">Date</string>
+    <string name="transaction_time">Time</string>
+    <string name="transaction_input_field_commentary">Commentary</string>
+    <string name="operation_transaction_my_expenses">My expenses</string>
+    <string name="transaction_result_changes_applied">Changed applied</string>
+    <string name="transaction_result_created">Transaction created</string>
+    <string name="transaction_result_deleted">Transaction deleted</string>
+    <string name="navigation_item_expenses">Expense</string>
+    <string name="navigation_item_incomes">Income</string>
+    <string name="navigation_item_account">Account</string>
+    <string name="navigation_item_categories">Categories</string>
+    <string name="navigation_item_settings">Settings</string>
+    <string name="error_default_account">Only default account supported</string>
 </resources>

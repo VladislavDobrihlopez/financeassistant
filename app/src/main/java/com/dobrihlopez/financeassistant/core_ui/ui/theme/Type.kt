@@ -10,34 +10,39 @@ import com.dobrihlopez.financeassistant.R
 
 // Set of Material typography styles to start with
 
-val SFProDisplay = FontFamily(
-    Font(R.font.sf_pro_regular, FontWeight.Normal),
-    Font(R.font.sf_pro_medium, FontWeight.Bold)
-)
+val SFProDisplay =
+    FontFamily(
+        Font(R.font.sf_pro_regular, FontWeight.Normal),
+        Font(R.font.sf_pro_medium, FontWeight.Bold),
+    )
 
-val Typography = Typography(
-    bodyMedium = TextStyle(
-        fontFamily = SFProDisplay,
-        fontSize = 14.sp,
-        lineHeight = 20.sp,
-        fontWeight = FontWeight.Normal,
-        letterSpacing = 0.5.sp
-    ),
-    bodyLarge = TextStyle(
-        fontFamily = SFProDisplay,
-        fontSize = 16.sp,
-        lineHeight = 24.sp,
-        fontWeight = FontWeight.Normal,
-        letterSpacing = 0.5.sp
-    ),
-    titleLarge = TextStyle(
-        fontFamily = SFProDisplay,
-        fontSize = 24.sp,
-        lineHeight = 28.sp,
-        fontWeight = FontWeight.Normal,
-        letterSpacing = 0.sp
-    ),
-    /* Other default text styles to override
+val Typography =
+    Typography(
+        bodyMedium =
+            TextStyle(
+                fontFamily = SFProDisplay,
+                fontSize = 14.sp,
+                lineHeight = 20.sp,
+                fontWeight = FontWeight.Normal,
+                letterSpacing = 0.5.sp,
+            ),
+        bodyLarge =
+            TextStyle(
+                fontFamily = SFProDisplay,
+                fontSize = 16.sp,
+                lineHeight = 24.sp,
+                fontWeight = FontWeight.Normal,
+                letterSpacing = 0.5.sp,
+            ),
+        titleLarge =
+            TextStyle(
+                fontFamily = SFProDisplay,
+                fontSize = 24.sp,
+                lineHeight = 28.sp,
+                fontWeight = FontWeight.Normal,
+                letterSpacing = 0.sp,
+            ),
+                /* Other default text styles to override
     titleLarge = TextStyle(
         fontFamily = FontFamily.Default,
         fontWeight = FontWeight.Normal,
@@ -52,5 +57,5 @@ val Typography = Typography(
         lineHeight = 16.sp,
         letterSpacing = 0.5.sp
     )
-    */
-)
+                 */
+    )
